@@ -19,6 +19,11 @@ import Footer from "./components/Footer";
 function useReveal() {
   useEffect(() => {
     const els = document.querySelectorAll(".reveal");
+    // Safety fallback: if IntersectionObserver isn't available, reveal everything.
+    if (typeof IntersectionObserver === "undefined") {
+      els.forEach((el) => el.classList.add("in-view"));
+      return;
+    }
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -31,7 +36,17 @@ function useReveal() {
       { threshold: 0.12 }
     );
     els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
+    // Extra safety net: never let content stay invisible for long.
+    const t = setTimeout(() => {
+      document.querySelectorAll(".reveal:not(.in-view)").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight) el.classList.add("in-view");
+      });
+    }, 2500);
+    return () => {
+      obs.disconnect();
+      clearTimeout(t);
+    };
   }, []);
 }
 

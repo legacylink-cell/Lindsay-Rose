@@ -26,17 +26,17 @@ export const NAV_LINKS = [
 ];
 
 export const IMAGES = {
-  heroLiving: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHwxfHxicmlnaHQlMjBjbGVhbiUyMGxpdmluZyUyMHJvb218ZW58MHx8fHwxNzg0MzgwMzI4fDA&ixlib=rb-4.1.0&q=85",
-  livingSofa: "https://images.unsplash.com/photo-1615800002234-05c4d488696c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHw0fHxicmlnaHQlMjBjbGVhbiUyMGxpdmluZyUyMHJvb218ZW58MHx8fHwxNzg0MzgwMzI4fDA&ixlib=rb-4.1.0&q=85",
-  kitchen: "https://images.unsplash.com/photo-1713514374038-656f7bbde9db?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHw0fHxzdW5saXQlMjBraXRjaGVufGVufDB8fHx8MTc4NDM4MDMyOXww&ixlib=rb-4.1.0&q=85",
-  bedroomPlants: "https://images.unsplash.com/photo-1499916078039-922301b0eb9b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwYmVkcm9vbXxlbnwwfHx8fDE3ODQzODAzMjh8MA&ixlib=rb-4.1.0&q=85",
-  bedroom: "https://images.unsplash.com/photo-1541004995602-b3e898709909?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHw0fHxjb3p5JTIwYmVkcm9vbXxlbnwwfHx8fDE3ODQzODAzMjh8MA&ixlib=rb-4.1.0&q=85",
-  cleanerGlass: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHw0fHxwcm9mZXNzaW9uYWwlMjBjbGVhbmVyJTIwd29ya2luZ3xlbnwwfHx8fDE3ODQzODAzNjZ8MA&ixlib=rb-4.1.0&q=85",
+  heroLiving: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHwxfHxicmlnaHQlMjBjbGVhbiUyMGxpdmluZyUyMHJvb218ZW58MHx8fHwxNzg0MzgwMzI4fDA&ixlib=rb-4.1.0&q=85&w=1200&auto=format",
+  livingSofa: "https://images.unsplash.com/photo-1615800002234-05c4d488696c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHw0fHxicmlnaHQlMjBjbGVhbiUyMGxpdmluZyUyMHJvb218ZW58MHx8fHwxNzg0MzgwMzI4fDA&ixlib=rb-4.1.0&q=85&w=1200&auto=format",
+  kitchen: "https://images.unsplash.com/photo-1713514374038-656f7bbde9db?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHw0fHxzdW5saXQlMjBraXRjaGVufGVufDB8fHx8MTc4NDM4MDMyOXww&ixlib=rb-4.1.0&q=85&w=640&auto=format",
+  bedroomPlants: "https://images.unsplash.com/photo-1499916078039-922301b0eb9b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwYmVkcm9vbXxlbnwwfHx8fDE3ODQzODAzMjh8MA&ixlib=rb-4.1.0&q=85&w=640&auto=format",
+  bedroom: "https://images.unsplash.com/photo-1541004995602-b3e898709909?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHw0fHxjb3p5JTIwYmVkcm9vbXxlbnwwfHx8fDE3ODQzODAzMjh8MA&ixlib=rb-4.1.0&q=85&w=1200&auto=format",
+  cleanerGlass: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHw0fHxwcm9mZXNzaW9uYWwlMjBjbGVhbmVyJTIwd29ya2luZ3xlbnwwfHx8fDE3ODQzODAzNjZ8MA&ixlib=rb-4.1.0&q=85&w=1200&auto=format",
   cleanerTeam: "https://images.pexels.com/photos/6195274/pexels-photo-6195274.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   cleanerVacuum: "https://images.pexels.com/photos/6196694/pexels-photo-6196694.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   cleaningStove: "https://images.pexels.com/photos/9462314/pexels-photo-9462314.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-  cleaningSink: "https://images.unsplash.com/photo-1556910638-6cdac31d44dc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHw0fHxjbGVhbmluZyUyMGtpdGNoZW58ZW58MHx8fHwxNzg0MzgwMzY1fDA&ixlib=rb-4.1.0&q=85",
-  officeLobby: "https://images.unsplash.com/photo-1587316205943-b15dc52a12e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHwzfHxvZmZpY2UlMjBsb2JieXxlbnwwfHx8fDE3ODQzODE2NzN8MA&ixlib=rb-4.1.0&q=85",
+  cleaningSink: "https://images.unsplash.com/photo-1556910638-6cdac31d44dc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHw0fHxjbGVhbmluZyUyMGtpdGNoZW58ZW58MHx8fHwxNzg0MzgwMzY1fDA&ixlib=rb-4.1.0&q=85&w=1200&auto=format",
+  officeLobby: "https://images.unsplash.com/photo-1587316205943-b15dc52a12e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHwzfHxvZmZpY2UlMjBsb2JieXxlbnwwfHx8fDE3ODQzODE2NzN8MA&ixlib=rb-4.1.0&q=85&w=1200&auto=format",
   officeSpace: "https://images.pexels.com/photos/164586/pexels-photo-164586.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   commercialCleaner: "https://images.pexels.com/photos/6196223/pexels-photo-6196223.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
 };
