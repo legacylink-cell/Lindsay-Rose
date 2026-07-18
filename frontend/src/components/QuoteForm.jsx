@@ -92,21 +92,21 @@ const QuoteForm = () => {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-brand-ink mb-1.5">Full name *</label>
-                    <input className={inputCls} value={form.name} onChange={update("name")} placeholder="Jane Doe" />
+                    <input className={inputCls} value={form.name} onChange={update("name")} placeholder="Your full name" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-brand-ink mb-1.5">Phone *</label>
-                    <input className={inputCls} value={form.phone} onChange={update("phone")} placeholder="(469) 000-0000" />
+                    <input className={inputCls} value={form.phone} onChange={update("phone")} placeholder="Your phone number" />
                   </div>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-brand-ink mb-1.5">Email *</label>
-                    <input className={inputCls} type="email" value={form.email} onChange={update("email")} placeholder="you@email.com" />
+                    <input className={inputCls} type="email" value={form.email} onChange={update("email")} placeholder="Your email address" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-brand-ink mb-1.5">City</label>
-                    <input className={inputCls} value={form.city} onChange={update("city")} placeholder="Frisco, TX" />
+                    <input className={inputCls} value={form.city} onChange={update("city")} placeholder="Your city" />
                   </div>
                 </div>
                 <div>
@@ -117,7 +117,7 @@ const QuoteForm = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-brand-ink mb-1.5">Tell us about your space</label>
-                  <textarea rows={4} className={inputCls} value={form.details} onChange={update("details")} placeholder="Bedrooms, bathrooms, square footage, frequency, or anything special..." />
+                  <textarea rows={4} className={inputCls} value={form.details} onChange={update("details")} placeholder="Share any details that help us prepare your quote" />
                 </div>
                 <button
                   type="submit"
