@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { ArrowUpRight, Check } from "lucide-react";
-import { RESIDENTIAL_SERVICES, COMMERCIAL_SERVICES, CHECKLIST } from "../mock";
+import { RESIDENTIAL_SERVICES, CHECKLIST } from "../mock";
 
 const go = (href) => {
   const el = document.querySelector(href);
@@ -26,43 +26,30 @@ const ServiceCard = ({ s }) => (
 );
 
 const Services = () => {
-  const [tab, setTab] = useState("residential");
-  const list = tab === "residential" ? RESIDENTIAL_SERVICES : COMMERCIAL_SERVICES;
-
   return (
     <section id="services" className="section-pad">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-2xl">
-            <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">What we do</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Residential cleaning</p>
             <h2 className="mt-3 font-serif text-4xl md:text-5xl font-600 text-brand-ink">
-              Cleaning built around <span className="italic text-brand-green">your</span> space
+              Cleaning built around your home
             </h2>
             <p className="mt-4 text-brand-ink/65 text-lg">
-              From weekly upkeep to commercial janitorial care, every visit is tailored, thorough, and handled by people who genuinely care.
+              From weekly upkeep to move-out deep cleans, every visit is tailored, thorough, and handled by people who genuinely care.
             </p>
           </div>
 
-          <div className="inline-flex bg-white rounded-full p-1 shadow-soft ring-1 ring-black/5 self-start">
-            {[
-              { id: "residential", label: "Residential" },
-              { id: "commercial", label: "Commercial" },
-            ].map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setTab(t.id)}
-                className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all ${
-                  tab === t.id ? "bg-brand-green text-brand-cream shadow-soft" : "text-brand-ink/60 hover:text-brand-green"
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
+          <button
+            onClick={() => go("#commercial")}
+            className="self-start inline-flex items-center gap-2 bg-white text-brand-green font-semibold px-6 py-3 rounded-full shadow-soft ring-1 ring-black/5 hover:shadow-lift hover:-translate-y-0.5 transition-all"
+          >
+            Need commercial cleaning? <ArrowUpRight className="w-4 h-4" />
+          </button>
         </div>
 
         <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {list.map((s) => (
+          {RESIDENTIAL_SERVICES.map((s) => (
             <ServiceCard key={s.title} s={s} />
           ))}
         </div>

@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import TrustBar from "./components/TrustBar";
 import Services from "./components/Services";
+import Commercial from "./components/Commercial";
 import About from "./components/About";
 import HowItWorks from "./components/HowItWorks";
 import ServiceAreas from "./components/ServiceAreas";
@@ -43,6 +44,7 @@ const Landing = () => {
         <Hero />
         <TrustBar />
         <Services />
+        <Commercial />
         <About />
         <HowItWorks />
         <Pricing />

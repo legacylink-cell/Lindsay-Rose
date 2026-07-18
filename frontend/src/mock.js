@@ -18,11 +18,11 @@ export const BRAND = {
 
 export const NAV_LINKS = [
   { label: "Services", href: "#services" },
+  { label: "Commercial", href: "#commercial" },
   { label: "How it works", href: "#process" },
   { label: "Pricing", href: "#pricing" },
   { label: "Areas", href: "#areas" },
   { label: "Reviews", href: "#reviews" },
-  { label: "About", href: "#about" },
 ];
 
 export const IMAGES = {
@@ -36,6 +36,9 @@ export const IMAGES = {
   cleanerVacuum: "https://images.pexels.com/photos/6196694/pexels-photo-6196694.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   cleaningStove: "https://images.pexels.com/photos/9462314/pexels-photo-9462314.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   cleaningSink: "https://images.unsplash.com/photo-1556910638-6cdac31d44dc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2ODl8MHwxfHNlYXJjaHw0fHxjbGVhbmluZyUyMGtpdGNoZW58ZW58MHx8fHwxNzg0MzgwMzY1fDA&ixlib=rb-4.1.0&q=85",
+  officeLobby: "https://images.unsplash.com/photo-1587316205943-b15dc52a12e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHwzfHxvZmZpY2UlMjBsb2JieXxlbnwwfHx8fDE3ODQzODE2NzN8MA&ixlib=rb-4.1.0&q=85",
+  officeSpace: "https://images.pexels.com/photos/164586/pexels-photo-164586.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+  commercialCleaner: "https://images.pexels.com/photos/6196223/pexels-photo-6196223.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
 };
 
 export const RESIDENTIAL_SERVICES = [
@@ -78,6 +81,20 @@ export const COMMERCIAL_SERVICES = [
     title: "Post-Construction",
     desc: "Dust, debris, and detail work after a build or remodel — turnover-ready in one visit.",
   },
+];
+
+export const COMMERCIAL_BENEFITS = [
+  "Flexible day or after-hours scheduling",
+  "Insured & bonded, background-checked crews",
+  "Consistent quality with a dedicated account contact",
+  "Custom scopes & supply management",
+  "Disinfection for high-traffic & sensitive spaces",
+  "Flat, transparent pricing \u2014 no surprises",
+];
+
+export const COMMERCIAL_INDUSTRIES = [
+  "Offices", "Retail", "Medical & Dental", "Salons & Studios",
+  "Restaurants", "Property Mgmt", "Churches", "Post-Construction",
 ];
 
 export const CHECKLIST = [
