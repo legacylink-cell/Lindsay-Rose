@@ -8,7 +8,7 @@ module.exports = {
   theme: {
   	extend: {
   		fontFamily: {
-  			serif: ['Fraunces', 'Georgia', 'serif'],
+  			serif: ['Bricolage Grotesque', 'Inter', 'sans-serif'],
   			sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
   		},
   		borderRadius: {

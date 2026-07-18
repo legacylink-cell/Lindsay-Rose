@@ -29,7 +29,7 @@ const Hero = () => {
 
           <h1 className="reveal mt-6 font-serif text-[2.6rem] leading-[1.05] sm:text-6xl md:text-[4.2rem] font-600 text-brand-ink tracking-tight">
             We brighten your space,
-            <span className="block text-brand-green italic">so you get your time back.</span>
+            <span className="block text-brand-green">so you get your time back.</span>
           </h1>
 
           <p className="reveal mt-6 text-lg text-brand-ink/70 max-w-xl leading-relaxed">

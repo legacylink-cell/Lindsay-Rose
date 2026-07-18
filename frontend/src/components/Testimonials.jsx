@@ -30,7 +30,7 @@ const Testimonials = () => {
                   <Star key={i} className="w-4 h-4 fill-brand-amber text-brand-amber" />
                 ))}
               </span>
-              <p className="mt-4 text-brand-ink/80 leading-relaxed text-lg font-serif italic">“{t.quote}”</p>
+              <p className="mt-4 text-brand-ink/80 leading-relaxed text-lg italic">“{t.quote}”</p>
               <div className="mt-5 flex items-center gap-3">
                 <span className="grid place-items-center w-11 h-11 rounded-full bg-brand-green text-brand-cream font-600">
                   {t.name.charAt(0)}
