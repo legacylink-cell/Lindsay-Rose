@@ -2,7 +2,7 @@
 // NOTE: Testimonials and quote submissions are MOCKED for now.
 
 import {
-  Sparkles, Home, Repeat, Truck, Building2, Wrench,
+  SprayCan, Home, Repeat, Truck, Building2, Wrench, Store,
 } from "lucide-react";
 
 export const BRAND = {
@@ -49,7 +49,7 @@ export const RESIDENTIAL_SERVICES = [
     tag: "Most popular",
   },
   {
-    icon: Sparkles,
+    icon: SprayCan,
     title: "Deep Cleaning",
     desc: "A thorough top-to-bottom reset — baseboards, blinds, buildup and all. The perfect first visit.",
   },
@@ -72,7 +72,7 @@ export const COMMERCIAL_SERVICES = [
     desc: "Reliable janitorial care that keeps your team healthy and your space presentable, day after day.",
   },
   {
-    icon: Sparkles,
+    icon: Store,
     title: "Retail & Medical",
     desc: "Disinfection-focused cleaning that meets high-traffic and hygiene-sensitive standards.",
   },

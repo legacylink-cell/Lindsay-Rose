@@ -1,11 +1,11 @@
 import React from "react";
-import { Heart, Users, Sparkles } from "lucide-react";
+import { Heart, Users, SearchCheck } from "lucide-react";
 import { IMAGES } from "../mock";
 
 const VALUES = [
   { icon: Heart, title: "Genuine care", desc: "We clean like it's our own home — because to us, trust is everything." },
   { icon: Users, title: "The same faces", desc: "Consistent, vetted crews who get to know you and your space." },
-  { icon: Sparkles, title: "Detail obsessed", desc: "The corners others skip are the ones we notice first." },
+  { icon: SearchCheck, title: "Detail obsessed", desc: "The corners others skip are the ones we notice first." },
 ];
 
 const About = () => {
@@ -14,7 +14,7 @@ const About = () => {
       <div className="max-w-7xl mx-auto px-5 md:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <div className="relative reveal">
           <div className="rounded-[2rem] overflow-hidden shadow-lift ring-1 ring-black/5">
-            <img src={IMAGES.cleanerTeam} alt="Our cleaning team at work" className="w-full h-[440px] md:h-[540px] object-cover" />
+            <img loading="lazy" decoding="async" src={IMAGES.cleanerTeam} alt="Our cleaning team at work" className="w-full h-[440px] md:h-[540px] object-cover" />
           </div>
           <div className="absolute -bottom-6 -right-4 md:-right-8 bg-brand-green text-brand-cream rounded-2xl p-5 shadow-lift max-w-[220px]">
             <p className="font-serif text-lg leading-snug">“We brighten your home and free up your time.”</p>
