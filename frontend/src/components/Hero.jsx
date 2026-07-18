@@ -82,7 +82,7 @@ const Hero = () => {
         {/* image collage */}
         <div className="relative reveal">
           <div className="relative rounded-[2rem] overflow-hidden shadow-lift ring-1 ring-black/5">
-            <img src={IMAGES.heroLiving} alt="Bright, spotless living room cleaned by Brightleaf in DFW" fetchpriority="high" decoding="async" width="800" height="520" className="w-full h-[420px] md:h-[520px] object-cover" />
+            <img src={IMAGES.heroLiving} alt="Bright, spotless living room cleaned by Brightleaf in DFW" fetchPriority="high" decoding="async" width="800" height="520" className="w-full h-[420px] md:h-[520px] object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-brand-greenDark/25 to-transparent" />
           </div>
 
