@@ -130,7 +130,9 @@ const Footer = () => {
             <p>
               Designed by{" "}
               <a
-                href="#"
+                href="https://mozeid.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-semibold text-brand-amberLight hover:text-brand-amber transition-colors"
               >
                 Mo Studio
