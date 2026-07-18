@@ -59,7 +59,19 @@ const Footer = () => {
 
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-cream/45">
           <p>© {new Date().getFullYear()} {BRAND.full}. All rights reserved.</p>
-          <p>Bonded & Insured · Eco-Friendly · 100% Satisfaction Guarantee</p>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center">
+            <p>Bonded & Insured · Eco-Friendly · 100% Satisfaction Guarantee</p>
+            <span className="hidden sm:inline text-brand-cream/20">|</span>
+            <p>
+              Designed by{" "}
+              <a
+                href="#"
+                className="font-semibold text-brand-amberLight hover:text-brand-amber transition-colors"
+              >
+                Mo Studio
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
