@@ -1,11 +1,70 @@
 import React from "react";
 import { Leaf, Phone, Mail, MapPin, Clock } from "lucide-react";
 import { BRAND, NAV_LINKS } from "../mock";
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
+} from "./ui/dialog";
+import { ScrollArea } from "./ui/scroll-area";
 
 const go = (href) => {
   const el = document.querySelector(href);
   if (el) el.scrollIntoView({ behavior: "smooth" });
 };
+
+const TERMS = [
+  {
+    h: "1. Services",
+    p: `${BRAND.full} provides residential and commercial cleaning services throughout the Dallas–Fort Worth metroplex. The specific scope of each cleaning is agreed upon in your quote. Your first visit is an initial deep cleaning and may take additional time.`,
+  },
+  {
+    h: "2. Quotes & Pricing",
+    p: "All quotes are estimates based on the information you provide and may be adjusted after an in-person or virtual assessment. Recurring clients receive our best per-visit pricing and are never locked into a contract.",
+  },
+  {
+    h: "3. Scheduling & Access",
+    p: "You agree to provide safe, reasonable access to the property at the scheduled time. If we are unable to access the property, a cancellation fee may apply. Please provide at least 24 hours' notice to reschedule or cancel.",
+  },
+  {
+    h: "4. Satisfaction Guarantee",
+    p: "We stand behind our work with a 100% satisfaction guarantee. If any area does not meet your expectations, notify us within 24 hours and we will return to re-clean the affected area at no additional cost.",
+  },
+  {
+    h: "5. Payment",
+    p: "Payment is due upon completion of service unless other arrangements have been made in writing. Commercial accounts may be invoiced according to agreed terms.",
+  },
+  {
+    h: "6. Liability",
+    p: "We are bonded and insured. We take great care in your home or business; however, we ask that fragile, high-value, or sentimental items be secured prior to service. Please report any concerns within 24 hours of service.",
+  },
+  {
+    h: "7. Privacy",
+    p: "Any personal information you share with us is used solely to provide and improve our services and is never sold to third parties.",
+  },
+];
+
+const TermsDialog = ({ children }) => (
+  <Dialog>
+    <DialogTrigger asChild>{children}</DialogTrigger>
+    <DialogContent className="max-w-2xl bg-brand-cream text-brand-ink border-none">
+      <DialogHeader>
+        <DialogTitle className="font-serif text-2xl text-brand-ink">Terms &amp; Conditions</DialogTitle>
+      </DialogHeader>
+      <ScrollArea className="max-h-[65vh] pr-4">
+        <p className="text-sm text-brand-ink/55 mb-4">
+          Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}. These terms are a general placeholder and should be reviewed by legal counsel before publishing.
+        </p>
+        <div className="space-y-5">
+          {TERMS.map((t) => (
+            <div key={t.h}>
+              <h4 className="font-600 text-brand-ink">{t.h}</h4>
+              <p className="mt-1 text-sm text-brand-ink/70 leading-relaxed">{t.p}</p>
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+    </DialogContent>
+  </Dialog>
+);
 
 const Footer = () => {
   return (
@@ -61,6 +120,12 @@ const Footer = () => {
           <p>© {new Date().getFullYear()} {BRAND.full}. All rights reserved.</p>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center">
             <p>Bonded & Insured · Eco-Friendly · 100% Satisfaction Guarantee</p>
+            <span className="hidden sm:inline text-brand-cream/20">|</span>
+            <TermsDialog>
+              <button className="font-medium text-brand-cream/60 hover:text-brand-amberLight transition-colors underline-offset-2 hover:underline">
+                Terms & Conditions
+              </button>
+            </TermsDialog>
             <span className="hidden sm:inline text-brand-cream/20">|</span>
             <p>
               Designed by{" "}

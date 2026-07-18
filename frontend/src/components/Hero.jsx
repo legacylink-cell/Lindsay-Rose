@@ -18,13 +18,33 @@ const Hero = () => {
 
       <div className="max-w-7xl mx-auto px-5 md:px-8 grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
         <div>
-          <div className="inline-flex items-center gap-2 bg-white/70 border border-brand-green/15 rounded-full pl-1.5 pr-4 py-1.5 shadow-soft reveal">
-            <span className="flex items-center gap-0.5 bg-brand-amber/15 text-brand-amber rounded-full px-2 py-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3.5 h-3.5 fill-brand-amber text-brand-amber" />
+          <div className="inline-flex items-center gap-3 bg-white border border-black/5 rounded-full pl-2 pr-4 py-1.5 shadow-soft reveal">
+            <div className="flex -space-x-2.5">
+              {[
+                { i: "M", c: "bg-brand-green" },
+                { i: "D", c: "bg-brand-amber" },
+                { i: "P", c: "bg-brand-greenLight" },
+                { i: "J", c: "bg-brand-ink" },
+              ].map((a) => (
+                <span
+                  key={a.i}
+                  className={`grid place-items-center w-7 h-7 rounded-full ring-2 ring-white text-[11px] font-semibold text-white ${a.c}`}
+                >
+                  {a.i}
+                </span>
               ))}
-            </span>
-            <span className="text-xs font-semibold text-brand-ink/80">Rated 4.9 by DFW families & offices</span>
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="flex items-center gap-1">
+                <span className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-brand-amber text-brand-amber" />
+                  ))}
+                </span>
+                <span className="text-xs font-bold text-brand-ink ml-0.5">4.9</span>
+              </span>
+              <span className="text-[11px] font-medium text-brand-ink/55 mt-1">300+ happy DFW homes & offices</span>
+            </div>
           </div>
 
           <h1 className="reveal mt-6 font-serif text-[2.6rem] leading-[1.05] sm:text-6xl md:text-[4.2rem] font-600 text-brand-ink tracking-tight">
