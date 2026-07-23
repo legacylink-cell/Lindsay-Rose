@@ -15,10 +15,10 @@ const Commercial = () => {
           {/* left: images */}
           <div className="relative reveal order-2 lg:order-1">
             <div className="rounded-[2rem] overflow-hidden shadow-lift ring-1 ring-white/10">
-              <img loading="lazy" decoding="async" src={IMAGES.officeLobby} alt="Modern, spotless office lobby" className="w-full h-[440px] md:h-[520px] object-cover" />
+              <img loading="lazy" decoding="async" src={IMAGES.officeLobby} alt="Modern, spotless office lobby" width="900" height="520" className="w-full h-[440px] md:h-[520px] object-cover" />
             </div>
             <div className="absolute -bottom-6 -right-4 md:-right-8 w-44 md:w-56 rounded-2xl overflow-hidden shadow-lift ring-4 ring-brand-greenDark floaty">
-              <img loading="lazy" decoding="async" src={IMAGES.commercialCleaner} alt="Commercial cleaning professional" className="w-full h-32 md:h-40 object-cover" />
+              <img loading="lazy" decoding="async" src={IMAGES.commercialCleaner} alt="Commercial cleaning professional" width="320" height="160" className="w-full h-32 md:h-40 object-cover" />
             </div>
             <div className="absolute -top-5 -left-3 md:-left-6 bg-brand-amber text-brand-ink rounded-2xl px-4 py-3 shadow-lift">
               <p className="text-2xl font-700 leading-none">B2B</p>

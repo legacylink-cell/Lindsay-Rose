@@ -50,7 +50,7 @@ const TermsDialog = ({ children }) => (
         <DialogTitle className="font-serif text-2xl text-brand-ink">Terms &amp; Conditions</DialogTitle>
       </DialogHeader>
       <ScrollArea className="max-h-[65vh] pr-4">
-        <p className="text-sm text-brand-ink/55 mb-4">
+        <p className="text-sm text-brand-ink/65 mb-4">
           Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}. These terms are a general placeholder and should be reviewed by legal counsel before publishing.
         </p>
         <div className="space-y-5">
@@ -116,7 +116,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-cream/45">
+        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-brand-cream/70">
           <p>© {new Date().getFullYear()} {BRAND.full}. All rights reserved.</p>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center">
             <p>Bonded & Insured · Eco-Friendly · 100% Satisfaction Guarantee</p>

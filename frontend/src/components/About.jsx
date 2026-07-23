@@ -14,7 +14,7 @@ const About = () => {
       <div className="max-w-7xl mx-auto px-5 md:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <div className="relative reveal">
           <div className="rounded-[2rem] overflow-hidden shadow-lift ring-1 ring-black/5">
-            <img loading="lazy" decoding="async" src={IMAGES.cleanerTeam} alt="Our cleaning team at work" className="w-full h-[440px] md:h-[540px] object-cover" />
+            <img loading="lazy" decoding="async" src={IMAGES.cleanerTeam} alt="Our cleaning team at work" width="900" height="540" className="w-full h-[440px] md:h-[540px] object-cover" />
           </div>
           <div className="absolute -bottom-6 -right-4 md:-right-8 bg-brand-green text-brand-cream rounded-2xl p-5 shadow-lift max-w-[220px]">
             <p className="font-serif text-lg leading-snug">“We brighten your home and free up your time.”</p>

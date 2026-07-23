@@ -43,7 +43,7 @@ const Hero = () => {
                 </span>
                 <span className="text-xs font-bold text-brand-ink ml-0.5">4.9</span>
               </span>
-              <span className="text-[11px] font-medium text-brand-ink/55 mt-1">300+ happy DFW homes & offices</span>
+              <span className="text-[11px] font-medium text-brand-ink/65 mt-1">300+ happy DFW homes & offices</span>
             </div>
           </div>
 

@@ -37,13 +37,13 @@ const Testimonials = () => {
                 </span>
                 <div>
                   <p className="font-600 text-brand-ink">{t.name}</p>
-                  <p className="text-sm text-brand-ink/55">{t.role}</p>
+                  <p className="text-sm text-brand-ink/65">{t.role}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <p className="mt-8 text-center text-xs text-brand-ink/45">Reviews shown are illustrative placeholders.</p>
+        <p className="mt-8 text-center text-xs text-brand-ink/60">Reviews shown are illustrative placeholders.</p>
       </div>
     </section>
   );

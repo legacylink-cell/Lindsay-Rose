@@ -40,7 +40,7 @@ const Pricing = () => {
               <p className={`text-sm mt-1 ${p.highlight ? "text-brand-cream/70" : "text-brand-ink/60"}`}>{p.blurb}</p>
               <div className="mt-5 flex items-baseline gap-1.5">
                 <span className="font-serif text-4xl font-600">{p.price}</span>
-                <span className={`text-sm ${p.highlight ? "text-brand-cream/70" : "text-brand-ink/55"}`}>{p.unit}</span>
+                <span className={`text-sm ${p.highlight ? "text-brand-cream/70" : "text-brand-ink/65"}`}>{p.unit}</span>
               </div>
               <ul className="mt-6 space-y-3">
                 {p.features.map((f) => (
@@ -65,7 +65,7 @@ const Pricing = () => {
             </div>
           ))}
         </div>
-        <p className="mt-8 text-center text-sm text-brand-ink/55">100% satisfaction guaranteed · Bonded & insured · Never locked into a contract</p>
+        <p className="mt-8 text-center text-sm text-brand-ink/65">100% satisfaction guaranteed · Bonded & insured · Never locked into a contract</p>
       </div>
     </section>
   );

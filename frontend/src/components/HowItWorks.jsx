@@ -43,10 +43,10 @@ const HowItWorks = () => {
 
           <div className="relative reveal">
             <div className="rounded-[2rem] overflow-hidden shadow-lift ring-1 ring-black/5">
-              <img loading="lazy" decoding="async" src={IMAGES.cleanerGlass} alt="Cleaning professional at work" className="w-full h-[520px] object-cover" />
+              <img loading="lazy" decoding="async" src={IMAGES.cleanerGlass} alt="Cleaning professional at work" width="900" height="520" className="w-full h-[520px] object-cover" />
             </div>
             <div className="absolute -top-5 -left-4 md:-left-8 w-40 rounded-2xl overflow-hidden shadow-lift ring-4 ring-brand-cream floaty">
-              <img loading="lazy" decoding="async" src={IMAGES.bedroomPlants} alt="Fresh, tidy bedroom" className="w-full h-32 object-cover" />
+              <img loading="lazy" decoding="async" src={IMAGES.bedroomPlants} alt="Fresh, tidy bedroom" width="320" height="128" className="w-full h-32 object-cover" />
             </div>
           </div>
         </div>

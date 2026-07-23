@@ -35,7 +35,7 @@ const QuoteForm = () => {
   };
 
   const inputCls =
-    "w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-ink/40 focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green transition";
+    "w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-ink/55 focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green transition";
 
   return (
     <section id="quote" className="section-pad">
@@ -91,33 +91,33 @@ const QuoteForm = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-brand-ink mb-1.5">Full name *</label>
-                    <input className={inputCls} value={form.name} onChange={update("name")} placeholder="Your full name" />
+                    <label htmlFor="qf-name" className="block text-sm font-medium text-brand-ink mb-1.5">Full name *</label>
+                    <input id="qf-name" name="name" autoComplete="name" className={inputCls} value={form.name} onChange={update("name")} placeholder="Your full name" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-brand-ink mb-1.5">Phone *</label>
-                    <input className={inputCls} value={form.phone} onChange={update("phone")} placeholder="Your phone number" />
+                    <label htmlFor="qf-phone" className="block text-sm font-medium text-brand-ink mb-1.5">Phone *</label>
+                    <input id="qf-phone" name="phone" type="tel" autoComplete="tel" className={inputCls} value={form.phone} onChange={update("phone")} placeholder="Your phone number" />
                   </div>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-brand-ink mb-1.5">Email *</label>
-                    <input className={inputCls} type="email" value={form.email} onChange={update("email")} placeholder="Your email address" />
+                    <label htmlFor="qf-email" className="block text-sm font-medium text-brand-ink mb-1.5">Email *</label>
+                    <input id="qf-email" name="email" type="email" autoComplete="email" className={inputCls} value={form.email} onChange={update("email")} placeholder="Your email address" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-brand-ink mb-1.5">City</label>
-                    <input className={inputCls} value={form.city} onChange={update("city")} placeholder="Your city" />
+                    <label htmlFor="qf-city" className="block text-sm font-medium text-brand-ink mb-1.5">City</label>
+                    <input id="qf-city" name="city" autoComplete="address-level2" className={inputCls} value={form.city} onChange={update("city")} placeholder="Your city" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-brand-ink mb-1.5">Service needed</label>
-                  <select className={inputCls} value={form.service} onChange={update("service")}>
+                  <label htmlFor="qf-service" className="block text-sm font-medium text-brand-ink mb-1.5">Service needed</label>
+                  <select id="qf-service" name="service" className={inputCls} value={form.service} onChange={update("service")}>
                     {SERVICE_TYPES.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-brand-ink mb-1.5">Tell us about your space</label>
-                  <textarea rows={4} className={inputCls} value={form.details} onChange={update("details")} placeholder="Share any details that help us prepare your quote" />
+                  <label htmlFor="qf-details" className="block text-sm font-medium text-brand-ink mb-1.5">Tell us about your space</label>
+                  <textarea id="qf-details" name="details" rows={4} className={inputCls} value={form.details} onChange={update("details")} placeholder="Share any details that help us prepare your quote" />
                 </div>
                 <button
                   type="submit"
@@ -125,7 +125,7 @@ const QuoteForm = () => {
                 >
                   Send my quote request <Send className="w-4 h-4" />
                 </button>
-                <p className="text-center text-xs text-brand-ink/45">No obligation. We never share your details.</p>
+                <p className="text-center text-xs text-brand-ink/60">No obligation. We never share your details.</p>
               </form>
             )}
           </div>
