@@ -1,6 +1,6 @@
 import React from "react";
-import { Star, Quote } from "lucide-react";
-import { TESTIMONIALS } from "../mock";
+import { Star, Quote, ExternalLink } from "lucide-react";
+import { TESTIMONIALS, BRAND } from "../mock";
 
 const Testimonials = () => {
   return (
@@ -44,6 +44,19 @@ const Testimonials = () => {
           ))}
         </div>
         <p className="mt-8 text-center text-xs text-brand-ink/60">Verified reviews from our Google Business Profile.</p>
+        <div className="mt-6 flex flex-col items-center gap-3">
+          <p className="text-brand-ink/70">Loved your clean? We'd be grateful for a quick review.</p>
+          <a
+            href={BRAND.reviewUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-brand-green hover:bg-brand-greenDark text-brand-cream font-600 px-7 py-3.5 rounded-full transition-all hover:shadow-lift hover:-translate-y-0.5"
+          >
+            <Star className="w-4 h-4 fill-brand-amber text-brand-amber" />
+            Leave us a review on Google
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        </div>
       </div>
     </section>
   );
