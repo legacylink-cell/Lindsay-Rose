@@ -47,6 +47,12 @@ const Header = () => {
               {l.label}
             </button>
           ))}
+          <a
+            href="/careers"
+            className="text-sm font-medium text-brand-ink/75 hover:text-brand-green transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-brand-amber after:transition-all hover:after:w-full"
+          >
+            Careers
+          </a>
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
@@ -74,6 +80,9 @@ const Header = () => {
                 {l.label}
               </button>
             ))}
+            <a href="/careers" className="text-left py-3 text-brand-ink/80 font-medium border-b border-border/60">
+              Careers
+            </a>
             <a href={BRAND.phoneHref} className="flex items-center gap-2 py-3 text-brand-green font-semibold">
               <Phone className="w-4 h-4" /> {BRAND.phone}
             </a>

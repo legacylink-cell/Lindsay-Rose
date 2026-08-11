@@ -15,6 +15,7 @@ import Testimonials from "./components/Testimonials";
 import FAQ from "./components/FAQ";
 import QuoteForm from "./components/QuoteForm";
 import Footer from "./components/Footer";
+import Careers from "./components/Careers";
 
 function useReveal() {
   useEffect(() => {
@@ -84,6 +85,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/careers" element={<Careers />} />
       </Routes>
       <Toaster position="top-center" richColors />
     </BrowserRouter>

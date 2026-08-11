@@ -103,6 +103,11 @@ const Footer = () => {
                   </button>
                 </li>
               ))}
+              <li>
+                <a href="/careers" className="text-brand-cream/70 hover:text-brand-amberLight transition-colors text-sm">
+                  Careers
+                </a>
+              </li>
             </ul>
           </div>
 
