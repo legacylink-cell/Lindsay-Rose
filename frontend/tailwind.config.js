@@ -8,12 +8,9 @@ module.exports = {
   theme: {
   	extend: {
   		fontFamily: {
-  			serif: ['Cormorant Garamond', 'Georgia', 'serif'],
-  			sans: ['Jost', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+  			serif: ['Bricolage Grotesque', 'Inter', 'sans-serif'],
+  			sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
 		},
-		fontWeight: {
-			'400': '400', '500': '500', '600': '600', '700': '700', '800': '800',
-  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

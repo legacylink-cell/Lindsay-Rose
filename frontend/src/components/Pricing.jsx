@@ -13,7 +13,7 @@ const Pricing = () => {
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Simple, honest pricing</p>
-          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">
+          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-600 text-brand-ink">
             Fair quotes, no contracts, no surprises
           </h2>
           <p className="mt-4 text-brand-ink/65 text-lg">
@@ -36,10 +36,10 @@ const Pricing = () => {
                   <Star className="w-3 h-3 fill-brand-ink" /> Most requested
                 </span>
               )}
-              <h3 className={`font-serif text-2xl font-700 ${p.highlight ? "text-brand-cream" : "text-brand-ink"}`}>{p.name}</h3>
+              <h3 className={`font-serif text-2xl font-600 ${p.highlight ? "text-brand-cream" : "text-brand-ink"}`}>{p.name}</h3>
               <p className={`text-sm mt-1 ${p.highlight ? "text-brand-cream/70" : "text-brand-ink/60"}`}>{p.blurb}</p>
               <div className="mt-5 flex items-baseline gap-1.5">
-                <span className="font-serif text-4xl font-700">{p.price}</span>
+                <span className="font-serif text-4xl font-600">{p.price}</span>
                 <span className={`text-sm ${p.highlight ? "text-brand-cream/70" : "text-brand-ink/65"}`}>{p.unit}</span>
               </div>
               <ul className="mt-6 space-y-3">

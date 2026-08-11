@@ -21,7 +21,7 @@ const Commercial = () => {
               <img loading="lazy" decoding="async" src={IMAGES.commercialCleaner} alt="Commercial cleaning professional" width="320" height="160" className="w-full h-32 md:h-40 object-cover" />
             </div>
             <div className="absolute -top-5 -left-3 md:-left-6 bg-brand-amber text-brand-ink rounded-2xl px-4 py-3 shadow-lift">
-              <p className="text-2xl font-700 leading-none">B2B</p>
+              <p className="text-2xl font-600 leading-none">B2B</p>
               <p className="text-[11px] mt-1 max-w-[120px] font-medium">Trusted by DFW businesses</p>
             </div>
           </div>
@@ -31,7 +31,7 @@ const Commercial = () => {
             <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide reveal">
               <Building2 className="w-4 h-4 text-brand-amberLight" /> Commercial & Office Cleaning
             </span>
-            <h2 className="reveal mt-5 text-4xl md:text-5xl font-700">
+            <h2 className="reveal mt-5 text-4xl md:text-5xl font-600">
               Spotless workspaces that keep business moving
             </h2>
             <p className="reveal mt-5 text-brand-cream/75 text-lg leading-relaxed max-w-xl">
@@ -45,7 +45,7 @@ const Commercial = () => {
                   <span className="grid place-items-center w-11 h-11 rounded-xl bg-brand-amber/20 text-brand-amberLight">
                     <s.icon className="w-5 h-5" />
                   </span>
-                  <h3 className="mt-3 font-700 text-brand-cream">{s.title}</h3>
+                  <h3 className="mt-3 font-600 text-brand-cream">{s.title}</h3>
                   <p className="mt-1.5 text-sm text-brand-cream/60 leading-relaxed">{s.desc}</p>
                 </div>
               ))}

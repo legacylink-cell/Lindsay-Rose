@@ -31,7 +31,7 @@ const TrustBar = () => {
             <div className="p-8 md:p-10 grid grid-cols-2 gap-6">
               {STATS.map((s) => (
                 <div key={s.label} className="reveal">
-                  <p className="font-serif text-3xl md:text-4xl font-700 text-brand-amberLight">{s.value}</p>
+                  <p className="font-serif text-3xl md:text-4xl font-600 text-brand-amberLight">{s.value}</p>
                   <p className="text-sm text-brand-cream/70 mt-1">{s.label}</p>
                 </div>
               ))}

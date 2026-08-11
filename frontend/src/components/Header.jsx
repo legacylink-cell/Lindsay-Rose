@@ -32,7 +32,7 @@ const Header = () => {
             <img src="/logo-icon.png" alt="" aria-hidden="true" className="w-7 h-7 object-contain" />
           </span>
           <span className="leading-tight">
-            <span className="block font-serif text-[1.35rem] font-700 tracking-wide text-brand-ink">{BRAND.name}</span>
+            <span className="block font-serif text-[1.35rem] font-600 tracking-wide text-brand-ink">{BRAND.name}</span>
             <span className="block text-[10px] tracking-[0.28em] uppercase text-brand-amber">Cleaning</span>
           </span>
         </a>

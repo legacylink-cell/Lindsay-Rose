@@ -56,7 +56,7 @@ const TermsDialog = ({ children }) => (
         <div className="space-y-5">
           {TERMS.map((t) => (
             <div key={t.h}>
-              <h4 className="font-700 text-brand-ink">{t.h}</h4>
+              <h4 className="font-600 text-brand-ink">{t.h}</h4>
               <p className="mt-1 text-sm text-brand-ink/70 leading-relaxed">{t.p}</p>
             </div>
           ))}
@@ -77,7 +77,7 @@ const Footer = () => {
                 <img src="/logo-icon.png" alt="" aria-hidden="true" className="w-7 h-7 object-contain" />
               </span>
               <span className="leading-tight">
-                <span className="block font-serif text-xl font-700 tracking-wide">{BRAND.name}</span>
+                <span className="block font-serif text-xl font-600 tracking-wide">{BRAND.name}</span>
                 <span className="block text-[10px] tracking-[0.28em] uppercase text-brand-amberLight">Cleaning</span>
               </span>
             </div>
@@ -94,7 +94,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-sm font-700 uppercase tracking-wider text-brand-cream/80">Explore</h4>
+            <h4 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Explore</h4>
             <ul className="mt-4 space-y-2.5">
               {NAV_LINKS.map((l) => (
                 <li key={l.href}>
@@ -107,7 +107,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-sm font-700 uppercase tracking-wider text-brand-cream/80">Get in touch</h4>
+            <h4 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Get in touch</h4>
             <ul className="mt-4 space-y-3 text-sm text-brand-cream/70">
               <li><a href={BRAND.phoneHref} className="flex items-center gap-2.5 hover:text-brand-amberLight transition-colors"><Phone className="w-4 h-4 shrink-0" /> {BRAND.phone}</a></li>
               <li><a href={`mailto:${BRAND.email}`} className="flex items-center gap-2.5 hover:text-brand-amberLight transition-colors break-all"><Mail className="w-4 h-4 shrink-0" /> {BRAND.email}</a></li>
