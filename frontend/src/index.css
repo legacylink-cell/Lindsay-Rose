@@ -90,6 +90,8 @@ html { scroll-behavior: smooth; }
   to { transform: translateX(-50%); }
 }
 .marquee-track { animation: marquee 30s linear infinite; }
+.reviews-track { animation: marquee 60s linear infinite; will-change: transform; }
+.reviews-marquee:hover .reviews-track { animation-play-state: paused; }
 
 ::selection { background: hsl(38 72% 54% / 0.35); }
 

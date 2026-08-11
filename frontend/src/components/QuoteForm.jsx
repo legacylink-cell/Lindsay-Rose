@@ -3,6 +3,8 @@ import { Send, Phone, Mail, Clock, MapPin, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { BRAND } from "../mock";
 
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
 const SERVICE_TYPES = [
   "Recurring home cleaning",
   "Deep cleaning",
@@ -14,24 +16,34 @@ const SERVICE_TYPES = [
 
 const QuoteForm = () => {
   const [form, setForm] = useState({
-    name: "", email: "", phone: "", city: "", service: SERVICE_TYPES[0], details: "",
+    name: "", email: "", phone: "", city: "", service: SERVICE_TYPES[0], details: "", company: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const update = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.phone) {
       toast.error("Please add your name, email and phone so we can reach you.");
       return;
     }
-    // FRONTEND-ONLY MOCK: save to localStorage. Backend integration comes next.
-    const saved = JSON.parse(localStorage.getItem("brightathome_quotes") || "[]");
-    saved.push({ ...form, at: new Date().toISOString() });
-    localStorage.setItem("brightathome_quotes", JSON.stringify(saved));
-    setSubmitted(true);
-    toast.success("Thanks! We'll reply within 24 hours on weekdays.");
+    setLoading(true);
+    try {
+      const res = await fetch(`${API}/quotes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      setSubmitted(true);
+      toast.success("Thanks! We'll reply within 24 hours on weekdays.");
+    } catch (err) {
+      toast.error("Something went wrong. Please call us at " + BRAND.phone + ".");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputCls =
@@ -119,11 +131,13 @@ const QuoteForm = () => {
                   <label htmlFor="qf-details" className="block text-sm font-medium text-brand-ink mb-1.5">Tell us about your space</label>
                   <textarea id="qf-details" name="details" rows={4} className={inputCls} value={form.details} onChange={update("details")} placeholder="Share any details that help us prepare your quote" />
                 </div>
+                <input type="text" name="company" value={form.company} onChange={update("company")} tabIndex="-1" autoComplete="off" aria-hidden="true" className="hidden" />
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-brand-green hover:bg-brand-greenDark text-brand-cream font-semibold px-6 py-4 rounded-full transition-all hover:shadow-lift hover:-translate-y-0.5"
+                  disabled={loading}
+                  className="w-full inline-flex items-center justify-center gap-2 bg-brand-green hover:bg-brand-greenDark text-brand-cream font-semibold px-6 py-4 rounded-full transition-all hover:shadow-lift hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Send my quote request <Send className="w-4 h-4" />
+                  {loading ? "Sending..." : "Send my quote request"} <Send className="w-4 h-4" />
                 </button>
                 <p className="text-center text-xs text-brand-ink/60">No obligation. We never share your details.</p>
               </form>

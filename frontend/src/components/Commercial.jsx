@@ -1,6 +1,6 @@
 import React from "react";
-import { Check, ArrowRight, Building2 } from "lucide-react";
-import { IMAGES, COMMERCIAL_SERVICES, COMMERCIAL_BENEFITS, COMMERCIAL_INDUSTRIES } from "../mock";
+import { Check, ArrowRight, Building2, Phone } from "lucide-react";
+import { IMAGES, COMMERCIAL_SERVICES, COMMERCIAL_BENEFITS, COMMERCIAL_INDUSTRIES, BRAND } from "../mock";
 
 const go = (href) => {
   const el = document.querySelector(href);
@@ -63,13 +63,21 @@ const Commercial = () => {
               ))}
             </div>
 
-            <button
-              onClick={() => go("#quote")}
-              className="reveal mt-9 group inline-flex items-center gap-2 bg-brand-amber hover:bg-brand-amberLight text-brand-ink font-semibold px-7 py-4 rounded-full transition-all hover:shadow-lift hover:-translate-y-0.5"
-            >
-              Request a commercial quote
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </button>
+            <div className="reveal mt-9 flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => go("#quote")}
+                className="group inline-flex items-center justify-center gap-2 bg-brand-amber hover:bg-brand-amberLight text-brand-ink font-semibold px-7 py-4 rounded-full transition-all hover:shadow-lift hover:-translate-y-0.5"
+              >
+                Request a commercial quote
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </button>
+              <a
+                href={BRAND.phoneHref}
+                className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-brand-cream font-semibold px-7 py-4 rounded-full border border-white/20 transition-all hover:-translate-y-0.5"
+              >
+                <Phone className="w-4 h-4" /> Call {BRAND.phone}
+              </a>
+            </div>
           </div>
         </div>
 

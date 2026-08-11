@@ -1,5 +1,6 @@
 import React from "react";
-import { IMAGES, PROCESS } from "../mock";
+import { Phone } from "lucide-react";
+import { IMAGES, PROCESS, BRAND } from "../mock";
 
 const go = (href) => {
   const el = document.querySelector(href);
@@ -33,12 +34,20 @@ const HowItWorks = () => {
                 </div>
               </div>
             ))}
-            <button
-              onClick={() => go("#quote")}
-              className="ml-6 mt-2 bg-brand-green hover:bg-brand-greenDark text-brand-cream font-semibold px-7 py-4 rounded-full transition-all hover:shadow-lift hover:-translate-y-0.5"
-            >
-              Start with a free quote
-            </button>
+            <div className="ml-6 mt-2 flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => go("#quote")}
+                className="bg-brand-green hover:bg-brand-greenDark text-brand-cream font-semibold px-7 py-4 rounded-full transition-all hover:shadow-lift hover:-translate-y-0.5"
+              >
+                Start with a free quote
+              </button>
+              <a
+                href={BRAND.phoneHref}
+                className="inline-flex items-center justify-center gap-2 bg-white text-brand-green font-semibold px-7 py-4 rounded-full border border-brand-green/20 hover:border-brand-green/40 transition-all hover:-translate-y-0.5"
+              >
+                <Phone className="w-4 h-4" /> Call {BRAND.phone}
+              </a>
+            </div>
           </div>
 
           <div className="relative reveal">

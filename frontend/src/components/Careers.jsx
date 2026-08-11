@@ -32,8 +32,9 @@ const POSITIONS = [
 ];
 
 const Careers = () => {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", position: POSITIONS[0].title, message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", position: POSITIONS[0].title, message: "", company: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
@@ -44,18 +45,27 @@ const Careers = () => {
   const inputCls =
     "w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-ink/55 focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green transition";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.phone) {
       toast.error("Please add your name, email and phone so we can reach you.");
       return;
     }
-    // FRONTEND-ONLY MOCK: saved to localStorage. Applications will route to support email once backend is live.
-    const saved = JSON.parse(localStorage.getItem("brightathome_applications") || "[]");
-    saved.push({ ...form, at: new Date().toISOString() });
-    localStorage.setItem("brightathome_applications", JSON.stringify(saved));
-    setSubmitted(true);
-    toast.success("Application received! We'll be in touch soon.");
+    setLoading(true);
+    try {
+      const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/applications`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      setSubmitted(true);
+      toast.success("Application received! We'll be in touch soon.");
+    } catch (err) {
+      toast.error("Something went wrong. Please email " + BRAND.email + ".");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-react";
 import { BRAND, NAV_LINKS } from "../mock";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
@@ -119,6 +119,16 @@ const Footer = () => {
               <li className="flex items-center gap-2.5"><Clock className="w-4 h-4 shrink-0" /> {BRAND.hours}</li>
               <li className="flex items-start gap-2.5"><MapPin className="w-4 h-4 shrink-0 mt-0.5" /> {BRAND.address}</li>
             </ul>
+
+            <h4 className="mt-6 text-sm font-600 uppercase tracking-wider text-brand-cream/80">Follow us</h4>
+            <div className="mt-3 flex items-center gap-3">
+              <a href={BRAND.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook" className="grid place-items-center w-10 h-10 rounded-xl bg-white/10 hover:bg-brand-amber hover:text-brand-ink text-brand-cream transition-colors">
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a href={BRAND.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="grid place-items-center w-10 h-10 rounded-xl bg-white/10 hover:bg-brand-amber hover:text-brand-ink text-brand-cream transition-colors">
+                <Instagram className="w-5 h-5" />
+              </a>
+            </div>
           </div>
         </div>
 

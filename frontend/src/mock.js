@@ -3,6 +3,7 @@
 
 import {
   SprayCan, Home, Repeat, Truck, Building2, Wrench, Store,
+  Blinds, DoorOpen, Flame, AppWindow, Fan, Refrigerator, Archive, Utensils,
 } from "lucide-react";
 
 export const BRAND = {
@@ -16,6 +17,10 @@ export const BRAND = {
   area: "Dallas–Fort Worth Metroplex",
   address: "401 Saratoga Dr, Denton, TX 76210",
   reviewUrl: "https://www.google.com/search?q=Bright+at+Home+Cleaning+Services#lrd=0x864c1b327112189d:0x69466840e88545a1,3,,,,",
+  social: {
+    facebook: "#",
+    instagram: "#",
+  },
 };
 
 export const NAV_LINKS = [
@@ -33,7 +38,7 @@ export const IMAGES = {
   kitchen: "https://images.unsplash.com/photo-1713514374038-656f7bbde9db?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHw0fHxzdW5saXQlMjBraXRjaGVufGVufDB8fHx8MTc4NDM4MDMyOXww&ixlib=rb-4.1.0&q=85&w=640&auto=format",
   bedroomPlants: "https://images.unsplash.com/photo-1499916078039-922301b0eb9b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwxfHxjb3p5JTIwYmVkcm9vbXxlbnwwfHx8fDE3ODQzODAzMjh8MA&ixlib=rb-4.1.0&q=85&w=640&auto=format",
   bedroom: "https://images.unsplash.com/photo-1541004995602-b3e898709909?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHw0fHxjb3p5JTIwYmVkcm9vbXxlbnwwfHx8fDE3ODQzODAzMjh8MA&ixlib=rb-4.1.0&q=85&w=1200&auto=format",
-  cleanerGlass: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHw0fHxwcm9mZXNzaW9uYWwlMjBjbGVhbmVyJTIwd29ya2luZ3xlbnwwfHx8fDE3ODQzODAzNjZ8MA&ixlib=rb-4.1.0&q=85&w=1200&auto=format",
+  cleanerGlass: "https://images.pexels.com/photos/4239146/pexels-photo-4239146.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   cleanerTeam: "https://images.pexels.com/photos/6195274/pexels-photo-6195274.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   cleanerVacuum: "https://images.pexels.com/photos/6196694/pexels-photo-6196694.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   cleaningStove: "https://images.pexels.com/photos/9462314/pexels-photo-9462314.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
@@ -99,6 +104,25 @@ export const COMMERCIAL_INDUSTRIES = [
   "Restaurants", "Property Mgmt", "Churches", "Post-Construction",
 ];
 
+export const ADDONS = [
+  { icon: Blinds, label: "Blinds, shutters & window sills" },
+  { icon: DoorOpen, label: "Baseboards, doors & door frames" },
+  { icon: Flame, label: "Inside-the-oven cleaning" },
+  { icon: AppWindow, label: "Interior reachable windows" },
+  { icon: Archive, label: "Cabinet & drawer exteriors" },
+  { icon: Fan, label: "Ceiling fans & light fixtures" },
+  { icon: Refrigerator, label: "Inside-the-fridge cleaning" },
+  { icon: Utensils, label: "Interior cabinets & pantry" },
+];
+
+export const ADDONS_NOTE = "Just give us a call or email about a week before your next visit and we'll fold any extras into your scheduled clean.";
+
+export const ONE_TIME = {
+  title: "Need a one-time clean?",
+  body: "We're known for keeping homes fresh on a regular schedule \u2014 but we're just as happy to help for a single visit. Our one-time cleans follow our full scope of services at a deeper level, and you can pair them with any add-ons you like. Reach out and we'll build a clear, no-obligation quote around your home.",
+};
+
+// MOCK DATA continues below.
 export const CHECKLIST = [
   "Vacuum & clean all flooring",
   "Dust furniture, fans, baseboards & blinds",
@@ -217,6 +241,24 @@ export const TESTIMONIALS = [
     name: "D. L.",
     role: "Local Guide · Google Review",
     quote: "So glad we found Bright at Home Cleaning! I have high standards for cleaning but didn't have time for it myself anymore, which was causing added stress that we didn't need. Lori & Jennifer do a superb job and are friendly, trustworthy, punctual, and efficient. We've had them for an initial deep clean then back for bi-weekly cleanings and it's wonderful!",
+    rating: 5,
+  },
+  {
+    name: "Sarah Stephens",
+    role: "Verified Google Review",
+    quote: "Kaeley always does an amazing job on our home. Her attention to detail is outstanding, and it's always such a relief to come home to a spotless house. Highly recommend!",
+    rating: 5,
+  },
+  {
+    name: "PC Ashley",
+    role: "Local Guide · Google Review",
+    quote: "Wow, house looks beautiful and smells wonderful! Also important to me, I don't have to go through the entire house repositioning pictures and knick knacks! Amazing attention to detail!",
+    rating: 5,
+  },
+  {
+    name: "Becky Hurst",
+    role: "Local Guide · Google Review",
+    quote: "18 months later, I am still thrilled with Bright at Home Cleaning. They handle everything in a purely professional and helpful manner — they're kind, always punctual, and I'm so thankful to see them. From the initial consult to payment, the whole process is easy and full of considerate communication. Highly recommend!",
     rating: 5,
   },
 ];

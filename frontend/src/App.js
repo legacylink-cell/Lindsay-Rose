@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Hero from "./components/Hero";
 import TrustBar from "./components/TrustBar";
 import Services from "./components/Services";
+import AddOns from "./components/AddOns";
 import Commercial from "./components/Commercial";
 import About from "./components/About";
 import HowItWorks from "./components/HowItWorks";
@@ -16,6 +17,7 @@ import FAQ from "./components/FAQ";
 import QuoteForm from "./components/QuoteForm";
 import Footer from "./components/Footer";
 import Careers from "./components/Careers";
+import Admin from "./components/Admin";
 
 function useReveal() {
   useEffect(() => {
@@ -66,6 +68,7 @@ const Landing = () => {
         <Hero />
         <TrustBar />
         <Services />
+        <AddOns />
         <Commercial />
         <About />
         <HowItWorks />
@@ -86,6 +89,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/careers" element={<Careers />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
       <Toaster position="top-center" richColors />
     </BrowserRouter>

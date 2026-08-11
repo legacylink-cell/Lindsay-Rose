@@ -1,6 +1,6 @@
 import React from "react";
-import { Check, ArrowRight, Star } from "lucide-react";
-import { PRICING } from "../mock";
+import { Check, ArrowRight, Star, Phone } from "lucide-react";
+import { PRICING, BRAND } from "../mock";
 
 const go = (href) => {
   const el = document.querySelector(href);
@@ -65,7 +65,15 @@ const Pricing = () => {
             </div>
           ))}
         </div>
-        <p className="mt-8 text-center text-sm text-brand-ink/65">100% satisfaction guaranteed · Bonded & insured · Never locked into a contract</p>
+        <div className="mt-8 flex flex-col items-center gap-3">
+          <a
+            href={BRAND.phoneHref}
+            className="inline-flex items-center gap-2 bg-brand-green hover:bg-brand-greenDark text-brand-cream font-600 px-7 py-3.5 rounded-full transition-all hover:shadow-lift hover:-translate-y-0.5"
+          >
+            <Phone className="w-4 h-4" /> Prefer to talk? Call {BRAND.phone}
+          </a>
+          <p className="text-center text-sm text-brand-ink/65">100% satisfaction guaranteed · Bonded & insured · Never locked into a contract</p>
+        </div>
       </div>
     </section>
   );
