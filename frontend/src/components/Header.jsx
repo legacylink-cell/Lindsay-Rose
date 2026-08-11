@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Menu, X, Phone, Leaf } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import { BRAND, NAV_LINKS } from "../mock";
 
 const Header = () => {
@@ -28,12 +28,12 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between">
         <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="flex items-center gap-2.5 group">
-          <span className="grid place-items-center w-10 h-10 rounded-xl bg-brand-green text-brand-cream transition-transform group-hover:rotate-6">
-            <Leaf className="w-5 h-5" />
+          <span className="grid place-items-center w-11 h-11 rounded-xl bg-brand-green transition-transform group-hover:scale-105">
+            <img src="/logo-icon.png" alt="" aria-hidden="true" className="w-7 h-7 object-contain" />
           </span>
-          <span className="leading-none">
-            <span className="block font-serif text-xl font-600 text-brand-ink">{BRAND.name}</span>
-            <span className="block text-[10px] tracking-[0.22em] uppercase text-brand-green/70">Cleaning Co.</span>
+          <span className="leading-tight">
+            <span className="block font-serif text-[1.35rem] font-700 tracking-wide text-brand-ink">{BRAND.name}</span>
+            <span className="block text-[10px] tracking-[0.28em] uppercase text-brand-amber">Cleaning</span>
           </span>
         </a>
 

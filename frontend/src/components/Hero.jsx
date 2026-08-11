@@ -41,19 +41,19 @@ const Hero = () => {
                     <Star key={i} className="w-3.5 h-3.5 fill-brand-amber text-brand-amber" />
                   ))}
                 </span>
-                <span className="text-xs font-bold text-brand-ink ml-0.5">4.9</span>
+                <span className="text-xs font-bold text-brand-ink ml-0.5">5.0</span>
               </span>
-              <span className="text-[11px] font-medium text-brand-ink/65 mt-1">300+ happy DFW homes & offices</span>
+              <span className="text-[11px] font-medium text-brand-ink/65 mt-1">67 five-star Google reviews</span>
             </div>
           </div>
 
-          <h1 className="mt-6 font-serif text-[2.6rem] leading-[1.05] sm:text-6xl md:text-[4.2rem] font-600 text-brand-ink tracking-tight">
-            We brighten your space,
-            <span className="block text-brand-green">so you get your time back.</span>
+          <h1 className="mt-6 font-serif text-[2.9rem] leading-[1.02] sm:text-6xl md:text-[4.4rem] font-700 text-brand-ink tracking-tight">
+            A brighter home.
+            <span className="block text-brand-green">A better day.</span>
           </h1>
 
           <p className="mt-6 text-lg text-brand-ink/70 max-w-xl leading-relaxed">
-            Trusted, insured, eco-minded cleaning for homes and businesses across the {BRAND.area}. Real people who treat your space with genuine care — not a faceless service.
+            Trusted, insured, eco-minded cleaning for homes and businesses across Collin County, Dallas County, and all of the {BRAND.area}. Real people who treat your space with genuine care — not a faceless service.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
@@ -82,7 +82,7 @@ const Hero = () => {
         {/* image collage */}
         <div className="relative">
           <div className="relative rounded-[2rem] overflow-hidden shadow-lift ring-1 ring-black/5">
-            <img src={IMAGES.heroLiving} alt="Bright, spotless living room cleaned by Brightleaf in DFW" fetchPriority="high" decoding="async" width="800" height="520" className="w-full h-[420px] md:h-[520px] object-cover" />
+            <img src={IMAGES.heroLiving} alt="Bright, spotless living room cleaned by Bright at Home Cleaning in DFW" fetchPriority="high" decoding="async" width="800" height="520" className="w-full h-[420px] md:h-[520px] object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-brand-greenDark/25 to-transparent" />
           </div>
 
@@ -91,7 +91,7 @@ const Hero = () => {
           </div>
 
           <div className="absolute -top-5 -right-3 md:-right-6 bg-white rounded-2xl shadow-lift px-4 py-3 ring-1 ring-black/5">
-            <p className="font-serif text-2xl font-600 text-brand-green leading-none">100%</p>
+            <p className="font-serif text-2xl font-700 text-brand-green leading-none">100%</p>
             <p className="text-[11px] text-brand-ink/60 mt-1 max-w-[110px]">Satisfaction guaranteed, every visit</p>
           </div>
         </div>

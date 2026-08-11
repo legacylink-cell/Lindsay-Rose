@@ -35,7 +35,7 @@ const Commercial = () => {
               Spotless workspaces that keep business moving
             </h2>
             <p className="reveal mt-5 text-brand-cream/75 text-lg leading-relaxed max-w-xl">
-              From single offices to multi-site facilities across DFW, Brightleaf delivers dependable commercial cleaning built around your schedule, your standards, and your budget.
+              From single offices to multi-site facilities across DFW, Bright at Home delivers dependable commercial cleaning built around your schedule, your standards, and your budget.
             </p>
 
             {/* service cards */}
@@ -45,7 +45,7 @@ const Commercial = () => {
                   <span className="grid place-items-center w-11 h-11 rounded-xl bg-brand-amber/20 text-brand-amberLight">
                     <s.icon className="w-5 h-5" />
                   </span>
-                  <h3 className="mt-3 font-600 text-brand-cream">{s.title}</h3>
+                  <h3 className="mt-3 font-700 text-brand-cream">{s.title}</h3>
                   <p className="mt-1.5 text-sm text-brand-cream/60 leading-relaxed">{s.desc}</p>
                 </div>
               ))}

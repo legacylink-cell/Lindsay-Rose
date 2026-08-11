@@ -1,5 +1,5 @@
 import React from "react";
-import { Leaf, Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { BRAND, NAV_LINKS } from "../mock";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
@@ -56,7 +56,7 @@ const TermsDialog = ({ children }) => (
         <div className="space-y-5">
           {TERMS.map((t) => (
             <div key={t.h}>
-              <h4 className="font-600 text-brand-ink">{t.h}</h4>
+              <h4 className="font-700 text-brand-ink">{t.h}</h4>
               <p className="mt-1 text-sm text-brand-ink/70 leading-relaxed">{t.p}</p>
             </div>
           ))}
@@ -73,16 +73,17 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5">
-              <span className="grid place-items-center w-10 h-10 rounded-xl bg-brand-green text-brand-cream">
-                <Leaf className="w-5 h-5" />
+              <span className="grid place-items-center w-11 h-11 rounded-xl bg-white/10">
+                <img src="/logo-icon.png" alt="" aria-hidden="true" className="w-7 h-7 object-contain" />
               </span>
-              <span className="leading-none">
-                <span className="block font-serif text-xl font-600">{BRAND.name}</span>
-                <span className="block text-[10px] tracking-[0.22em] uppercase text-brand-cream/50">Cleaning Co.</span>
+              <span className="leading-tight">
+                <span className="block font-serif text-xl font-700 tracking-wide">{BRAND.name}</span>
+                <span className="block text-[10px] tracking-[0.28em] uppercase text-brand-amberLight">Cleaning</span>
               </span>
             </div>
-            <p className="mt-5 text-brand-cream/60 max-w-sm leading-relaxed">
-              {BRAND.tagline} Family-run, bonded & insured, and obsessed with the details — for homes and businesses across DFW.
+            <p className="mt-3 font-serif text-lg italic text-brand-amberLight">{BRAND.tagline}</p>
+            <p className="mt-3 text-brand-cream/70 max-w-sm leading-relaxed">
+              Family-run, bonded & insured, and obsessed with the details — for homes and businesses across Collin County, Dallas County, and all of DFW.
             </p>
             <button
               onClick={() => go("#quote")}
@@ -93,11 +94,11 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Explore</h4>
+            <h4 className="text-sm font-700 uppercase tracking-wider text-brand-cream/80">Explore</h4>
             <ul className="mt-4 space-y-2.5">
               {NAV_LINKS.map((l) => (
                 <li key={l.href}>
-                  <button onClick={() => go(l.href)} className="text-brand-cream/60 hover:text-brand-amberLight transition-colors text-sm">
+                  <button onClick={() => go(l.href)} className="text-brand-cream/70 hover:text-brand-amberLight transition-colors text-sm">
                     {l.label}
                   </button>
                 </li>
@@ -106,12 +107,12 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Get in touch</h4>
-            <ul className="mt-4 space-y-3 text-sm text-brand-cream/60">
-              <li><a href={BRAND.phoneHref} className="flex items-center gap-2.5 hover:text-brand-amberLight transition-colors"><Phone className="w-4 h-4" /> {BRAND.phone}</a></li>
-              <li className="flex items-center gap-2.5"><Mail className="w-4 h-4" /> {BRAND.email}</li>
-              <li className="flex items-center gap-2.5"><Clock className="w-4 h-4" /> {BRAND.hours}</li>
-              <li className="flex items-center gap-2.5"><MapPin className="w-4 h-4" /> {BRAND.area}</li>
+            <h4 className="text-sm font-700 uppercase tracking-wider text-brand-cream/80">Get in touch</h4>
+            <ul className="mt-4 space-y-3 text-sm text-brand-cream/70">
+              <li><a href={BRAND.phoneHref} className="flex items-center gap-2.5 hover:text-brand-amberLight transition-colors"><Phone className="w-4 h-4 shrink-0" /> {BRAND.phone}</a></li>
+              <li><a href={`mailto:${BRAND.email}`} className="flex items-center gap-2.5 hover:text-brand-amberLight transition-colors break-all"><Mail className="w-4 h-4 shrink-0" /> {BRAND.email}</a></li>
+              <li className="flex items-center gap-2.5"><Clock className="w-4 h-4 shrink-0" /> {BRAND.hours}</li>
+              <li className="flex items-start gap-2.5"><MapPin className="w-4 h-4 shrink-0 mt-0.5" /> {BRAND.address}</li>
             </ul>
           </div>
         </div>

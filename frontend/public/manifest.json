@@ -1,7 +1,7 @@
 {
-  "short_name": "Brightleaf",
-  "name": "Brightleaf Cleaning Co. — Home & Commercial Cleaning DFW",
-  "description": "Trusted home & commercial cleaning across the Dallas–Fort Worth metroplex.",
+  "short_name": "Bright at Home",
+  "name": "Bright at Home Cleaning — Home & Commercial Cleaning DFW",
+  "description": "Trusted home & commercial cleaning serving Collin County, Dallas County, and all of the Dallas–Fort Worth metroplex.",
   "icons": [
     { "src": "favicon.ico", "sizes": "16x16 32x32 48x48", "type": "image/x-icon" },
     { "src": "favicon-64.png", "type": "image/png", "sizes": "64x64" },
@@ -10,6 +10,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#1E5F4C",
-  "background_color": "#FAF7F1"
+  "theme_color": "#1F4D3A",
+  "background_color": "#FFFFFB"
 }

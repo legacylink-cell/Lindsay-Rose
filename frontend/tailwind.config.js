@@ -8,8 +8,11 @@ module.exports = {
   theme: {
   	extend: {
   		fontFamily: {
-  			serif: ['Bricolage Grotesque', 'Inter', 'sans-serif'],
-  			sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+  			serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+  			sans: ['Jost', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+		},
+		fontWeight: {
+			'400': '400', '500': '500', '600': '600', '700': '700', '800': '800',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -20,14 +23,14 @@ module.exports = {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			brand: {
-  				green: '#1E5F4C',
-  				greenDark: '#153F33',
-  				greenLight: '#2E7A63',
-  				cream: '#FAF7F1',
-  				sage: '#E7EFE8',
-  				amber: '#DBA13A',
-  				amberLight: '#E9BE6E',
-  				ink: '#20261F',
+  				green: '#1F4D3A',
+  				greenDark: '#143528',
+  				greenLight: '#2E6B50',
+  				cream: '#FFFFFB',
+  				sage: '#E8EFE9',
+  				amber: '#C9A227',
+  				amberLight: '#DFC069',
+  				ink: '#2E2E2E',
   			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',

@@ -1,4 +1,4 @@
-// MOCK DATA for Brightleaf Cleaning Co. (frontend-only teaser).
+// MOCK DATA for Bright at Home Cleaning (frontend-only teaser).
 // NOTE: Testimonials and quote submissions are MOCKED for now.
 
 import {
@@ -6,14 +6,15 @@ import {
 } from "lucide-react";
 
 export const BRAND = {
-  name: "Brightleaf",
-  full: "Brightleaf Cleaning Co.",
-  tagline: "Home & commercial cleaning, done with care — across DFW.",
+  name: "Bright at Home",
+  full: "Bright at Home Cleaning",
+  tagline: "A Brighter Home. A Better Day.",
   phone: "469-443-6903",
   phoneHref: "tel:+14694436903",
-  email: "hello@brightleafcleaning.com",
-  hours: "Mon–Fri, 9am–5pm",
+  email: "support@brightathomecleaning.com",
+  hours: "Mon–Fri, 8am–5pm",
   area: "Dallas–Fort Worth Metroplex",
+  address: "401 Saratoga Dr, Denton, TX 76210",
 };
 
 export const NAV_LINKS = [
@@ -132,11 +133,11 @@ export const PRICING = [
   {
     name: "Recurring",
     highlight: false,
-    price: "from $119",
-    unit: "/ visit",
+    price: "Custom",
+    unit: "quote",
     blurb: "Weekly, biweekly & monthly upkeep.",
     features: [
-      "Best per-visit pricing",
+      "Best per-visit value",
       "Same trusted team",
       "Never locked into a contract",
       "Flexible rescheduling",
@@ -146,8 +147,8 @@ export const PRICING = [
   {
     name: "Deep Clean",
     highlight: true,
-    price: "from $249",
-    unit: "/ visit",
+    price: "Custom",
+    unit: "quote",
     blurb: "The thorough first-visit reset.",
     features: [
       "Top-to-bottom detail work",
@@ -179,30 +180,42 @@ export const AREAS = [
   "Richardson", "Carrollton", "Denton", "Prosper", "Fairview", "Murphy",
 ];
 
-// MOCK testimonials — placeholder content, not real customers.
+// Real customer reviews from the Bright at Home Cleaning Google Business Profile.
 export const TESTIMONIALS = [
   {
-    name: "Maria G.",
-    role: "Frisco, TX",
-    quote: "They treated my home like it was their own. I came back to a house that literally smelled like sunshine. The team is warm, punctual, and genuinely kind.",
+    name: "Dani Price",
+    role: "Verified Google Review",
+    quote: "I am so pleased with Bright At Home Cleaning! The work they do is exceptional and incredibly professional. I first received a text that they were 'en route'. Lori was punctual and kind and got straight to the job. She paid special attention to details, and it looks and smells great! After she left I received a text that the job was done and the invoice was on its way. I love the communication! I highly recommend them.",
     rating: 5,
   },
   {
-    name: "Daniel R.",
-    role: "Office Manager, Dallas",
-    quote: "We switched our office to Brightleaf and the difference was immediate. Consistent, thorough, and they actually care about the details.",
+    name: "Chelsey Garrett",
+    role: "Verified Google Review",
+    quote: "Lori and Maren were very kind and professional. They spent a concentrated effort on certain areas that I've had trouble getting clean, and they achieved together what I couldn't! I really appreciated the time they took to clean and my home looks and smells amazing!",
     rating: 5,
   },
   {
-    name: "Priya S.",
-    role: "Plano, TX",
-    quote: "The move-out clean got our full deposit back. Communication was effortless and the quote was exactly what they charged. Rare these days.",
+    name: "Jennifer Inumerable",
+    role: "Verified Google Review",
+    quote: "Maren and her team are professional and very responsive. I used them for a deep clean and they did a fantastic job cleaning my house and using green products too, which is hard to find with cleaning companies nowadays. I also really liked the small thank you gift they gave me after the service. Would wholeheartedly recommend!",
     rating: 5,
   },
   {
-    name: "James & Elaine",
-    role: "McKinney, TX",
-    quote: "Biweekly cleanings have given us our weekends back. Same lovely crew every time — it feels like family looking after our home.",
+    name: "Kassie Redd",
+    role: "Verified Google Review",
+    quote: "We went through a couple different cleaning services and individuals before we found out about Bright at Home. Sarah is the BEST by far! She is thorough and efficient and has amazing attention to detail. Now I get that \"new home\" feel on a regular basis!",
+    rating: 5,
+  },
+  {
+    name: "Christopher Pilcic",
+    role: "Verified Google Review",
+    quote: "Bright at Home did an excellent job cleaning our home while we were out of town. It was such a pleasure coming home to a clean house. The attention to detail was very impressive. I will definitely be calling them back!",
+    rating: 5,
+  },
+  {
+    name: "D. L.",
+    role: "Local Guide · Google Review",
+    quote: "So glad we found Bright at Home Cleaning! I have high standards for cleaning but didn't have time for it myself anymore, which was causing added stress that we didn't need. Lori & Jennifer do a superb job and are friendly, trustworthy, punctual, and efficient. We've had them for an initial deep clean then back for bi-weekly cleanings and it's wonderful!",
     rating: 5,
   },
 ];
@@ -235,8 +248,8 @@ export const FAQS = [
 ];
 
 export const STATS = [
-  { value: "12+", label: "Years brightening DFW" },
-  { value: "4,800+", label: "Homes & offices cleaned" },
-  { value: "100%", label: "Satisfaction guarantee" },
-  { value: "4.9★", label: "Average client rating" },
+  { value: "6+", label: "Years serving North Texas" },
+  { value: "2,500+", label: "Cleans completed" },
+  { value: "67", label: "Five-star Google reviews" },
+  { value: "5.0★", label: "Average client rating" },
 ];
