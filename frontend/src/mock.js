@@ -19,7 +19,7 @@ export const BRAND = {
   reviewUrl: "https://www.google.com/search?q=Bright+at+Home+Cleaning+Services#lrd=0x864c1b327112189d:0x69466840e88545a1,3,,,,",
   social: {
     facebook: "https://www.facebook.com/brightathomecleaning/",
-    instagram: "",
+    instagram: "#",
   },
 };
 
