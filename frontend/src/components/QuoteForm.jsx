@@ -63,20 +63,20 @@ const QuoteForm = () => {
 
             <div className="mt-10 space-y-5">
               <a href={BRAND.phoneHref} className="flex items-center gap-4 group">
-                <span className="grid place-items-center w-12 h-12 rounded-xl bg-white/10 group-hover:bg-white/20 transition-colors"><Phone className="w-5 h-5 text-brand-amberLight" /></span>
-                <span><span className="block text-xs text-brand-cream/60">Call us</span><span className="font-600">{BRAND.phone}</span></span>
+                <span className="grid place-items-center w-12 h-12 rounded-xl bg-white/10 group-hover:bg-white/20 transition-colors shrink-0"><Phone className="w-5 h-5 text-brand-amberLight" /></span>
+                <span className="min-w-0"><span className="block text-xs text-brand-cream/60">Call us</span><span className="font-600 break-words">{BRAND.phone}</span></span>
+              </a>
+              <a href={`mailto:${BRAND.email}`} className="flex items-center gap-4 group">
+                <span className="grid place-items-center w-12 h-12 rounded-xl bg-white/10 group-hover:bg-white/20 transition-colors shrink-0"><Mail className="w-5 h-5 text-brand-amberLight" /></span>
+                <span className="min-w-0"><span className="block text-xs text-brand-cream/60">Email</span><span className="font-600 break-all">{BRAND.email}</span></span>
               </a>
               <div className="flex items-center gap-4">
-                <span className="grid place-items-center w-12 h-12 rounded-xl bg-white/10"><Mail className="w-5 h-5 text-brand-amberLight" /></span>
-                <span><span className="block text-xs text-brand-cream/60">Email</span><span className="font-600">{BRAND.email}</span></span>
+                <span className="grid place-items-center w-12 h-12 rounded-xl bg-white/10 shrink-0"><Clock className="w-5 h-5 text-brand-amberLight" /></span>
+                <span className="min-w-0"><span className="block text-xs text-brand-cream/60">Hours</span><span className="font-600 break-words">{BRAND.hours}</span></span>
               </div>
               <div className="flex items-center gap-4">
-                <span className="grid place-items-center w-12 h-12 rounded-xl bg-white/10"><Clock className="w-5 h-5 text-brand-amberLight" /></span>
-                <span><span className="block text-xs text-brand-cream/60">Hours</span><span className="font-600">{BRAND.hours}</span></span>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="grid place-items-center w-12 h-12 rounded-xl bg-white/10"><MapPin className="w-5 h-5 text-brand-amberLight" /></span>
-                <span><span className="block text-xs text-brand-cream/60">Serving</span><span className="font-600">{BRAND.area}</span></span>
+                <span className="grid place-items-center w-12 h-12 rounded-xl bg-white/10 shrink-0"><MapPin className="w-5 h-5 text-brand-amberLight" /></span>
+                <span className="min-w-0"><span className="block text-xs text-brand-cream/60">Serving</span><span className="font-600 break-words">{BRAND.area}</span></span>
               </div>
             </div>
           </div>

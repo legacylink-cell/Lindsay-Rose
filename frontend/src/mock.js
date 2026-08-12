@@ -18,8 +18,8 @@ export const BRAND = {
   address: "401 Saratoga Dr, Denton, TX 76210",
   reviewUrl: "https://www.google.com/search?q=Bright+at+Home+Cleaning+Services#lrd=0x864c1b327112189d:0x69466840e88545a1,3,,,,",
   social: {
-    facebook: "#",
-    instagram: "#",
+    facebook: "https://www.facebook.com/brightathomecleaning/",
+    instagram: "",
   },
 };
 

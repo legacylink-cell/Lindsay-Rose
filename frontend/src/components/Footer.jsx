@@ -122,12 +122,16 @@ const Footer = () => {
 
             <h4 className="mt-6 text-sm font-600 uppercase tracking-wider text-brand-cream/80">Follow us</h4>
             <div className="mt-3 flex items-center gap-3">
-              <a href={BRAND.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook" className="grid place-items-center w-10 h-10 rounded-xl bg-white/10 hover:bg-brand-amber hover:text-brand-ink text-brand-cream transition-colors">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href={BRAND.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="grid place-items-center w-10 h-10 rounded-xl bg-white/10 hover:bg-brand-amber hover:text-brand-ink text-brand-cream transition-colors">
-                <Instagram className="w-5 h-5" />
-              </a>
+              {BRAND.social.facebook && (
+                <a href={BRAND.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook" className="grid place-items-center w-10 h-10 rounded-xl bg-white/10 hover:bg-brand-amber hover:text-brand-ink text-brand-cream transition-colors">
+                  <Facebook className="w-5 h-5" />
+                </a>
+              )}
+              {BRAND.social.instagram && (
+                <a href={BRAND.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="grid place-items-center w-10 h-10 rounded-xl bg-white/10 hover:bg-brand-amber hover:text-brand-ink text-brand-cream transition-colors">
+                  <Instagram className="w-5 h-5" />
+                </a>
+              )}
             </div>
           </div>
         </div>
