@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Lock, LogOut, Inbox, Briefcase, RefreshCw } from "lucide-react";
+import { Lock, LogOut, Inbox, Briefcase, RefreshCw, Layers, CalendarClock } from "lucide-react";
 import { toast } from "sonner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -101,6 +101,34 @@ const Admin = () => {
       </header>
 
       <div className="max-w-6xl mx-auto px-5 py-8">
+        {(() => {
+          const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
+          const all = [...quotes, ...apps];
+          const newThisWeek = all.filter((x) => {
+            const t = new Date(x.created_at).getTime();
+            return !isNaN(t) && t >= weekAgo;
+          }).length;
+          const stats = [
+            { icon: Inbox, label: "Quote requests", value: quotes.length },
+            { icon: Briefcase, label: "Applications", value: apps.length },
+            { icon: Layers, label: "Total submissions", value: all.length },
+            { icon: CalendarClock, label: "New this week", value: newThisWeek },
+          ];
+          return (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              {stats.map((s) => (
+                <div key={s.label} className="bg-white rounded-2xl p-5 shadow-soft ring-1 ring-black/5">
+                  <span className="grid place-items-center w-11 h-11 rounded-xl bg-brand-sage text-brand-green">
+                    <s.icon className="w-5 h-5" />
+                  </span>
+                  <p className="mt-3 font-serif text-3xl font-600 text-brand-ink">{s.value}</p>
+                  <p className="text-sm text-brand-ink/60">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
+
         <div className="inline-flex bg-white rounded-full p-1 shadow-soft ring-1 ring-black/5 mb-6">
           <button onClick={() => setTab("quotes")} className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-600 transition-all ${tab === "quotes" ? "bg-brand-green text-brand-cream" : "text-brand-ink/60"}`}><Inbox className="w-4 h-4" /> Quote Requests ({quotes.length})</button>
           <button onClick={() => setTab("apps")} className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-600 transition-all ${tab === "apps" ? "bg-brand-green text-brand-cream" : "text-brand-ink/60"}`}><Briefcase className="w-4 h-4" /> Applications ({apps.length})</button>

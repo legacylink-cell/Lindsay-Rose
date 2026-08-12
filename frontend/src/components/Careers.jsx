@@ -160,38 +160,19 @@ const Careers = () => {
         </div>
       </section>
 
-      {/* perks + positions */}
+      {/* perks */}
       <section className="pb-4">
-        <div className="max-w-7xl mx-auto px-5 md:px-8 grid lg:grid-cols-2 gap-10">
-          <div>
-            <h2 className="font-serif text-3xl md:text-4xl font-600 text-brand-ink">Why you'll love working here</h2>
-            <div className="mt-6 space-y-3">
-              {PERKS.map((p) => (
-                <div key={p.label} className="flex items-center gap-3 bg-white rounded-2xl p-4 shadow-soft ring-1 ring-black/5">
-                  <span className="grid place-items-center w-10 h-10 rounded-xl bg-brand-sage text-brand-green shrink-0">
-                    <p.icon className="w-5 h-5" />
-                  </span>
-                  <span className="text-brand-ink/80">{p.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h2 className="font-serif text-3xl md:text-4xl font-600 text-brand-ink">Open positions</h2>
-            <div className="mt-6 space-y-3">
-              {POSITIONS.map((pos) => (
-                <div key={pos.title} className="bg-white rounded-2xl p-5 shadow-soft ring-1 ring-black/5 flex items-center justify-between gap-4">
-                  <div>
-                    <h3 className="font-600 text-brand-ink">{pos.title}</h3>
-                    <p className="mt-1 text-sm text-brand-ink/60 flex flex-wrap gap-x-3 gap-y-1">
-                      <span className="inline-flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {pos.type}</span>
-                      <span className="inline-flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {pos.area}</span>
-                    </p>
-                  </div>
-                  <a href="#apply" className="shrink-0 text-sm font-600 text-brand-green hover:text-brand-greenDark">Apply →</a>
-                </div>
-              ))}
-            </div>
+        <div className="max-w-4xl mx-auto px-5 md:px-8">
+          <h2 className="font-serif text-3xl md:text-4xl font-600 text-brand-ink text-center">Why you'll love working here</h2>
+          <div className="mt-8 grid sm:grid-cols-2 gap-3">
+            {PERKS.map((p) => (
+              <div key={p.label} className="flex items-center gap-3 bg-white rounded-2xl p-4 shadow-soft ring-1 ring-black/5">
+                <span className="grid place-items-center w-10 h-10 rounded-xl bg-brand-sage text-brand-green shrink-0">
+                  <p.icon className="w-5 h-5" />
+                </span>
+                <span className="text-brand-ink/80">{p.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
