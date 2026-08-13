@@ -24,10 +24,15 @@ import BrandPreview from "./components/BrandPreview";
 
 function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
+    const revealVisible = () => {
+      document.querySelectorAll(".reveal:not(.in-view)").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.95 && r.bottom > 0) el.classList.add("in-view");
+      });
+    };
     // Safety fallback: if IntersectionObserver isn't available, reveal everything.
     if (typeof IntersectionObserver === "undefined") {
-      els.forEach((el) => el.classList.add("in-view"));
+      document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in-view"));
       return;
     }
     const obs = new IntersectionObserver(
@@ -41,16 +46,22 @@ function useReveal() {
       },
       { threshold: 0.12 }
     );
-    els.forEach((el) => obs.observe(el));
-    // Extra safety net: never let content stay invisible for long.
-    const t = setTimeout(() => {
-      document.querySelectorAll(".reveal:not(.in-view)").forEach((el) => {
-        const r = el.getBoundingClientRect();
-        if (r.top < window.innerHeight) el.classList.add("in-view");
-      });
-    }, 2500);
+    document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+    // Backup: a live-query scroll/resize handler reveals any .reveal element that
+    // enters the viewport, even if the observer missed it (e.g. dev hot reload).
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => { raf = 0; revealVisible(); });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    revealVisible();
+    const t = setTimeout(revealVisible, 1500);
     return () => {
       obs.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
       clearTimeout(t);
     };
   }, []);

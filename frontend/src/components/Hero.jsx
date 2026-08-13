@@ -47,9 +47,9 @@ const Hero = () => {
             </div>
           </div>
 
-          <h1 className="mt-6 font-serif text-[2.9rem] leading-[1.02] sm:text-6xl md:text-[4.4rem] font-700 text-brand-ink tracking-tight">
-            We brighten your space,
-            <span className="block text-brand-green">so you get your time back.</span>
+          <h1 className="mt-6 font-serif text-[2.2rem] leading-[1.05] sm:text-5xl md:text-[3.4rem] font-700 text-brand-ink tracking-tight">
+            We brighten your space.
+            <span className="block text-brand-green">You get your time back.</span>
           </h1>
 
           <p className="mt-6 text-lg text-brand-ink/70 max-w-xl leading-relaxed">

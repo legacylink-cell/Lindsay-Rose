@@ -9,7 +9,7 @@ const ServiceAreas = () => {
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="rounded-[2rem] bg-brand-greenDark text-brand-cream overflow-hidden relative grain">
           <div className="relative px-8 md:px-12 py-12 md:py-16">
-            <div className="max-w-2xl">
+            <div className="max-w-2xl mx-auto text-center">
               <p className="text-xs uppercase tracking-[0.22em] text-brand-amberLight font-semibold">Proudly serving</p>
               <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700">
                 Collin County, Dallas County & all of DFW
