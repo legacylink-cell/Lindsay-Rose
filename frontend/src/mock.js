@@ -27,9 +27,42 @@ export const NAV_LINKS = [
   { label: "Services", href: "#services" },
   { label: "Commercial", href: "#commercial" },
   { label: "How it works", href: "#process" },
-  { label: "Pricing", href: "#pricing" },
   { label: "Areas", href: "#areas" },
   { label: "Reviews", href: "#reviews" },
+];
+
+export const DIFFERENTIATORS = [
+  {
+    icon: "ShieldCheck",
+    title: "Background-Checked Team",
+    desc: "Every single team member passes a thorough background check before they ever set foot in your home \u2014 a step far too many cleaning companies quietly skip. Your safety and peace of mind always come first.",
+    featured: true,
+  },
+  {
+    icon: "Heart",
+    title: "Faith-Driven Care",
+    desc: "We run our business on integrity and genuine care, treating your home and family the way we'd want ours treated.",
+  },
+  {
+    icon: "Users",
+    title: "The Same Trusted Faces",
+    desc: "You get a consistent, familiar crew who learn your home and preferences \u2014 not a rotating cast of strangers.",
+  },
+  {
+    icon: "Leaf",
+    title: "Eco-Friendly & Safe",
+    desc: "Effective, non-toxic, biodegradable products that are safe for your kids, pets, and the planet.",
+  },
+  {
+    icon: "BadgeCheck",
+    title: "Bonded & Insured",
+    desc: "Fully bonded and insured for complete protection, so you can relax knowing you're fully covered.",
+  },
+  {
+    icon: "Star",
+    title: "100% Satisfaction Guarantee",
+    desc: "If anything isn't perfect, tell us within 24 hours and we'll make it right \u2014 free. That's our promise.",
+  },
 ];
 
 export const IMAGES = {

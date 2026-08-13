@@ -10,6 +10,7 @@ import AddOns from "./components/AddOns";
 import Commercial from "./components/Commercial";
 import About from "./components/About";
 import FaithVerse from "./components/FaithVerse";
+import Differentiators from "./components/Differentiators";
 import HowItWorks from "./components/HowItWorks";
 import ServiceAreas from "./components/ServiceAreas";
 import Pricing from "./components/Pricing";
@@ -67,12 +68,13 @@ const Landing = () => {
       <Header />
       <main>
         <Hero />
+        <FaithVerse />
         <TrustBar />
         <Services />
+        <Differentiators />
         <AddOns />
         <Commercial />
         <About />
-        <FaithVerse />
         <HowItWorks />
         <Pricing />
         <ServiceAreas />
