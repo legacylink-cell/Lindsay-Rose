@@ -186,6 +186,18 @@ async def summary(_: bool = Depends(require_admin)):
     }
 
 
+@api_router.delete("/admin/quotes/{item_id}")
+async def delete_quote(item_id: str, _: bool = Depends(require_admin)):
+    await db.quotes.delete_one({"id": item_id})
+    return {"success": True}
+
+
+@api_router.delete("/admin/applications/{item_id}")
+async def delete_application(item_id: str, _: bool = Depends(require_admin)):
+    await db.applications.delete_one({"id": item_id})
+    return {"success": True}
+
+
 app.include_router(api_router)
 
 app.add_middleware(

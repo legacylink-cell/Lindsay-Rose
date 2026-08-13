@@ -59,6 +59,23 @@ const Admin = () => {
 
   const fmt = (iso) => { try { return new Date(iso).toLocaleString(); } catch { return iso; } };
 
+  const remove = async (item) => {
+    if (!window.confirm(`Delete this ${tab === "quotes" ? "quote request" : "application"} from ${item.name}? This can't be undone.`)) return;
+    try {
+      const path = tab === "quotes" ? "quotes" : "applications";
+      const res = await fetch(`${API}/admin/${path}/${item.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error();
+      if (tab === "quotes") setQuotes((p) => p.filter((x) => x.id !== item.id));
+      else setApps((p) => p.filter((x) => x.id !== item.id));
+      toast.success("Deleted.");
+    } catch {
+      toast.error("Could not delete. Please try again.");
+    }
+  };
+
   if (!token) {
     return (
       <div className="min-h-screen grid place-items-center bg-brand-cream px-5">
@@ -143,7 +160,12 @@ const Admin = () => {
                     <a href={`tel:${item.phone}`} className="text-sm text-brand-green">{item.phone}</a>
                     <a href={`mailto:${item.email}`} className="text-sm text-brand-ink/60">{item.email}</a>
                   </div>
-                  <span className="text-xs text-brand-ink/50">{fmt(item.created_at)}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-brand-ink/50">{fmt(item.created_at)}</span>
+                    <button onClick={() => remove(item)} data-testid={`delete-submission-${item.id}`} className="text-brand-ink/40 hover:text-red-600 transition-colors" aria-label="Delete submission" title="Delete">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2 text-xs">
                   {item.service && <span className="bg-brand-sage text-brand-green px-2.5 py-1 rounded-full">{item.service}</span>}
