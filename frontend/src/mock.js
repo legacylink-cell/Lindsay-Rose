@@ -191,8 +191,7 @@ export const PRICING = [
   {
     name: "Recurring",
     highlight: false,
-    price: "Custom",
-    unit: "quote",
+    tagline: "Tailored to your home",
     blurb: "Weekly, biweekly & monthly upkeep.",
     features: [
       "Best per-visit value",
@@ -205,8 +204,7 @@ export const PRICING = [
   {
     name: "Deep Clean",
     highlight: true,
-    price: "Custom",
-    unit: "quote",
+    tagline: "Your first-visit reset",
     blurb: "The thorough first-visit reset.",
     features: [
       "Top-to-bottom detail work",
@@ -219,8 +217,7 @@ export const PRICING = [
   {
     name: "Commercial",
     highlight: false,
-    price: "Custom",
-    unit: "quote",
+    tagline: "Built around your space",
     blurb: "Offices, retail, medical & more.",
     features: [
       "Tailored to your schedule",
