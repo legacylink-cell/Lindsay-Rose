@@ -323,6 +323,6 @@ export const FAQS = [
 export const STATS = [
   { value: "6+", label: "Years serving North Texas" },
   { value: "2,500+", label: "Cleans completed" },
-  { value: "67", label: "Five-star Google reviews" },
+  { value: "65+", label: "Five-star Google reviews" },
   { value: "5.0★", label: "Average client rating" },
 ];

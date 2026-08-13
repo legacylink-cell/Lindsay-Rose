@@ -39,7 +39,7 @@ const Testimonials = () => {
                 <Star key={i} className="w-5 h-5 fill-brand-amber text-brand-amber" />
               ))}
             </span>
-            <span className="text-brand-ink/65 font-medium">5.0 average · 67 Google reviews</span>
+            <span className="text-brand-ink/65 font-medium">5.0 average · 65+ Google reviews</span>
           </div>
         </div>
       </div>
