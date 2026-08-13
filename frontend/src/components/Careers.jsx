@@ -74,7 +74,7 @@ const Careers = () => {
       <header className="bg-brand-cream border-b border-border">
         <div className="max-w-7xl mx-auto px-5 md:px-8 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center group" data-testid="careers-logo">
-            <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-12 md:h-14 w-auto object-contain transition-transform group-hover:scale-105" />
+            <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-16 md:h-20 w-auto object-contain transition-transform group-hover:scale-105" />
           </Link>
           <div className="flex items-center gap-4">
             <Link to="/" className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-brand-ink/75 hover:text-brand-green transition-colors">
