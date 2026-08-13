@@ -9,7 +9,7 @@ import {
 export const BRAND = {
   name: "Bright at Home",
   full: "Bright at Home Cleaning",
-  tagline: "A Brighter Home. A Better Day.",
+  tagline: "A brighter home, a brighter life.",
   phone: "469-443-6903",
   phoneHref: "tel:+14694436903",
   email: "support@brightathomecleaning.com",
