@@ -1,5 +1,5 @@
 import React from "react";
-import { Check, ArrowRight, Star, Phone, Sparkles } from "lucide-react";
+import { Check, ArrowRight, Star, Phone, Heart } from "lucide-react";
 import { PRICING, BRAND } from "../mock";
 
 const go = (href) => {
@@ -40,7 +40,7 @@ const Pricing = () => {
               <p className={`text-sm mt-1 ${p.highlight ? "text-brand-cream/70" : "text-brand-ink/60"}`}>{p.blurb}</p>
               <div className="mt-5 flex items-center gap-2">
                 <span className={`inline-flex items-center gap-1.5 font-serif text-xl font-600 ${p.highlight ? "text-brand-amber" : "text-brand-green"}`}>
-                  <Sparkles className="w-4 h-4" /> {p.tagline}
+                  <Heart className="w-4 h-4" /> {p.tagline}
                 </span>
               </div>
               <ul className="mt-6 space-y-3">
