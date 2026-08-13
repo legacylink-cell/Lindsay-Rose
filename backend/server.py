@@ -28,6 +28,7 @@ ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'changeme')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'dev-secret')
 FORWARD_EMAIL = os.environ.get('FORWARD_EMAIL', 'design@mozeid.com')
 FORWARD_CC = os.environ.get('FORWARD_CC', 'support@brightathomecleaning.com')
+FORWARD_ORIGIN = os.environ.get('FORWARD_ORIGIN', 'https://www.bright.mozeid.com')
 JWT_ALGO = 'HS256'
 
 app = FastAPI()
@@ -75,11 +76,18 @@ def _forward_email(subject: str, fields: dict):
     """Forward a submission to the support inbox via FormSubmit (no API key)."""
     try:
         payload = {**fields, "_subject": subject, "_template": "table", "_captcha": "false", "_cc": FORWARD_CC}
-        requests.post(
+        headers = {
+            "Origin": FORWARD_ORIGIN,
+            "Referer": FORWARD_ORIGIN + "/",
+            "User-Agent": "Mozilla/5.0 (BrightAtHome Server)",
+        }
+        resp = requests.post(
             f"https://formsubmit.co/ajax/{FORWARD_EMAIL}",
             json=payload,
+            headers=headers,
             timeout=12,
         )
+        logging.info(f"FormSubmit forward [{resp.status_code}]: {resp.text[:300]}")
     except Exception as e:  # never block a submission on email issues
         logging.warning(f"Email forward failed: {e}")
 
