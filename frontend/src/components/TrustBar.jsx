@@ -6,7 +6,7 @@ const BADGES = [
   { icon: ShieldCheck, label: "Bonded & Insured" },
   { icon: Leaf, label: "Eco-Friendly" },
   { icon: HeartHandshake, label: "Family Operated" },
-  { icon: BadgeCheck, label: "Vetted Team" },
+  { icon: BadgeCheck, label: "Background-Checked" },
 ];
 
 const TrustBar = () => {

@@ -177,6 +177,23 @@ const Careers = () => {
         </div>
       </section>
 
+      {/* background check requirement */}
+      <section className="pb-4">
+        <div className="max-w-4xl mx-auto px-5 md:px-8">
+          <div className="rounded-[1.5rem] bg-brand-green text-brand-cream p-6 md:p-8 flex items-start gap-4 shadow-soft">
+            <span className="grid place-items-center w-12 h-12 rounded-xl bg-white/10 text-brand-amberLight shrink-0">
+              <ShieldCheck className="w-6 h-6" />
+            </span>
+            <div>
+              <h3 className="font-serif text-2xl font-600">A note on trust &amp; safety</h3>
+              <p className="mt-2 text-brand-cream/85 leading-relaxed">
+                Because our team works inside clients' homes and businesses, <span className="font-600 text-brand-cream">a clean, successfully completed background check is a firm requirement</span> for every position, with no exceptions. It's how we keep our clients safe and uphold the trust they place in us.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* application form */}
       <section id="apply" className="section-pad">
         <div className="max-w-3xl mx-auto px-5 md:px-8">

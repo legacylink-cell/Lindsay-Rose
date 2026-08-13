@@ -73,12 +73,12 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5">
-              <span className="grid place-items-center w-11 h-11 rounded-xl bg-white/10">
-                <img src="/logo-icon.png" alt="" aria-hidden="true" className="w-7 h-7 object-contain" />
+              <span className="grid place-items-center w-14 h-14 rounded-2xl bg-white/10">
+                <img src="/logo-icon.png" alt="" aria-hidden="true" className="w-9 h-9 object-contain" />
               </span>
               <span className="leading-tight">
-                <span className="block font-serif text-xl font-600 tracking-wide">{BRAND.name}</span>
-                <span className="block text-[10px] tracking-[0.28em] uppercase text-brand-amberLight">Cleaning</span>
+                <span className="block font-serif text-2xl font-600 tracking-wide">{BRAND.name}</span>
+                <span className="block text-[11px] tracking-[0.3em] uppercase text-brand-amberLight">Cleaning</span>
               </span>
             </div>
             <p className="mt-3 font-serif text-lg italic text-brand-amberLight">{BRAND.tagline}</p>

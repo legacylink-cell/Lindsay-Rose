@@ -9,6 +9,7 @@ import Services from "./components/Services";
 import AddOns from "./components/AddOns";
 import Commercial from "./components/Commercial";
 import About from "./components/About";
+import FaithVerse from "./components/FaithVerse";
 import HowItWorks from "./components/HowItWorks";
 import ServiceAreas from "./components/ServiceAreas";
 import Pricing from "./components/Pricing";
@@ -71,6 +72,7 @@ const Landing = () => {
         <AddOns />
         <Commercial />
         <About />
+        <FaithVerse />
         <HowItWorks />
         <Pricing />
         <ServiceAreas />

@@ -119,6 +119,9 @@ backend:
         -working: true
         -agent: "testing"
         -comment: "TESTED. Valid quote submission works correctly. POST /api/quotes with valid data (name, email, phone, city, service, details) returns 200 with {success: true, id: <uuid>}. Data persists in MongoDB quotes collection. Response time is fast (email forwarding runs in background and does not block)."
+        -working: true
+        -agent: "testing"
+        -comment: "RE-TESTED after email config change (primary: design@mozeid.com, CC: support@brightathomecleaning.com). POST /api/quotes with {name:'QA Test', email:'qa@example.com', phone:'469-111-2222', city:'Denton', service:'One-time cleaning', details:'test'} returns 200 with {success:true, id:<uuid>}. Response time: 0.31s (excellent, email forwarding NOT blocking). Data persists correctly. ✅ NO REGRESSION."
 
   - task: "POST /api/quotes - email validation"
     implemented: true
@@ -134,6 +137,9 @@ backend:
         -working: true
         -agent: "testing"
         -comment: "TESTED. Email validation works correctly. POST /api/quotes with invalid email (e.g., 'not-an-email') returns 422 validation error as expected."
+        -working: true
+        -agent: "testing"
+        -comment: "RE-TESTED after email config change. POST /api/quotes with invalid email 'not-an-email' returns 422 validation error as expected. ✅ NO REGRESSION."
 
   - task: "POST /api/quotes - honeypot protection"
     implemented: true
@@ -149,6 +155,9 @@ backend:
         -working: true
         -agent: "testing"
         -comment: "TESTED. Honeypot protection works correctly. POST /api/quotes with 'company' field filled returns 200 {success: true} but submission is NOT stored in database (verified via admin endpoint - honeypot submission not present in quotes list)."
+        -working: true
+        -agent: "testing"
+        -comment: "RE-TESTED after email config change. POST /api/quotes with valid data + 'company':'bot' returns 200 {success:true} but NOT stored in database (verified via admin endpoint - only 1 qa@example.com quote found, honeypot submission correctly dropped). ✅ NO REGRESSION."
 
   - task: "POST /api/applications - valid submission"
     implemented: true
@@ -164,6 +173,9 @@ backend:
         -working: true
         -agent: "testing"
         -comment: "TESTED. Valid application submission works correctly. POST /api/applications with valid data (name, email, phone, position, message) returns 200 with {success: true, id: <uuid>}. Data persists in MongoDB applications collection."
+        -working: true
+        -agent: "testing"
+        -comment: "RE-TESTED after email config change. POST /api/applications with valid data returns 200 with {success:true, id:<uuid>}. Response time: 0.21s (fast). Data persists correctly in MongoDB. ✅ NO REGRESSION."
 
   - task: "POST /api/admin/login - authentication"
     implemented: true
@@ -179,6 +191,9 @@ backend:
         -working: true
         -agent: "testing"
         -comment: "TESTED. Admin authentication works correctly. (1) POST /api/admin/login with wrong credentials returns 401 Unauthorized. (2) POST /api/admin/login with correct credentials (brightadmin / Brighth4Dyvnjh from backend/.env) returns 200 with JWT token."
+        -working: true
+        -agent: "testing"
+        -comment: "RE-TESTED after email config change. (1) POST /api/admin/login with wrong credentials returns 401 as expected. (2) POST /api/admin/login with correct credentials (brightadmin / Brighth4Dyvnjh) returns 200 with JWT token. ✅ NO REGRESSION."
 
   - task: "GET /api/admin/quotes - protected endpoint"
     implemented: true
@@ -194,6 +209,9 @@ backend:
         -working: true
         -agent: "testing"
         -comment: "TESTED. Admin quotes endpoint works correctly. (1) GET /api/admin/quotes without token returns 403 Forbidden. (2) GET /api/admin/quotes with valid Bearer token returns 200 with list of quotes. Test quote submission found in list. Honeypot submission correctly NOT present in list. Sorting verified (newest first)."
+        -working: true
+        -agent: "testing"
+        -comment: "RE-TESTED after email config change. (1) GET /api/admin/quotes without token returns 403 as expected. (2) GET /api/admin/quotes with valid Bearer token returns 200 with list. Test quote found, honeypot submission NOT stored (verified only 1 qa@example.com quote). ✅ NO REGRESSION."
 
   - task: "GET /api/admin/applications - protected endpoint"
     implemented: true
@@ -209,6 +227,9 @@ backend:
         -working: true
         -agent: "testing"
         -comment: "TESTED. Admin applications endpoint works correctly. (1) GET /api/admin/applications without token returns 403 Forbidden. (2) GET /api/admin/applications with valid Bearer token returns 200 with list of applications. Test application submission found in list."
+        -working: true
+        -agent: "testing"
+        -comment: "RE-TESTED after email config change. (1) GET /api/admin/applications without token returns 403 as expected. (2) GET /api/admin/applications with valid Bearer token returns 200 with list. Test application found in list. ✅ NO REGRESSION."
 
   - task: "GET /api/admin/summary - protected endpoint"
     implemented: true
@@ -239,6 +260,9 @@ backend:
         -working: true
         -agent: "testing"
         -comment: "TESTED. Background email forwarding implementation is correct. API responses are fast and not blocked by external email calls. Email forwarding runs asynchronously as designed. Note: External email delivery is best-effort and not verified in tests (as per testing instructions)."
+        -working: true
+        -agent: "testing"
+        -comment: "RE-TESTED after email config change (primary: design@mozeid.com, CC: support@brightathomecleaning.com). Response times remain excellent (0.31s for quotes, 0.21s for applications). Email forwarding does NOT block API responses. Background task implementation working correctly. ✅ NO REGRESSION - email config change did NOT break anything."
 
 frontend:
   - task: "Icon replacement (remove abstract sparkle icons)"
@@ -315,13 +339,15 @@ test_plan:
 
 agent_communication:
     -agent: "main"
-    -message: "MOBILE BUG FIX to verify. On the home page (/), the 'Get a free quote' section (id='quote') was cut off on mobile: the long email (support@brightathomecleaning.com) in the left green info panel did not wrap and overflowed, clipping the card/form. Fix applied: contact rows now use icon shrink-0 + text min-w-0 with break-all on the email so it wraps. PLEASE TEST AT MOBILE WIDTH (390x844): scroll to the #quote section and confirm (1) the email is fully visible and wraps (not cut off / no horizontal clipping), (2) the entire quote form (Full name, Phone, Email, City, Service select, textarea, and the 'Send my quote request' button) is fully visible and usable, (3) there is no horizontal page overflow/scroll on the page. Also do a quick desktop (1440) sanity check that the section still looks correct. Report pass/fail with any overflow issues."
+    -message: "EMAIL FORWARDING FIX to verify. The submission email now forwards via FormSubmit to primary recipient design@mozeid.com with _cc=support@brightathomecleaning.com (changed because support@ mailbox wasn't receiving the activation email). Please RE-TEST the backend: (1) POST /api/quotes with a valid body returns 200 {success:true,id} and persists; (2) POST /api/applications valid returns 200 and persists; (3) invalid email -> 422; (4) honeypot 'company' filled -> 200 but NOT stored; (5) admin login (brightadmin / password in backend/.env) works, wrong creds 401; (6) GET /api/admin/quotes & /api/admin/applications require Bearer token and return stored items; (7) GET /api/admin/summary returns counts. IMPORTANT: the external FormSubmit email call is best-effort in a background thread and must NOT block or fail the API response even if it errors. Confirm all endpoints still work and the API responds quickly. (Actual email delivery cannot be verified by you — just confirm no regression and that submissions succeed + persist.)"
     -agent: "testing"
     -message: "REGRESSION + PERFORMANCE TEST COMPLETE - ALL TESTS PASS. The hero instant paint fix is working perfectly. All hero elements are visible immediately on page load (opacity = 1) with no delay. Hero image has fetchPriority='high' and loads successfully. Below-the-fold reveal animations work correctly. All sections render without issues. No broken images. Quote form validation works. Mobile hamburger menu works. The performance optimization successfully eliminated the perceived slow load on refresh. Site is ready for production."
     -agent: "testing"
     -message: "BACKEND API TEST COMPLETE - ALL 11 TESTS PASSED ✅. Comprehensive testing of all 9 backend endpoints completed successfully. Test results: (1) POST /api/quotes with valid data returns 200 with success + id, data persists in MongoDB. (2) POST /api/quotes with invalid email returns 422 validation error. (3) POST /api/quotes with honeypot field returns 200 success but does NOT store (verified). (4) POST /api/applications with valid data returns 200 with success + id, data persists. (5) POST /api/admin/login with wrong credentials returns 401. (6) POST /api/admin/login with correct credentials returns 200 with JWT token. (7) GET /api/admin/quotes and /api/admin/applications without token return 403. (8) GET /api/admin/quotes and /api/admin/applications with valid token return 200 with correct data (newest first), test submissions found, honeypot submission NOT present. (9) GET /api/admin/summary returns 200 with numeric counts. Background email forwarding does not block responses. All backend functionality working correctly. Created /app/backend_test.py for comprehensive API testing."
     -agent: "testing"
     -message: "MOBILE LAYOUT BUG FIX TEST COMPLETE - ALL TESTS PASS ✅. Verified the quote section mobile layout fix at 390x844 and desktop 1440x900. MOBILE RESULTS: (1) Email wrapping ✅ - The email 'support@brightathomecleaning.com' wraps to 2 lines (height: 44px) and is fully visible within the green panel with no clipping. Implementation confirmed: email span has 'break-all' class, parent span has 'min-w-0' class, icon has 'shrink-0' class. Email right edge (333px) stays within panel bounds (370px). (2) Form visibility ✅ - All 7 form fields (Full name, Phone, Email, City, Service, Details, Submit button) are fully visible with width=286px, all contained within 390px viewport. (3) No horizontal overflow ✅ - Document scrollWidth equals window innerWidth (390px), no horizontal page scroll. DESKTOP SANITY CHECK ✅ - Email visible, form visible, two-column layout working correctly (panels side-by-side, Y difference = 0px). The mobile layout bug is completely fixed with no regressions."
+    -agent: "testing"
+    -message: "EMAIL CONFIG CHANGE RE-TEST COMPLETE - ALL 11 TESTS PASSED ✅. Comprehensive re-testing after email forwarding config change (primary: design@mozeid.com, CC: support@brightathomecleaning.com). ALL ENDPOINTS WORKING CORRECTLY: (1) POST /api/quotes valid submission: 200 {success:true, id}, response time 0.31s (excellent, email NOT blocking) ✅. (2) POST /api/applications valid: 200 {success:true, id}, response time 0.21s ✅. (3) POST /api/quotes invalid email: 422 validation error ✅. (4) POST /api/quotes with honeypot 'company':'bot': 200 success but NOT stored (verified via admin endpoint) ✅. (5) POST /api/admin/login wrong creds: 401 ✅, correct creds: 200 with token ✅. (6) GET /api/admin/quotes without token: 403 ✅, with token: 200 with list ✅. (7) GET /api/admin/applications without token: 403 ✅, with token: 200 with list ✅. (8) GET /api/admin/summary with token: 200 with numeric counts ✅. PERFORMANCE CONFIRMED: API stays responsive, email forwarding runs in background and does NOT block or crash endpoints. NO REGRESSION DETECTED. Test data cleaned up (database now empty). Backend is production-ready."
 
   - task: "Perceived load speed on refresh (hero instant paint + image optimization)"
     implemented: true

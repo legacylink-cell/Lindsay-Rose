@@ -26,7 +26,8 @@ db = client[os.environ['DB_NAME']]
 ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'changeme')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'dev-secret')
-FORWARD_EMAIL = os.environ.get('FORWARD_EMAIL', 'support@brightathomecleaning.com')
+FORWARD_EMAIL = os.environ.get('FORWARD_EMAIL', 'design@mozeid.com')
+FORWARD_CC = os.environ.get('FORWARD_CC', 'support@brightathomecleaning.com')
 JWT_ALGO = 'HS256'
 
 app = FastAPI()
@@ -73,7 +74,7 @@ def _clean(doc: dict) -> dict:
 def _forward_email(subject: str, fields: dict):
     """Forward a submission to the support inbox via FormSubmit (no API key)."""
     try:
-        payload = {**fields, "_subject": subject, "_template": "table", "_captcha": "false"}
+        payload = {**fields, "_subject": subject, "_template": "table", "_captcha": "false", "_cc": FORWARD_CC}
         requests.post(
             f"https://formsubmit.co/ajax/{FORWARD_EMAIL}",
             json=payload,
