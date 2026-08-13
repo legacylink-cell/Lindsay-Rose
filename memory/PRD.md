@@ -1,0 +1,33 @@
+# Bright at Home Cleaning — Product Requirements & Status
+
+## Product
+Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW residential + commercial cleaning). Faith-forward, mobile-first, SEO-ready. Collects quote + career leads. Preview env editable; production at https://www.bright.mozeid.com (user redeploys).
+
+## Stack
+- Frontend: React + Tailwind + shadcn/ui. Routes: `/` (Landing), `/careers`, `/admin`, `/brand` (logo preview).
+- Backend: FastAPI + MongoDB (quote/career storage, admin JWT auth, FormSubmit email relay).
+- Key files: `src/mock.js` (brand data), `src/index.css`, `tailwind.config.js`, `public/index.html`, components in `src/components/`.
+
+## Brand system (updated 2026-06 — client official brand kit)
+- **Colors**: primary green `#1F5B3A`, bright green `#4CAF50` (brand-greenLight/greenBright), gold `#F4C542` (brand-amber), cream/off-white `#FFF7E6` (brand-cream), charcoal `#333333` (brand-ink). Applied in tailwind brand tokens + index.css :root vars + index.html theme-color.
+- **Typography**: Headings = **Montserrat** (free Proxima Nova look-alike, per user choice). Body = **Source Sans 3**. Loaded in index.html; mapped via tailwind `serif`/`sans`/`display` + index.css. Custom `font-600/700/800` weight utilities registered in tailwind.
+- **Textures (minimal)**: subtle marble (`.tex-marble`, ~5% opacity) on Pricing section; subtle white-pebble (`.tex-pebble`, ~6%) on Testimonials/reviews section.
+- **Logo**: DECISION PENDING. 6 variations saved in `public/logos/` and shown at `/brand` for user to pick. Options: 01 house-B horizontal (primary/matches sheet), 02 B-emblem icon (favicon), 03 rooftop emblem, 04 minimal roofline, 05 script compact, 06 script signature. Header/footer still use old `/logo-icon.png` until user chooses. Once chosen: update Header/Footer logo, generate favicon/apple-touch/OG image.
+
+## Recent changes (2026-06)
+- Removed repetitive "Custom quote" text on pricing cards → per-card taglines (Tailored to your home / Your first-visit reset / Built around your space) with Heart icon.
+- Removed all AI-connotation icons (replaced sparkle with Heart). No AI icons/text anywhere.
+- Faith section: removed "Holy Bible" (now just "Matthew 5:16"); icon changed from open book to **Cross**.
+- Review count changed 67 → **65+** (hero, testimonials, stats, schema=65).
+- Applied full brand kit: palette + Montserrat/Source Sans 3 fonts + subtle marble/pebble textures.
+- Built `/brand` logo preview page.
+
+## Open items / backlog
+- **P0 (awaiting user)**: Pick a logo at `/brand`, then finalize it site-wide + regenerate favicon/OG.
+- Instagram social URL still placeholder (`#`) in mock.js — replace or hide.
+- FormSubmit email activation unverified in production (primary design@mozeid.com, CC support@brightathomecleaning.com).
+- Terms & Conditions text is placeholder — needs legal-approved copy.
+- Optional: city landing pages (Plano/Argyle) for local SEO; Google Business Profile work (business-side).
+
+## Integrations
+- MongoDB (Motor), FastAPI, FormSubmit.co (email relay), Admin JWT (ADMIN_USERNAME/PASSWORD, JWT_SECRET in backend/.env — do not echo), Google review link, Facebook link, Unsplash imagery, Google Fonts.

@@ -20,6 +20,7 @@ import QuoteForm from "./components/QuoteForm";
 import Footer from "./components/Footer";
 import Careers from "./components/Careers";
 import Admin from "./components/Admin";
+import BrandPreview from "./components/BrandPreview";
 
 function useReveal() {
   useEffect(() => {
@@ -94,6 +95,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/careers" element={<Careers />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/brand" element={<BrandPreview />} />
       </Routes>
       <Toaster position="top-center" richColors />
     </BrowserRouter>

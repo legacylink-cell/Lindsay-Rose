@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -15,25 +15,25 @@ code {
 
 @layer base {
   :root {
-        --background: 60 100% 99%;
-        --foreground: 0 0% 18%;
+        --background: 44 100% 95%;
+        --foreground: 0 0% 20%;
         --card: 0 0% 100%;
-        --card-foreground: 0 0% 18%;
+        --card-foreground: 0 0% 20%;
         --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 18%;
-        --primary: 155 43% 21%;
-        --primary-foreground: 60 100% 99%;
-        --secondary: 150 20% 92%;
-        --secondary-foreground: 155 43% 18%;
-        --muted: 150 16% 93%;
+        --popover-foreground: 0 0% 20%;
+        --primary: 147 49% 24%;
+        --primary-foreground: 44 100% 95%;
+        --secondary: 145 25% 90%;
+        --secondary-foreground: 147 49% 20%;
+        --muted: 145 20% 92%;
         --muted-foreground: 0 0% 40%;
-        --accent: 45 68% 47%;
+        --accent: 44 89% 61%;
         --accent-foreground: 0 0% 12%;
         --destructive: 0 72% 48%;
         --destructive-foreground: 0 0% 98%;
-        --border: 150 12% 88%;
-        --input: 150 12% 84%;
-        --ring: 155 43% 21%;
+        --border: 145 15% 86%;
+        --input: 145 15% 82%;
+        --ring: 147 49% 24%;
         --radius: 0.9rem;
     }
 }
@@ -46,13 +46,31 @@ code {
     @apply bg-background text-foreground;
     }
   h1, h2, h3, h4 {
-    font-family: 'Bricolage Grotesque', 'Inter', sans-serif;
+    font-family: 'Montserrat', 'Source Sans 3', sans-serif;
     letter-spacing: -0.01em;
   }
 }
 
 /* Utilities */
-.font-serif-display { font-family: 'Bricolage Grotesque', 'Inter', sans-serif; }
+.font-serif-display { font-family: 'Montserrat', 'Source Sans 3', sans-serif; }
+
+/* Subtle brand textures (kept minimal, low opacity) */
+.tex-marble { position: relative; isolation: isolate; }
+.tex-marble::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: url("https://images.unsplash.com/photo-1551554781-c46200ea959d?crop=entropy&cs=srgb&fm=jpg&q=70&w=1400&auto=format");
+  background-size: cover; background-position: center;
+  opacity: 0.05;
+}
+.tex-pebble { position: relative; isolation: isolate; }
+.tex-pebble::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: url("https://images.unsplash.com/photo-1554990462-e8e4bca9eec2?crop=entropy&cs=srgb&fm=jpg&q=70&w=1400&auto=format");
+  background-size: cover; background-position: center;
+  opacity: 0.06;
+}
 
 .section-pad { padding-top: 6rem; padding-bottom: 6rem; }
 @media (max-width: 768px) { .section-pad { padding-top: 4rem; padding-bottom: 4rem; } }
