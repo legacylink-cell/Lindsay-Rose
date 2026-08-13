@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Lock, LogOut, Inbox, Briefcase, RefreshCw, Layers, CalendarClock } from "lucide-react";
+import { Lock, LogOut, Inbox, Briefcase, RefreshCw, Layers, CalendarClock, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
