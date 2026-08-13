@@ -11,7 +11,7 @@ const BADGES = [
 
 const TrustBar = () => {
   return (
-    <section className="relative">
+    <section className="relative pt-16 md:pt-24">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="rounded-[1.75rem] bg-brand-green text-brand-cream shadow-lift overflow-hidden">
           <div className="grid md:grid-cols-2">
