@@ -31,7 +31,7 @@ const Commercial = () => {
             <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-4 py-1.5 text-xs font-semibold tracking-wide reveal">
               <Building2 className="w-4 h-4 text-brand-amberLight" /> Commercial & Office Cleaning
             </span>
-            <h2 className="reveal mt-5 text-4xl md:text-5xl font-600">
+            <h2 className="reveal mt-5 font-serif text-4xl md:text-5xl font-700">
               Spotless workspaces that keep business moving
             </h2>
             <p className="reveal mt-5 text-brand-cream/75 text-lg leading-relaxed max-w-xl">
