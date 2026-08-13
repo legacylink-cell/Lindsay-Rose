@@ -27,14 +27,8 @@ const Header = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between">
-        <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="flex items-center gap-2.5 group">
-          <span className="grid place-items-center w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-brand-green transition-transform group-hover:scale-105">
-            <img src="/logo-icon.png" alt="" aria-hidden="true" className="w-9 h-9 md:w-11 md:h-11 object-contain" />
-          </span>
-          <span className="leading-tight">
-            <span className="block font-serif text-2xl md:text-[1.7rem] font-600 tracking-wide text-brand-ink">{BRAND.name}</span>
-            <span className="block text-[11px] tracking-[0.3em] uppercase text-brand-amber">Cleaning</span>
-          </span>
+        <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="flex items-center group" data-testid="header-logo">
+          <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-14 md:h-[4.5rem] w-auto object-contain transition-transform group-hover:scale-105" />
         </a>
 
         <nav className="hidden lg:flex items-center gap-8">

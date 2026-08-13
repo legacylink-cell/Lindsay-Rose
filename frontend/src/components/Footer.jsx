@@ -72,14 +72,8 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-5 md:px-8 py-14">
         <div className="grid md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2.5">
-              <span className="grid place-items-center w-14 h-14 rounded-2xl bg-white/10">
-                <img src="/logo-icon.png" alt="" aria-hidden="true" className="w-9 h-9 object-contain" />
-              </span>
-              <span className="leading-tight">
-                <span className="block font-serif text-2xl font-600 tracking-wide">{BRAND.name}</span>
-                <span className="block text-[11px] tracking-[0.3em] uppercase text-brand-amberLight">Cleaning</span>
-              </span>
+            <div className="inline-flex bg-brand-cream rounded-2xl p-3" data-testid="footer-logo">
+              <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-20 w-auto object-contain" />
             </div>
             <p className="mt-3 font-serif text-lg italic text-brand-amberLight">{BRAND.tagline}</p>
             <p className="mt-3 text-brand-cream/70 max-w-sm leading-relaxed">

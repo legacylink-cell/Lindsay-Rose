@@ -63,12 +63,9 @@ const Admin = () => {
     return (
       <div className="min-h-screen grid place-items-center bg-brand-cream px-5">
         <form onSubmit={login} className="w-full max-w-sm bg-white rounded-2xl p-8 shadow-lift ring-1 ring-black/5">
-          <div className="flex items-center gap-2.5 mb-6">
-            <span className="grid place-items-center w-11 h-11 rounded-xl bg-brand-green">
-              <img src="/logo-icon.png" alt="" aria-hidden="true" className="w-7 h-7 object-contain" />
-            </span>
+          <div className="flex items-center gap-3 mb-6">
+            <img src="/logos/logo-b-rooftop-emblem-t.png" alt="Bright at Home Cleaning" className="h-12 w-auto object-contain" />
             <div className="leading-tight">
-              <p className="font-serif text-lg font-600 text-brand-ink">Bright at Home</p>
               <p className="text-[10px] tracking-[0.28em] uppercase text-brand-amber">Admin</p>
             </div>
           </div>
@@ -89,8 +86,8 @@ const Admin = () => {
     <div className="min-h-screen bg-brand-cream">
       <header className="bg-white border-b border-border">
         <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <span className="grid place-items-center w-10 h-10 rounded-xl bg-brand-green"><img src="/logo-icon.png" alt="" aria-hidden="true" className="w-6 h-6 object-contain" /></span>
+          <div className="flex items-center gap-3">
+            <img src="/logos/logo-b-rooftop-emblem-t.png" alt="Bright at Home Cleaning" className="h-10 w-auto object-contain" />
             <p className="font-serif text-lg font-600 text-brand-ink">Submissions Dashboard</p>
           </div>
           <div className="flex items-center gap-2">
