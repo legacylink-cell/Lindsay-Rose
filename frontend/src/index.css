@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -46,13 +46,14 @@ code {
     @apply bg-background text-foreground;
     }
   h1, h2, h3, h4 {
-    font-family: 'Montserrat', 'Source Sans 3', sans-serif;
-    letter-spacing: -0.01em;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: 0;
   }
 }
 
 /* Utilities */
-.font-serif-display { font-family: 'Montserrat', 'Source Sans 3', sans-serif; }
+.font-serif-display { font-family: 'Cormorant Garamond', Georgia, serif; }
 
 /* Subtle brand textures (kept minimal, low opacity) */
 .tex-marble { position: relative; isolation: isolate; }

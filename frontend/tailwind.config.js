@@ -8,9 +8,9 @@ module.exports = {
   theme: {
         extend: {
                 fontFamily: {
-                        serif: ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                        sans: ['"Source Sans 3"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                        display: ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+                        sans: ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
                 },
                 fontWeight: {
                         '600': '600',
