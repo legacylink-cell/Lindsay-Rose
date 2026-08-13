@@ -26,15 +26,15 @@ module.exports = {
                         background: 'hsl(var(--background))',
                         foreground: 'hsl(var(--foreground))',
                         brand: {
-                                green: '#1F5B3A',
-                                greenDark: '#16442B',
-                                greenLight: '#4CAF50',
-                                greenBright: '#4CAF50',
-                                cream: '#FFF7E6',
-                                sage: '#EAF3EC',
-                                amber: '#F4C542',
-                                amberLight: '#F7D673',
-                                ink: '#333333',
+                                green: '#1F4D3A',
+                                greenDark: '#143528',
+                                greenLight: '#2E6B50',
+                                greenBright: '#2E6B50',
+                                cream: '#FFFFFB',
+                                sage: '#E8EFE9',
+                                amber: '#C9A227',
+                                amberLight: '#DFC069',
+                                ink: '#2E2E2E',
                         },
                         card: {
                                 DEFAULT: 'hsl(var(--card))',
@@ -69,8 +69,8 @@ module.exports = {
                         ring: 'hsl(var(--ring))',
                 },
                 boxShadow: {
-                        soft: '0 10px 40px -12px rgba(31, 91, 58, 0.18)',
-                        lift: '0 24px 60px -20px rgba(31, 91, 58, 0.28)',
+                        soft: '0 10px 40px -12px rgba(30, 63, 51, 0.18)',
+                        lift: '0 24px 60px -20px rgba(30, 63, 51, 0.28)',
                 },
                 keyframes: {
                         'accordion-down': {
