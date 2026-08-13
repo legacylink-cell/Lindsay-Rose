@@ -10,7 +10,7 @@ const VALUES = [
 
 const About = () => {
   return (
-    <section id="about" className="section-pad bg-white">
+    <section id="about" className="section-pad bg-white tex-marble">
       <div className="max-w-7xl mx-auto px-5 md:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <div className="relative reveal">
           <div className="rounded-[2rem] overflow-hidden shadow-lift ring-1 ring-black/5">

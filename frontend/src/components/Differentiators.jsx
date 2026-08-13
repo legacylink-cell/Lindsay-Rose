@@ -11,7 +11,7 @@ const go = (href) => {
 
 const Differentiators = () => {
   return (
-    <section id="why-us" className="section-pad bg-white">
+    <section id="why-us" className="section-pad bg-white tex-marble">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Why choose us</p>

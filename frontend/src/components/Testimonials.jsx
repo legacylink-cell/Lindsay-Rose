@@ -26,7 +26,7 @@ const Card = ({ t }) => (
 const Testimonials = () => {
   const loop = [...TESTIMONIALS, ...TESTIMONIALS];
   return (
-    <section id="reviews" className="section-pad bg-white overflow-hidden tex-pebble">
+    <section id="reviews" className="section-pad bg-white overflow-hidden tex-marble">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Kind words</p>
