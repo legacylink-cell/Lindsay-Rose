@@ -9,7 +9,7 @@ module.exports = {
         extend: {
                 fontFamily: {
                         serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-                        sans: ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        sans: ['Mulish', 'ui-sans-serif', 'system-ui', 'sans-serif'],
                         display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
                 },
                 fontWeight: {
