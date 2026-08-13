@@ -56,7 +56,7 @@ const QuoteForm = () => {
           {/* left info panel */}
           <div className="bg-brand-green text-brand-cream p-8 md:p-12 relative grain">
             <p className="text-xs uppercase tracking-[0.22em] text-brand-amberLight font-semibold">Get a free quote</p>
-            <h2 className="mt-3 font-serif text-4xl md:text-5xl font-600">Let's brighten your space</h2>
+            <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700">Let's brighten your space</h2>
             <p className="mt-4 text-brand-cream/75 leading-relaxed max-w-md">
               Tell us a little about your home or business and we'll send a clear, no-obligation quote — usually within 24 hours on weekdays.
             </p>
@@ -88,7 +88,7 @@ const QuoteForm = () => {
                 <span className="grid place-items-center w-16 h-16 rounded-full bg-brand-sage text-brand-green mb-5">
                   <CheckCircle2 className="w-8 h-8" />
                 </span>
-                <h3 className="font-serif text-3xl font-600 text-brand-ink">Request received!</h3>
+                <h3 className="font-serif text-3xl font-700 text-brand-ink">Request received!</h3>
                 <p className="mt-3 text-brand-ink/65 max-w-sm">
                   Thanks, {form.name.split(" ")[0]}. We'll review your details and reply within 24 hours on weekdays. Check your spam folder just in case.
                 </p>

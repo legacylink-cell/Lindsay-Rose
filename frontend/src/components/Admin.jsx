@@ -69,7 +69,7 @@ const Admin = () => {
               <p className="text-[10px] tracking-[0.28em] uppercase text-brand-amber">Admin</p>
             </div>
           </div>
-          <h1 className="font-serif text-2xl font-600 text-brand-ink flex items-center gap-2"><Lock className="w-5 h-5 text-brand-green" /> Sign in</h1>
+          <h1 className="font-serif text-2xl font-700 text-brand-ink flex items-center gap-2"><Lock className="w-5 h-5 text-brand-green" /> Sign in</h1>
           <div className="mt-5 space-y-3">
             <input className="w-full rounded-xl border border-input bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green/40" placeholder="Username" value={creds.username} onChange={(e) => setCreds({ ...creds, username: e.target.value })} />
             <input type="password" className="w-full rounded-xl border border-input bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-green/40" placeholder="Password" value={creds.password} onChange={(e) => setCreds({ ...creds, password: e.target.value })} />
@@ -88,7 +88,7 @@ const Admin = () => {
         <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="/logos/logo-b-rooftop-emblem-t.png" alt="Bright at Home Cleaning" className="h-10 w-auto object-contain" />
-            <p className="font-serif text-lg font-600 text-brand-ink">Submissions Dashboard</p>
+            <p className="font-serif text-lg font-700 text-brand-ink">Submissions Dashboard</p>
           </div>
           <div className="flex items-center gap-2">
             <button onClick={load} className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-ink/70 hover:text-brand-green px-3 py-2"><RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} /> Refresh</button>
@@ -118,7 +118,7 @@ const Admin = () => {
                   <span className="grid place-items-center w-11 h-11 rounded-xl bg-brand-sage text-brand-green">
                     <s.icon className="w-5 h-5" />
                   </span>
-                  <p className="mt-3 font-serif text-3xl font-600 text-brand-ink">{s.value}</p>
+                  <p className="mt-3 font-serif text-3xl font-700 text-brand-ink">{s.value}</p>
                   <p className="text-sm text-brand-ink/60">{s.label}</p>
                 </div>
               ))}

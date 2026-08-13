@@ -46,13 +46,14 @@ code {
     @apply bg-background text-foreground;
     }
   h1, h2, h3, h4 {
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0;
   }
 }
 
 /* Utilities */
 .font-serif-display { font-family: 'Cormorant Garamond', Georgia, serif; }
+.font-serif { -webkit-text-stroke: 0.4px currentColor; }
 
 /* Subtle brand textures (kept minimal, low opacity) */
 .tex-marble { position: relative; isolation: isolate; }

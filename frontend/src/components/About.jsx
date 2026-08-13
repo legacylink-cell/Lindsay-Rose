@@ -24,7 +24,7 @@ const About = () => {
 
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold reveal">Our story</p>
-          <h2 className="reveal mt-3 font-serif text-4xl md:text-5xl font-600 text-brand-ink">
+          <h2 className="reveal mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">
             A family-run team, now brightening all of DFW
           </h2>
           <p className="reveal mt-5 text-brand-ink/70 text-lg leading-relaxed">

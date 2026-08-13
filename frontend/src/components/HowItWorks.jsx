@@ -13,7 +13,7 @@ const HowItWorks = () => {
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">How it works</p>
-          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-600 text-brand-ink">
+          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">
             Booking us is refreshingly simple
           </h2>
           <p className="mt-4 text-brand-ink/65 text-lg">Three easy steps between you and a spotless space.</p>
@@ -24,7 +24,7 @@ const HowItWorks = () => {
             {PROCESS.map((p, i) => (
               <div key={p.step} className="reveal group flex gap-5 p-6 rounded-2xl hover:bg-white hover:shadow-soft transition-all">
                 <div className="shrink-0">
-                  <span className="grid place-items-center w-14 h-14 rounded-2xl bg-brand-green text-brand-cream font-serif text-xl font-600 group-hover:bg-brand-amber group-hover:text-brand-ink transition-colors">
+                  <span className="grid place-items-center w-14 h-14 rounded-2xl bg-brand-green text-brand-cream font-serif text-xl font-700 group-hover:bg-brand-amber group-hover:text-brand-ink transition-colors">
                     {p.step}
                   </span>
                 </div>

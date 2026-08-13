@@ -17,7 +17,7 @@ const AddOns = () => {
             <span className="inline-flex items-center gap-2 bg-white border border-black/5 rounded-full px-4 py-1.5 text-xs font-semibold text-brand-green shadow-soft">
               <Plus className="w-4 h-4" /> Make it yours
             </span>
-            <h2 className="mt-5 font-serif text-4xl md:text-5xl font-600 text-brand-ink">
+            <h2 className="mt-5 font-serif text-4xl md:text-5xl font-700 text-brand-ink">
               Add-on services
             </h2>
             <p className="mt-4 text-brand-ink/70 text-lg leading-relaxed">
@@ -58,7 +58,7 @@ const AddOns = () => {
           <div className="relative grid md:grid-cols-[1.5fr_1fr] gap-8 items-center">
             <div>
               <p className="text-xs uppercase tracking-[0.22em] text-brand-amberLight font-semibold">Not on a schedule?</p>
-              <h3 className="mt-3 font-serif text-3xl md:text-4xl font-600">{ONE_TIME.title}</h3>
+              <h3 className="mt-3 font-serif text-3xl md:text-4xl font-700">{ONE_TIME.title}</h3>
               <p className="mt-4 text-brand-cream/80 leading-relaxed max-w-xl">{ONE_TIME.body}</p>
             </div>
             <div className="md:justify-self-end flex flex-col sm:flex-row gap-3">

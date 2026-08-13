@@ -10,7 +10,7 @@ const FAQ = () => {
       <div className="max-w-3xl mx-auto px-5 md:px-8">
         <div className="text-center">
           <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Good to know</p>
-          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-600 text-brand-ink">
+          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">
             Questions, answered
           </h2>
         </div>

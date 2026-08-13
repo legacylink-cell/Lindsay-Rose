@@ -96,7 +96,7 @@ const Careers = () => {
           <span className="inline-flex items-center gap-2 bg-white border border-black/5 rounded-full px-4 py-1.5 text-xs font-semibold text-brand-green shadow-soft">
             <Briefcase className="w-4 h-4" /> We're hiring across DFW
           </span>
-          <h1 className="mt-6 font-serif text-4xl sm:text-6xl font-600 text-brand-ink tracking-tight leading-[1.05]">
+          <h1 className="mt-6 font-serif text-4xl sm:text-6xl font-700 text-brand-ink tracking-tight leading-[1.05]">
             Build a career you're
             <span className="block text-brand-green">proud to come home to.</span>
           </h1>
@@ -116,7 +116,7 @@ const Careers = () => {
             <span className="grid place-items-center w-14 h-14 rounded-2xl bg-white/10 text-brand-amberLight">
               <Target className="w-6 h-6" />
             </span>
-            <h2 className="mt-5 font-serif text-3xl font-600">Our Mission</h2>
+            <h2 className="mt-5 font-serif text-3xl font-700">Our Mission</h2>
             <p className="mt-4 text-brand-cream/85 leading-relaxed text-lg">
               To give families and businesses across North Texas the gift of time and peace of mind — delivering meticulous, eco-friendly cleaning through a team we treat like family. We show up on time, care for every detail, and leave every space brighter than we found it.
             </p>
@@ -125,7 +125,7 @@ const Careers = () => {
             <span className="grid place-items-center w-14 h-14 rounded-2xl bg-brand-sage text-brand-green">
               <Eye className="w-6 h-6" />
             </span>
-            <h2 className="mt-5 font-serif text-3xl font-600 text-brand-ink">Our Vision</h2>
+            <h2 className="mt-5 font-serif text-3xl font-700 text-brand-ink">Our Vision</h2>
             <p className="mt-4 text-brand-ink/70 leading-relaxed text-lg">
               To become the most trusted and loved cleaning company in the Dallas–Fort Worth metroplex — known not only for spotless homes and workspaces, but for creating rewarding, respectful careers and setting the standard for integrity, sustainability, and genuine care in our industry.
             </p>
@@ -138,7 +138,7 @@ const Careers = () => {
         <div className="max-w-7xl mx-auto px-5 md:px-8">
           <div className="text-center max-w-2xl mx-auto">
             <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">What we stand for</p>
-            <h2 className="mt-3 font-serif text-4xl md:text-5xl font-600 text-brand-ink">Our core values</h2>
+            <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">Our core values</h2>
           </div>
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {VALUES.map((v) => (
@@ -157,7 +157,7 @@ const Careers = () => {
       {/* perks */}
       <section className="pb-4">
         <div className="max-w-4xl mx-auto px-5 md:px-8">
-          <h2 className="font-serif text-3xl md:text-4xl font-600 text-brand-ink text-center">Why you'll love working here</h2>
+          <h2 className="font-serif text-3xl md:text-4xl font-700 text-brand-ink text-center">Why you'll love working here</h2>
           <div className="mt-8 grid sm:grid-cols-2 gap-3">
             {PERKS.map((p) => (
               <div key={p.label} className="flex items-center gap-3 bg-white rounded-2xl p-4 shadow-soft ring-1 ring-black/5">
@@ -179,7 +179,7 @@ const Careers = () => {
               <ShieldCheck className="w-6 h-6" />
             </span>
             <div>
-              <h3 className="font-serif text-2xl font-600">A note on trust &amp; safety</h3>
+              <h3 className="font-serif text-2xl font-700">A note on trust &amp; safety</h3>
               <p className="mt-2 text-brand-cream/85 leading-relaxed">
                 Because our team works inside clients' homes and businesses, <span className="font-600 text-brand-cream">a clean, successfully completed background check is a firm requirement</span> for every position, with no exceptions. It's how we keep our clients safe and uphold the trust they place in us.
               </p>
@@ -197,7 +197,7 @@ const Careers = () => {
                 <span className="grid place-items-center w-16 h-16 rounded-full bg-brand-sage text-brand-green mx-auto mb-5">
                   <CheckCircle2 className="w-8 h-8" />
                 </span>
-                <h3 className="font-serif text-3xl font-600 text-brand-ink">Thank you, {form.name.split(" ")[0]}!</h3>
+                <h3 className="font-serif text-3xl font-700 text-brand-ink">Thank you, {form.name.split(" ")[0]}!</h3>
                 <p className="mt-3 text-brand-ink/65 max-w-md mx-auto">
                   We've received your application and will be in touch soon. In the meantime, feel free to call us at {BRAND.phone}.
                 </p>
@@ -206,7 +206,7 @@ const Careers = () => {
               <>
                 <div className="text-center mb-8">
                   <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Join the team</p>
-                  <h2 className="mt-3 font-serif text-4xl font-600 text-brand-ink">Apply today</h2>
+                  <h2 className="mt-3 font-serif text-4xl font-700 text-brand-ink">Apply today</h2>
                   <p className="mt-3 text-brand-ink/65">Tell us a little about yourself — we read every application.</p>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">

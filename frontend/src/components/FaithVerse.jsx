@@ -9,7 +9,7 @@ const FaithVerse = () => {
           <Cross className="w-7 h-7" />
         </span>
         <p className="text-brand-amberLight tracking-[0.22em] uppercase text-xs font-600 mb-4">Guided by our Christian faith</p>
-        <blockquote className="font-serif text-2xl md:text-4xl leading-snug font-600">
+        <blockquote className="font-serif text-2xl md:text-4xl leading-snug font-700">
           “Let your light shine before others, that they may see your good deeds and glorify your Father in heaven.”
         </blockquote>
         <p className="mt-5 text-brand-amberLight tracking-[0.22em] uppercase text-sm font-600">Matthew 5:16</p>
