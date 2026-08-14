@@ -18,6 +18,7 @@ import Testimonials from "./components/Testimonials";
 import FAQ from "./components/FAQ";
 import QuoteForm from "./components/QuoteForm";
 import Footer from "./components/Footer";
+import MobileStickyCTA from "./components/MobileStickyCTA";
 import Careers from "./components/Careers";
 import Admin from "./components/Admin";
 import BrandPreview from "./components/BrandPreview";
@@ -95,6 +96,8 @@ const Landing = () => {
         <QuoteForm />
       </main>
       <Footer />
+      <div aria-hidden className="h-20 lg:hidden" />
+      <MobileStickyCTA />
     </div>
   );
 };
