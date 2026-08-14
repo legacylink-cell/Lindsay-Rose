@@ -72,10 +72,15 @@ def _clean(doc: dict) -> dict:
     return doc
 
 
-def _forward_email(subject: str, fields: dict):
-    """Forward a submission to the support inbox via FormSubmit (no API key)."""
+def _forward_email(subject: str, fields: dict, reply_to: str = None, autoresponse: str = None):
+    """Forward a submission to the support inbox via FormSubmit, and optionally
+    send a confirmation autoresponse to the person who submitted the form."""
     try:
         payload = {**fields, "_subject": subject, "_template": "table", "_captcha": "false", "_cc": FORWARD_CC}
+        if reply_to:
+            payload["_replyto"] = reply_to
+        if autoresponse:
+            payload["_autoresponse"] = autoresponse
         headers = {
             "Origin": FORWARD_ORIGIN,
             "Referer": FORWARD_ORIGIN + "/",
@@ -123,14 +128,24 @@ async def create_quote(body: QuoteCreate):
         "created_at": _now().isoformat(),
     }
     await db.quotes.insert_one(dict(doc))
+    first = body.name.split()[0] if body.name else "there"
     asyncio.create_task(asyncio.to_thread(
         _forward_email,
         "New Quote Request \u2013 Bright at Home Cleaning",
         {
-            "Name": body.name, "Phone": body.phone, "Email": body.email,
+            "Name": body.name, "Phone": body.phone, "email": body.email,
             "City": body.city or "\u2014", "Service": body.service or "\u2014",
             "Details": body.details or "\u2014",
         },
+        body.email,
+        (
+            f"Hi {first},\n\n"
+            "Thank you for requesting a quote with Bright at Home Cleaning! We've received your "
+            "request and a member of our team will reach out very soon to confirm the details and "
+            "your custom quote.\n\n"
+            "Need us sooner? Call or text us at 469-443-6903.\n\n"
+            "Warm regards,\nThe Bright at Home Cleaning Team\nA brighter home, a brighter life."
+        ),
     ))
     return {"success": True, "id": doc["id"]}
 
@@ -147,13 +162,23 @@ async def create_application(body: ApplicationCreate):
         "created_at": _now().isoformat(),
     }
     await db.applications.insert_one(dict(doc))
+    first = body.name.split()[0] if body.name else "there"
     asyncio.create_task(asyncio.to_thread(
         _forward_email,
         "New Career Application \u2013 Bright at Home Cleaning",
         {
-            "Name": body.name, "Phone": body.phone, "Email": body.email,
+            "Name": body.name, "Phone": body.phone, "email": body.email,
             "Position": body.position or "\u2014", "About": body.message or "\u2014",
         },
+        body.email,
+        (
+            f"Hi {first},\n\n"
+            "Thank you for applying to join the Bright at Home Cleaning team! We've received your "
+            "application and will review it carefully. If it looks like a good fit, we'll be in touch "
+            "about the next steps.\n\n"
+            "Questions in the meantime? Call us at 469-443-6903.\n\n"
+            "Warm regards,\nThe Bright at Home Cleaning Team\nA brighter home, a brighter life."
+        ),
     ))
     return {"success": True, "id": doc["id"]}
 
