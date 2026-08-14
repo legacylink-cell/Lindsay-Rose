@@ -20,10 +20,10 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 inset-x-0 z-50 py-3 transition-[background-color,box-shadow,padding] duration-200 ${
         scrolled
-          ? "bg-brand-cream/90 backdrop-blur-md shadow-soft py-3"
-          : "bg-transparent py-5"
+          ? "bg-brand-cream/95 backdrop-blur-md shadow-soft"
+          : "bg-brand-cream/95 backdrop-blur-md shadow-soft lg:bg-transparent lg:shadow-none lg:backdrop-blur-0 lg:py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between">
