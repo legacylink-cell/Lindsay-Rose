@@ -28,7 +28,7 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between">
         <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="flex items-center group" data-testid="header-logo">
-          <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-14 sm:h-16 md:h-24 lg:h-28 w-auto object-contain transition-transform group-hover:scale-105" />
+          <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-14 sm:h-16 md:h-24 lg:h-28 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80" />
         </a>
 
         <nav className="hidden lg:flex items-center gap-8">
