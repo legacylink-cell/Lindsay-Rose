@@ -15,7 +15,7 @@ export const BRAND = {
   email: "support@brightathomecleaning.com",
   hours: "Mon–Fri, 8am–5pm",
   area: "Dallas–Fort Worth Metroplex",
-  address: "401 Saratoga Dr, Denton, TX 76210",
+  address: "",
   reviewUrl: "https://www.google.com/search?q=Bright+at+Home+Cleaning+Services#lrd=0x864c1b327112189d:0x69466840e88545a1,3,,,,",
   social: {
     facebook: "https://www.facebook.com/brightathomecleaning/",

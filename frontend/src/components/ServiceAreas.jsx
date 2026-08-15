@@ -12,10 +12,10 @@ const ServiceAreas = () => {
             <div className="text-center">
               <p className="text-xs uppercase tracking-[0.22em] text-brand-amberLight font-semibold">Proudly serving</p>
               <h2 className="mt-3 font-serif text-2xl sm:text-3xl md:text-[2.15rem] lg:text-5xl font-700">
-                Collin County, Dallas County & all of DFW
+                Serving the entire Dallas–Fort Worth Metroplex
               </h2>
               <p className="mt-4 text-brand-cream/70 text-lg max-w-2xl mx-auto">
-                Rooted in Collin and Dallas County — and now serving the entire Dallas–Fort Worth metroplex. From Fort Worth to Frisco, Dallas to Denton, we're ready to brighten your space. Don't see your city? Just ask.
+                Proudly serving the entire Dallas–Fort Worth metroplex. From Fort Worth to Frisco, Dallas to Denton, we're ready to brighten your space. Don't see your city? Just ask.
               </p>
             </div>
           </div>

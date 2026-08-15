@@ -77,7 +77,7 @@ const Footer = () => {
             </div>
             <p className="mt-3 font-serif text-lg italic text-brand-amberLight">{BRAND.tagline}</p>
             <p className="mt-3 text-brand-cream/70 max-w-sm leading-relaxed">
-              Family-run, bonded & insured, and obsessed with the details — for homes and businesses across Collin County, Dallas County, and all of DFW.
+              Family-run, bonded & insured, and obsessed with the details — for homes and businesses across all of the Dallas–Fort Worth Metroplex.
             </p>
             <button
               onClick={() => go("#quote")}
@@ -111,7 +111,6 @@ const Footer = () => {
               <li><a href={BRAND.phoneHref} className="flex items-center gap-2.5 hover:text-brand-amberLight transition-colors"><Phone className="w-4 h-4 shrink-0" /> {BRAND.phone}</a></li>
               <li><a href={`mailto:${BRAND.email}`} className="flex items-center gap-2.5 hover:text-brand-amberLight transition-colors break-all"><Mail className="w-4 h-4 shrink-0" /> {BRAND.email}</a></li>
               <li className="flex items-center gap-2.5"><Clock className="w-4 h-4 shrink-0" /> {BRAND.hours}</li>
-              <li className="flex items-start gap-2.5"><MapPin className="w-4 h-4 shrink-0 mt-0.5" /> {BRAND.address}</li>
             </ul>
 
             <h4 className="mt-6 text-sm font-600 uppercase tracking-wider text-brand-cream/80">Follow us</h4>

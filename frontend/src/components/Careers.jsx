@@ -20,7 +20,6 @@ const PERKS = [
   { icon: Clock, label: "Flexible scheduling — most weekends off" },
   { icon: Leaf, label: "All eco-friendly supplies & equipment provided" },
   { icon: TrendingUp, label: "Paid training and room to grow into lead roles" },
-  { icon: MapPin, label: "Mileage & travel reimbursement" },
   { icon: Heart, label: "A supportive, family-run team culture" },
 ];
 

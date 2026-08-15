@@ -53,7 +53,7 @@ const Hero = () => {
           </h1>
 
           <p className="mt-6 text-lg text-brand-ink/70 max-w-xl leading-relaxed">
-            Trusted, insured, eco-minded cleaning for homes and businesses across Collin County, Dallas County, and all of the {BRAND.area}. Real people who treat your space with genuine care — not a faceless service.
+            Trusted, insured, eco-minded cleaning for homes and businesses across all of the {BRAND.area}. Real people who treat your space with genuine care — not a faceless service.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
