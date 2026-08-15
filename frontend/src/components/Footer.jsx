@@ -8,7 +8,12 @@ import { ScrollArea } from "./ui/scroll-area";
 
 const go = (href) => {
   const el = document.querySelector(href);
-  if (el) el.scrollIntoView({ behavior: "smooth" });
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth" });
+  } else {
+    // Not on the homepage — navigate there and let it scroll to the section.
+    window.location.href = "/" + href;
+  }
 };
 
 const TERMS = [

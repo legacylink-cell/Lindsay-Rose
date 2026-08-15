@@ -75,6 +75,15 @@ const Landing = () => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
+    const hash = window.location.hash;
+    if (hash && hash.length > 1) {
+      // Arrived from another page with a section hash (e.g. /#commercial) — scroll to it once rendered.
+      const t = setTimeout(() => {
+        const el = document.querySelector(hash);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+      return () => clearTimeout(t);
+    }
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, []);
   return (
