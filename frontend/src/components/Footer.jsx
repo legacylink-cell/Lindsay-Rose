@@ -70,7 +70,7 @@ const Footer = () => {
   return (
     <footer className="bg-brand-ink text-brand-cream">
       <div className="max-w-7xl mx-auto px-5 md:px-8 py-14">
-        <div className="grid md:grid-cols-4 gap-10">
+        <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-10">
           <div className="md:col-span-2">
             <div className="inline-flex bg-brand-cream rounded-2xl p-3" data-testid="footer-logo">
               <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-20 w-auto object-contain" />
@@ -102,6 +102,23 @@ const Footer = () => {
                   Careers
                 </a>
               </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Services</h4>
+            <ul className="mt-4 space-y-2.5">
+              {[
+                ["Recurring House Cleaning", "recurring-house-cleaning"],
+                ["Deep Cleaning", "deep-cleaning"],
+                ["One-Time Cleaning", "one-time-house-cleaning"],
+                ["Move-In / Move-Out", "move-in-move-out-cleaning"],
+                ["Commercial Cleaning", "commercial-cleaning"],
+              ].map(([label, slug]) => (
+                <li key={slug}>
+                  <a href={`/services/${slug}`} className="text-brand-cream/70 hover:text-brand-amberLight transition-colors text-sm">{label}</a>
+                </li>
+              ))}
             </ul>
           </div>
 

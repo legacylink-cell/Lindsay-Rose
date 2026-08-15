@@ -22,6 +22,7 @@ import MobileStickyCTA from "./components/MobileStickyCTA";
 import Careers from "./components/Careers";
 import Admin from "./components/Admin";
 import BrandPreview from "./components/BrandPreview";
+import ServicePage from "./pages/ServicePage";
 
 function useReveal() {
   useEffect(() => {
@@ -110,6 +111,7 @@ function App() {
         <Route path="/careers" element={<Careers />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/brand" element={<BrandPreview />} />
+        <Route path="/services/:slug" element={<ServicePage />} />
       </Routes>
       <Toaster position="top-center" richColors />
     </BrowserRouter>

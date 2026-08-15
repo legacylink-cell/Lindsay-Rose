@@ -63,19 +63,40 @@
         <script type="application/ld+json">
         {
           "@context": "https://schema.org",
-          "@type": "HouseCleaningService",
+          "@type": ["HouseCleaningService", "LocalBusiness"],
           "name": "Bright at Home Cleaning",
-          "description": "Trusted home & commercial cleaning serving Collin County, Dallas County, and all of the Dallas–Fort Worth metroplex. Bonded, insured, and eco-friendly.",
+          "description": "Trusted home & commercial cleaning serving the entire Dallas–Fort Worth metroplex. Bonded, insured, and eco-friendly.",
           "image": "https://www.bright.mozeid.com/og-image.jpg",
           "url": "https://www.bright.mozeid.com/",
           "telephone": "+1-469-443-6903",
           "email": "support@brightathomecleaning.com",
           "priceRange": "$$",
-          "slogan": "A Brighter Home. A Better Day.",
-          "areaServed": {
-            "@type": "GeoCircle",
-            "name": "Dallas–Fort Worth Metroplex",
-            "geoMidpoint": { "@type": "GeoCoordinates", "latitude": 32.9, "longitude": -96.9 }
+          "slogan": "A brighter home, a brighter life.",
+          "areaServed": [
+            {"@type":"City","name":"Plano, TX"},
+            {"@type":"City","name":"Frisco, TX"},
+            {"@type":"City","name":"McKinney, TX"},
+            {"@type":"City","name":"Allen, TX"},
+            {"@type":"City","name":"Fairview, TX"},
+            {"@type":"City","name":"Lucas, TX"},
+            {"@type":"City","name":"Murphy, TX"},
+            {"@type":"City","name":"Parker, TX"},
+            {"@type":"City","name":"Melissa, TX"},
+            {"@type":"City","name":"Princeton, TX"},
+            {"@type":"City","name":"Denton, TX"},
+            {"@type":"City","name":"Dallas, TX"},
+            {"@type":"City","name":"Fort Worth, TX"}
+          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Cleaning Services",
+            "itemListElement": [
+              {"@type":"Offer","itemOffered":{"@type":"Service","name":"Recurring House Cleaning","url":"https://www.bright.mozeid.com/services/recurring-house-cleaning"}},
+              {"@type":"Offer","itemOffered":{"@type":"Service","name":"Deep Cleaning","url":"https://www.bright.mozeid.com/services/deep-cleaning"}},
+              {"@type":"Offer","itemOffered":{"@type":"Service","name":"One-Time House Cleaning","url":"https://www.bright.mozeid.com/services/one-time-house-cleaning"}},
+              {"@type":"Offer","itemOffered":{"@type":"Service","name":"Move-In / Move-Out Cleaning","url":"https://www.bright.mozeid.com/services/move-in-move-out-cleaning"}},
+              {"@type":"Offer","itemOffered":{"@type":"Service","name":"Commercial Cleaning","url":"https://www.bright.mozeid.com/services/commercial-cleaning"}}
+            ]
           },
           "address": {
             "@type": "PostalAddress",
