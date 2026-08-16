@@ -216,7 +216,7 @@ const Careers = () => {
               <p className="font-serif text-2xl font-700">Prefer to text? · ¿Prefieres textear?</p>
               <p className="mt-1 text-brand-cream/80">Text us and we'll help you apply. · Envíanos un mensaje y te ayudamos a aplicar.</p>
             </div>
-            <a href="sms:+14694436903?&body=Hi! I'd like to apply for a cleaning position." data-testid="text-to-apply" className="shrink-0 inline-flex items-center gap-2 bg-brand-amber hover:bg-brand-amberLight text-brand-ink font-600 px-7 py-4 rounded-full transition-all">
+            <a href="sms:+14694436903?&body=Hi%21%20I%27d%20like%20to%20apply%20for%20a%20cleaning%20position." data-testid="text-to-apply" className="shrink-0 inline-flex items-center gap-2 bg-brand-amber hover:bg-brand-amberLight text-brand-ink font-600 px-7 py-4 rounded-full transition-all">
               <MessageSquare className="w-4 h-4" /> Text us to apply
             </a>
           </div>
