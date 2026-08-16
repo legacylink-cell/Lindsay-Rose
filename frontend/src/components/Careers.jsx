@@ -196,12 +196,12 @@ const Careers = () => {
 
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              ["Competitive weekly pay", "$XX–$XX/hr · paid weekly", "Pago semanal competitivo"],
-              ["Daytime hours — no nights", "Typical Mon–Fri, 8am–5pm", "Horario de día, sin noches"],
+              ["$20+ per hour", "Paid weekly", "$20+ por hora · pago semanal"],
+              ["Set your own schedule", "Daytime, evenings or weekends — you choose what fits your family", "Tú eliges tu horario"],
               ["Paid training", "We train you — no experience required", "Capacitación pagada"],
-              ["Consistent local routes", "Stay close to home across DFW", "Rutas locales constantes"],
-              ["Supportive family team", "Be treated like family, not a number", "Equipo que te trata como familia"],
-              ["Room to grow", "Grow into lead & supervisor roles", "Oportunidad de crecer"],
+              ["W-2 or 1099 — your choice", "Be an employee or a contractor, whatever suits you", "W-2 o 1099, tú decides"],
+              ["Referral bonus", "Refer a great cleaner and earn a bonus", "Bono por referir"],
+              ["Bilingual team", "Our operations director is bilingual — no language barrier", "Equipo bilingüe, sin barreras"],
             ].map(([en, sub, es]) => (
               <div key={en} className="bg-brand-cream rounded-2xl p-6 ring-1 ring-black/5">
                 <h3 className="font-600 text-brand-ink">{en}</h3>
@@ -211,14 +211,17 @@ const Careers = () => {
             ))}
           </div>
 
-          <div className="mt-10 rounded-2xl bg-brand-green text-brand-cream p-7 md:p-9 flex flex-col md:flex-row items-center justify-between gap-5">
-            <div>
-              <p className="font-serif text-2xl font-700">Prefer to text? · ¿Prefieres textear?</p>
-              <p className="mt-1 text-brand-cream/80">Text us and we'll help you apply. · Envíanos un mensaje y te ayudamos a aplicar.</p>
+          <div className="mt-10 rounded-2xl bg-brand-green text-brand-cream p-7 md:p-9">
+            <p className="font-serif text-2xl font-700">Three easy ways to apply · Tres formas de aplicar</p>
+            <p className="mt-1 text-brand-cream/80">Text us, call us, or fill out the form — whatever's easiest. · Textéanos, llámanos o llena el formulario.</p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <a href="sms:+14694436903?&body=Hi%21%20I%27d%20like%20to%20apply%20for%20a%20cleaning%20position." data-testid="text-to-apply" className="inline-flex items-center gap-2 bg-brand-amber hover:bg-brand-amberLight text-brand-ink font-600 px-6 py-3 rounded-full transition-all"><MessageSquare className="w-4 h-4" /> Text us</a>
+              <a href={BRAND.phoneHref} className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/25 text-brand-cream font-600 px-6 py-3 rounded-full transition-all"><Phone className="w-4 h-4" /> Call us</a>
+              <a href="#apply" className="inline-flex items-center gap-2 bg-brand-cream text-brand-green font-600 px-6 py-3 rounded-full transition-all"><Send className="w-4 h-4" /> Apply online</a>
             </div>
-            <a href="sms:+14694436903?&body=Hi%21%20I%27d%20like%20to%20apply%20for%20a%20cleaning%20position." data-testid="text-to-apply" className="shrink-0 inline-flex items-center gap-2 bg-brand-amber hover:bg-brand-amberLight text-brand-ink font-600 px-7 py-4 rounded-full transition-all">
-              <MessageSquare className="w-4 h-4" /> Text us to apply
-            </a>
+            <p className="mt-6 text-sm text-brand-cream/75 max-w-2xl leading-relaxed">
+              A background check is part of joining our team — it's simply how we keep the families and homes we serve safe. Having a record does <span className="font-600">not</span> automatically disqualify you, so please don't let that stop you from applying. · La verificación de antecedentes es parte del proceso, pero tener antecedentes no te descalifica automáticamente. ¡Anímate a aplicar!
+            </p>
           </div>
         </div>
       </section>
