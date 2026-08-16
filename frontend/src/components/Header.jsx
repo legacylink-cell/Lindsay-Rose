@@ -27,7 +27,7 @@ const Header = () => {
       }`}
     >
       <a href="/careers" data-testid="hiring-bar" className="block bg-brand-green text-brand-cream text-center text-[11px] sm:text-xs font-600 tracking-wide py-2 px-4 hover:bg-brand-greenDark transition-colors">
-        Now hiring cleaners across DFW · ¡Estamos contratando! — <span className="underline">Join our team →</span>
+        Now hiring cleaners across DFW · ¡Estamos contratando!<span className="hidden sm:inline"> — </span><span className="block sm:inline underline whitespace-nowrap">Join our team →</span>
       </a>
       <div className="max-w-7xl mx-auto px-5 md:px-8 py-3 lg:py-4 flex items-center justify-between">
         <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="flex items-center group" data-testid="header-logo">

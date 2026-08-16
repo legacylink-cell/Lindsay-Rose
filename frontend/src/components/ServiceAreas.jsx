@@ -18,7 +18,7 @@ const ServiceAreas = () => {
                 Proudly serving the entire Dallas–Fort Worth metroplex. From Fort Worth to Frisco, Dallas to Denton, we're ready to brighten your space. Don't see your city? Just ask.
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-2.5">
-                {["Plano","Frisco","McKinney","Allen","Fairview","Lucas","Murphy","Parker","Melissa","Princeton","Denton","Dallas","Fort Worth"].map((c) => (
+                {["Plano","Frisco","McKinney","Allen","Fairview","Lucas","Murphy","Parker","Melissa","Princeton","Denton","Fort Worth"].map((c) => (
                   <span key={c} className="bg-white/10 border border-white/15 rounded-full px-4 py-2 text-sm text-brand-cream/85">{c}</span>
                 ))}
               </div>
