@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowLeft, Phone, Target, Eye, Heart, ShieldCheck, TrendingUp, Leaf,
-  Clock, CheckCircle2, Send, Briefcase, MapPin, Users, DollarSign,
+  Clock, CheckCircle2, Send, Briefcase, MapPin, Users, DollarSign, MessageSquare,
 } from "lucide-react";
 import { toast } from "sonner";
 import { BRAND } from "../mock";
@@ -188,6 +188,41 @@ const Careers = () => {
       </section>
 
       {/* application form */}
+      <section className="section-pad bg-white tex-marble" data-testid="why-work-with-us">
+        <div className="max-w-6xl mx-auto px-5 md:px-8">
+          <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Why work with us · Por qué unirte</p>
+          <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">A cleaning job you'll actually enjoy</h2>
+          <p className="mt-3 text-brand-ink/60 italic">Un trabajo de limpieza que disfrutarás de verdad.</p>
+
+          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              ["Competitive weekly pay", "$XX–$XX/hr · paid weekly", "Pago semanal competitivo"],
+              ["Daytime hours — no nights", "Typical Mon–Fri, 8am–5pm", "Horario de día, sin noches"],
+              ["Paid training", "We train you — no experience required", "Capacitación pagada"],
+              ["Consistent local routes", "Stay close to home across DFW", "Rutas locales constantes"],
+              ["Supportive family team", "Be treated like family, not a number", "Equipo que te trata como familia"],
+              ["Room to grow", "Grow into lead & supervisor roles", "Oportunidad de crecer"],
+            ].map(([en, sub, es]) => (
+              <div key={en} className="bg-brand-cream rounded-2xl p-6 ring-1 ring-black/5">
+                <h3 className="font-600 text-brand-ink">{en}</h3>
+                <p className="mt-1 text-sm text-brand-ink/70">{sub}</p>
+                <p className="mt-2 text-sm text-brand-green italic">{es}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 rounded-2xl bg-brand-green text-brand-cream p-7 md:p-9 flex flex-col md:flex-row items-center justify-between gap-5">
+            <div>
+              <p className="font-serif text-2xl font-700">Prefer to text? · ¿Prefieres textear?</p>
+              <p className="mt-1 text-brand-cream/80">Text us and we'll help you apply. · Envíanos un mensaje y te ayudamos a aplicar.</p>
+            </div>
+            <a href="sms:+14694436903?&body=Hi! I'd like to apply for a cleaning position." data-testid="text-to-apply" className="shrink-0 inline-flex items-center gap-2 bg-brand-amber hover:bg-brand-amberLight text-brand-ink font-600 px-7 py-4 rounded-full transition-all">
+              <MessageSquare className="w-4 h-4" /> Text us to apply
+            </a>
+          </div>
+        </div>
+      </section>
+
       <section id="apply" className="section-pad">
         <div className="max-w-3xl mx-auto px-5 md:px-8">
           <div className="bg-white rounded-[1.75rem] p-8 md:p-10 shadow-lift ring-1 ring-black/5">

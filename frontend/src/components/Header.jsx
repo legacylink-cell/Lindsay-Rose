@@ -20,13 +20,16 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 py-3 transition-[background-color,box-shadow,padding] duration-200 ${
+      className={`fixed top-0 inset-x-0 z-50 transition-[background-color,box-shadow] duration-200 ${
         scrolled
           ? "bg-brand-cream/95 backdrop-blur-md shadow-soft"
-          : "bg-brand-cream/95 backdrop-blur-md shadow-soft lg:bg-transparent lg:shadow-none lg:backdrop-blur-0 lg:py-5"
+          : "bg-brand-cream/95 backdrop-blur-md shadow-soft lg:bg-transparent lg:shadow-none lg:backdrop-blur-0"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-5 md:px-8 flex items-center justify-between">
+      <a href="/careers" data-testid="hiring-bar" className="block bg-brand-green text-brand-cream text-center text-[11px] sm:text-xs font-600 tracking-wide py-2 px-4 hover:bg-brand-greenDark transition-colors">
+        Now hiring cleaners across DFW · ¡Estamos contratando! — <span className="underline">Join our team →</span>
+      </a>
+      <div className="max-w-7xl mx-auto px-5 md:px-8 py-3 lg:py-4 flex items-center justify-between">
         <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="flex items-center group" data-testid="header-logo">
           <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-14 sm:h-16 md:h-24 lg:h-28 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80" />
         </a>
