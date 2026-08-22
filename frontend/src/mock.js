@@ -230,9 +230,8 @@ export const PRICING = [
 ];
 
 export const AREAS = [
-  "Dallas", "Fort Worth", "Plano", "Frisco", "McKinney", "Allen",
-  "Arlington", "Irving", "Garland", "Grapevine", "Southlake", "Coppell",
-  "Richardson", "Carrollton", "Denton", "Prosper", "Fairview", "Murphy",
+  "Plano", "Frisco", "McKinney", "Allen", "Celina", "Prosper",
+  "Denton", "Flower Mound", "Grapevine", "Fort Worth",
 ];
 
 // Real customer reviews from the Bright at Home Cleaning Google Business Profile.
@@ -309,6 +308,10 @@ export const FAQS = [
   {
     q: "Am I locked into a contract?",
     a: "Never. Recurring clients get our best pricing with zero contracts. Adjust, pause, or cancel your schedule anytime.",
+  },
+  {
+    q: "Which areas do you serve?",
+    a: "We focus on the popular Collin County communities of Plano, Frisco, McKinney, Allen, Celina and Prosper, and also serve Denton, Flower Mound, Grapevine and Fort Worth, where we're based and have long-standing relationships. Don't see your city? Just ask — we're happy to check.",
   },
   {
     q: "Do you serve commercial spaces?",

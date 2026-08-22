@@ -6,8 +6,8 @@ import QuoteForm from "../components/QuoteForm";
 import Footer from "../components/Footer";
 
 export const SERVICE_CITIES = [
-  "Plano", "Frisco", "McKinney", "Allen", "Fairview", "Lucas", "Murphy",
-  "Parker", "Melissa", "Princeton", "Denton", "Dallas", "Fort Worth",
+  "Plano", "Frisco", "McKinney", "Allen", "Celina", "Prosper",
+  "Denton", "Flower Mound", "Grapevine", "Fort Worth",
 ];
 
 const SERVICES = {
