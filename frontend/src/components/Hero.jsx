@@ -7,6 +7,11 @@ const go = (href) => {
   if (el) el.scrollIntoView({ behavior: "smooth" });
 };
 
+const heroBase = IMAGES.heroLiving.replace(/q=\d+/, "q=75");
+const heroSrcSet = [640, 900, 1200]
+  .map((w) => `${heroBase.replace(/w=\d+/, "w=" + w)} ${w}w`)
+  .join(", ");
+
 const Hero = () => {
   return (
     <section id="top" className="relative overflow-hidden pt-32 md:pt-40 pb-16 md:pb-24">
@@ -82,7 +87,7 @@ const Hero = () => {
         {/* image collage */}
         <div className="relative">
           <div className="relative rounded-[2rem] overflow-hidden shadow-lift ring-1 ring-black/5">
-            <img src={IMAGES.heroLiving} alt="Bright, spotless living room cleaned by Bright at Home Cleaning in DFW" fetchPriority="high" decoding="async" width="800" height="520" className="w-full h-[420px] md:h-[520px] object-cover" />
+            <img src={heroBase} srcSet={heroSrcSet} sizes="(min-width: 1024px) 600px, 100vw" alt="Bright, spotless living room cleaned by Bright at Home Cleaning in DFW" fetchPriority="high" decoding="async" width="800" height="520" className="w-full h-[420px] md:h-[520px] object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-brand-greenDark/25 to-transparent" />
           </div>
 
