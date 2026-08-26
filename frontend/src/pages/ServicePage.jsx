@@ -156,7 +156,7 @@ const ServicePage = () => {
         name: BRAND.full,
         telephone: "+1-469-443-6903",
         email: BRAND.email,
-        url: "https://www.bright.mozeid.com/",
+        url: "https://www.brightathomecleaning.com/",
       },
       areaServed: SERVICE_CITIES.map((c) => ({ "@type": "City", name: `${c}, TX` })),
     });

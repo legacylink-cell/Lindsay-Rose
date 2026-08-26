@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.bright.mozeid.com/sitemap.xml
+Sitemap: https://www.brightathomecleaning.com/sitemap.xml

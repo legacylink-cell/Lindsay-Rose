@@ -28,7 +28,7 @@ ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'changeme')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'dev-secret')
 FORWARD_EMAIL = os.environ.get('FORWARD_EMAIL', 'support@brightathomecleaning.com')
 FORWARD_CC = os.environ.get('FORWARD_CC', 'design@mozeid.com')
-FORWARD_ORIGIN = os.environ.get('FORWARD_ORIGIN', 'https://www.bright.mozeid.com')
+FORWARD_ORIGIN = os.environ.get('FORWARD_ORIGIN', 'https://www.brightathomecleaning.com')
 JWT_ALGO = 'HS256'
 
 app = FastAPI()
