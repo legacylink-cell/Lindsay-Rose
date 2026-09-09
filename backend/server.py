@@ -27,7 +27,6 @@ ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'changeme')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'dev-secret')
 FORWARD_EMAIL = os.environ.get('FORWARD_EMAIL', 'support@brightathomecleaning.com')
-FORWARD_CC = os.environ.get('FORWARD_CC', 'design@mozeid.com')
 FORWARD_ORIGIN = os.environ.get('FORWARD_ORIGIN', 'https://www.brightathomecleaning.com')
 JWT_ALGO = 'HS256'
 
@@ -76,7 +75,7 @@ def _forward_email(subject: str, fields: dict, reply_to: str = None, autorespons
     """Forward a submission to the support inbox via FormSubmit, and optionally
     send a confirmation autoresponse to the person who submitted the form."""
     try:
-        payload = {**fields, "_subject": subject, "_template": "table", "_captcha": "false", "_cc": FORWARD_CC}
+        payload = {**fields, "_subject": subject, "_template": "table", "_captcha": "false"}
         if reply_to:
             payload["_replyto"] = reply_to
         if autoresponse:
