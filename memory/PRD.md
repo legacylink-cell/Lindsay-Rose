@@ -28,6 +28,15 @@ Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW 
 - `_forward_email()` in `backend/server.py` now: (1) sends the submission to `FORWARD_EMAIL` with `Reply-To` = submitter, (2) sends the client confirmation to the submitter. Independent try/except; failures never affect the saved submission. **No CC to anyone.**
 - **Branded HTML confirmations (2026-06)**: `CLIENT_EMAILS` + `_client_message(kind, first)` in `backend/server.py` build multipart text+HTML client emails (cream logo band, amber rule, brand-green heading, pill `tel:` CTA, tagline footer). Distinct subjects: "We received your quote request" vs "We received your application". Logo pulled from `SITE_URL/logos/logo-b-rooftop-emblem-t.png` (env `SITE_URL`, defaults to production domain). Verified in preview: 2 quote + 2 application sends, all 4 confirmations logged sent.
 
+## Lead status + follow-up reminders (Option A, 2026-06)
+- **Statuses**: quotes = `new` / `contacted` / `booked`; applications = `new` / `contacted`. New submissions save with `status: "new"`; older records with no field are treated as new in both API queries and UI.
+- **Admin UI** (`frontend/src/components/Admin.jsx`): status badge per card, one-tap `Mark contacted` / `Mark booked` / `Back to new` (optimistic update + rollback on failure), amber "Needs reply" flag + ring on quotes still `new` after 24h, and an **Awaiting reply** stat card (replaced "Total submissions").
+- **Endpoints**: `PATCH /api/admin/quotes/{id}/status`, `PATCH /api/admin/applications/{id}/status` (validated, admin JWT), `POST /api/admin/reminders/run` (manual trigger).
+- **Reminder engine** (`run_reminders()` + `_reminder_loop()` startup task): every `REMINDER_CHECK_MINUTES` (180) it emails support ONE branded digest of quotes still `new` past `REMINDER_AFTER_HOURS` (24), with name/city/service/age and tappable phone + email per lead and an Open Admin Dashboard CTA. Each lead is stamped `reminded_at` so it nags **once**; marking contacted/booked also stamps it. Restart-safe (no duplicate sends).
+- Caveat: the loop lives in the backend process, so a restart resets the timer and a digest can fire late.
+- Tested 2026-06 (iteration_2.json): backend 100% (10/10 pytest in `backend/tests/test_status_and_reminders.py`), frontend 100% (all Admin status flows, persistence, overdue flag, tab-specific buttons). Test/synthetic submissions cleaned out afterwards.
+
+
 - Verified in preview 2026-06: quote + career application both logged "Support notification sent" and "Client confirmation sent". Needs redeploy for production.
 
 ## Open items / backlog

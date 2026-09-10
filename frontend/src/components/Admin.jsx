@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Lock, LogOut, Inbox, Briefcase, RefreshCw, Layers, CalendarClock, Trash2 } from "lucide-react";
+import { Lock, LogOut, Inbox, Briefcase, RefreshCw, AlarmClock, CalendarClock, Trash2, Check, CalendarCheck, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const TOKEN_KEY = "bah_admin_token";
+const OVERDUE_HRS = 24;
+
+const STATUS_STYLES = {
+  new: "bg-amber-50 text-amber-800 ring-1 ring-amber-200",
+  contacted: "bg-blue-50 text-blue-800 ring-1 ring-blue-200",
+  booked: "bg-brand-sage text-brand-green ring-1 ring-brand-green/20",
+};
 
 const Admin = () => {
   const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY) || "");
@@ -58,6 +65,24 @@ const Admin = () => {
   useEffect(() => { load(); }, [load]);
 
   const fmt = (iso) => { try { return new Date(iso).toLocaleString(); } catch { return iso; } };
+
+  const setStatus = async (item, status) => {
+    const path = tab === "quotes" ? "quotes" : "applications";
+    const setter = tab === "quotes" ? setQuotes : setApps;
+    setter((p) => p.map((x) => (x.id === item.id ? { ...x, status } : x)));
+    try {
+      const res = await fetch(`${API}/admin/${path}/${item.id}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success(status === "new" ? "Moved back to New." : `Marked ${status}.`);
+    } catch {
+      setter((p) => p.map((x) => (x.id === item.id ? { ...x, status: item.status || "new" } : x)));
+      toast.error("Could not update. Please try again.");
+    }
+  };
 
   const remove = async (item) => {
     if (!window.confirm(`Delete this ${tab === "quotes" ? "quote request" : "application"} from ${item.name}? This can't be undone.`)) return;
@@ -125,7 +150,7 @@ const Admin = () => {
           const stats = [
             { icon: Inbox, label: "Quote requests", value: quotes.length },
             { icon: Briefcase, label: "Applications", value: apps.length },
-            { icon: Layers, label: "Total submissions", value: all.length },
+            { icon: AlarmClock, label: "Awaiting reply", value: quotes.filter((q) => (q.status || "new") === "new").length },
             { icon: CalendarClock, label: "New this week", value: newThisWeek },
           ];
           return (
@@ -152,13 +177,25 @@ const Admin = () => {
           <div className="bg-white rounded-2xl p-12 text-center text-brand-ink/60 shadow-soft ring-1 ring-black/5">No {tab === "quotes" ? "quote requests" : "applications"} yet.</div>
         ) : (
           <div className="space-y-3">
-            {list.map((item) => (
-              <div key={item.id} className="bg-white rounded-2xl p-5 shadow-soft ring-1 ring-black/5">
+            {list.map((item) => {
+              const status = item.status || "new";
+              const hrs = (Date.now() - new Date(item.created_at).getTime()) / 3600000;
+              const overdue = tab === "quotes" && status === "new" && hrs >= OVERDUE_HRS;
+              return (
+              <div key={item.id} data-testid={`submission-card-${item.id}`} className={`bg-white rounded-2xl p-5 shadow-soft ring-1 ${overdue ? "ring-2 ring-amber-300" : "ring-black/5"}`}>
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <span className="font-600 text-brand-ink">{item.name}</span>
                     <a href={`tel:${item.phone}`} className="text-sm text-brand-green">{item.phone}</a>
                     <a href={`mailto:${item.email}`} className="text-sm text-brand-ink/60">{item.email}</a>
+                    <span data-testid={`status-badge-${item.id}`} className={`text-[11px] font-600 uppercase tracking-wide px-2.5 py-1 rounded-full ${STATUS_STYLES[status]}`}>
+                      {status}
+                    </span>
+                    {overdue && (
+                      <span data-testid={`overdue-flag-${item.id}`} className="inline-flex items-center gap-1 text-[11px] font-600 text-amber-700">
+                        <AlarmClock className="w-3.5 h-3.5" /> Needs reply
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-xs text-brand-ink/50">{fmt(item.created_at)}</span>
@@ -173,8 +210,26 @@ const Admin = () => {
                   {item.position && <span className="bg-brand-sage text-brand-green px-2.5 py-1 rounded-full">{item.position}</span>}
                 </div>
                 {(item.details || item.message) && <p className="mt-3 text-sm text-brand-ink/75">{item.details || item.message}</p>}
+                <div className="mt-4 pt-3 border-t border-border flex flex-wrap gap-2">
+                  {status !== "contacted" && (
+                    <button onClick={() => setStatus(item, "contacted")} data-testid={`mark-contacted-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full bg-brand-green text-brand-cream hover:bg-brand-greenDark transition-colors">
+                      <Check className="w-3.5 h-3.5" /> Mark contacted
+                    </button>
+                  )}
+                  {tab === "quotes" && status !== "booked" && (
+                    <button onClick={() => setStatus(item, "booked")} data-testid={`mark-booked-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full bg-brand-sage text-brand-green hover:bg-brand-green hover:text-brand-cream transition-colors">
+                      <CalendarCheck className="w-3.5 h-3.5" /> Mark booked
+                    </button>
+                  )}
+                  {status !== "new" && (
+                    <button onClick={() => setStatus(item, "new")} data-testid={`mark-new-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full text-brand-ink/60 hover:text-brand-ink transition-colors">
+                      <RotateCcw className="w-3.5 h-3.5" /> Back to new
+                    </button>
+                  )}
+                </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

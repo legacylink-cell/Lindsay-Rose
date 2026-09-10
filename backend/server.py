@@ -36,8 +36,12 @@ SMTP_USER = os.environ.get('SMTP_USER', '')
 SMTP_APP_PASSWORD = (os.environ.get('SMTP_APP_PASSWORD') or '').replace(' ', '')
 MAIL_FROM_NAME = os.environ.get('MAIL_FROM_NAME', 'Bright at Home Cleaning')
 SITE_URL = os.environ.get('SITE_URL', 'https://brightathomecleaning.com')
+REMINDER_AFTER_HOURS = int(os.environ.get('REMINDER_AFTER_HOURS', '24'))
+REMINDER_CHECK_MINUTES = int(os.environ.get('REMINDER_CHECK_MINUTES', '180'))
 BUSINESS_PHONE = '469-443-6903'
 BUSINESS_PHONE_RAW = '4694436903'
+QUOTE_STATUSES = ('new', 'contacted', 'booked')
+APP_STATUSES = ('new', 'contacted')
 JWT_ALGO = 'HS256'
 
 app = FastAPI()
@@ -70,6 +74,10 @@ class LoginBody(BaseModel):
     password: str
 
 
+class StatusBody(BaseModel):
+    status: str
+
+
 # ---------------- Helpers ----------------
 def _now():
     return datetime.now(timezone.utc)
@@ -97,6 +105,38 @@ def _send_smtp(to: str, subject: str, text: str, reply_to: str = None, html: str
         smtp.ehlo()
         smtp.login(SMTP_USER, SMTP_APP_PASSWORD)
         smtp.send_message(msg)
+
+
+def _email_shell(heading: str, inner_html: str, cta_html: str = "") -> str:
+    """Branded email wrapper shared by client confirmations and internal reminders."""
+    cta_row = (f'<tr><td align="center" style="padding:6px 30px 30px;">{cta_html}</td></tr>'
+               if cta_html else "")
+    return f"""\
+<!DOCTYPE html>
+<html><body style="margin:0;padding:0;background:#E8EFE9;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#E8EFE9;padding:28px 12px;">
+<tr><td align="center">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background:#FFFFFB;border-radius:14px;overflow:hidden;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+    <tr><td align="center" style="background:#FFFFFB;padding:24px 24px 20px;">
+      <img src="{SITE_URL}/logos/logo-b-rooftop-emblem-t.png" alt="Bright at Home Cleaning" width="200" style="display:block;width:200px;max-width:74%;height:auto;border:0;">
+    </td></tr>
+    <tr><td style="height:4px;background:#C9A227;font-size:0;line-height:0;">&nbsp;</td></tr>
+    <tr><td style="padding:30px 30px 8px;">
+      <h1 style="margin:0 0 12px;font-size:22px;line-height:1.3;color:#1F4D3A;font-weight:700;">{heading}</h1>
+      {inner_html}
+    </td></tr>
+    {cta_row}
+    <tr><td style="background:#E8EFE9;padding:22px 30px;text-align:center;">
+      <p style="margin:0 0 6px;font-size:14px;color:#1F4D3A;font-weight:700;">The Bright at Home Cleaning Team</p>
+      <p style="margin:0 0 10px;font-size:13px;color:#2E2E2E;font-style:italic;">A brighter home, a brighter life.</p>
+      <p style="margin:0;font-size:13px;color:#2E2E2E;">
+        <a href="{SITE_URL}" style="color:#1F4D3A;text-decoration:underline;">brightathomecleaning.com</a>
+        &nbsp;&middot;&nbsp; Serving Plano, Frisco, McKinney &amp; nearby
+      </p>
+    </td></tr>
+  </table>
+</td></tr></table>
+</body></html>"""
 
 
 CLIENT_EMAILS = {
@@ -138,36 +178,90 @@ def _client_message(kind: str, first: str):
         f'<p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#2E2E2E;">{p}</p>'
         for p in tpl["paragraphs"]
     )
-    html = f"""\
-<!DOCTYPE html>
-<html><body style="margin:0;padding:0;background:#E8EFE9;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#E8EFE9;padding:28px 12px;">
-<tr><td align="center">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background:#FFFFFB;border-radius:14px;overflow:hidden;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
-    <tr><td align="center" style="background:#FFFFFB;padding:24px 24px 20px;">
-      <img src="{SITE_URL}/logos/logo-b-rooftop-emblem-t.png" alt="Bright at Home Cleaning" width="200" style="display:block;width:200px;max-width:74%;height:auto;border:0;">
-    </td></tr>
-    <tr><td style="height:4px;background:#C9A227;font-size:0;line-height:0;">&nbsp;</td></tr>
-    <tr><td style="padding:30px 30px 8px;">
-      <h1 style="margin:0 0 6px;font-size:22px;line-height:1.3;color:#1F4D3A;font-weight:700;">{tpl['heading']}</h1>
-      <p style="margin:0 0 18px;font-size:16px;color:#2E2E2E;">{greeting}</p>
-      {body_html}
-    </td></tr>
-    <tr><td align="center" style="padding:6px 30px 30px;">
-      <a href="tel:{BUSINESS_PHONE_RAW}" style="display:inline-block;background:#1F4D3A;color:#FFFFFB;text-decoration:none;font-size:16px;font-weight:700;padding:14px 30px;border-radius:999px;">Call or text {BUSINESS_PHONE}</a>
-    </td></tr>
-    <tr><td style="background:#E8EFE9;padding:22px 30px;text-align:center;">
-      <p style="margin:0 0 6px;font-size:14px;color:#1F4D3A;font-weight:700;">The Bright at Home Cleaning Team</p>
-      <p style="margin:0 0 10px;font-size:13px;color:#2E2E2E;font-style:italic;">A brighter home, a brighter life.</p>
-      <p style="margin:0;font-size:13px;color:#2E2E2E;">
-        <a href="{SITE_URL}" style="color:#1F4D3A;text-decoration:underline;">brightathomecleaning.com</a>
-        &nbsp;&middot;&nbsp; Serving Plano, Frisco, McKinney &amp; nearby
-      </p>
-    </td></tr>
-  </table>
-</td></tr></table>
-</body></html>"""
-    return tpl["subject"], text, html
+    inner = f'<p style="margin:0 0 18px;font-size:16px;color:#2E2E2E;">{greeting}</p>{body_html}'
+    cta = (f'<a href="tel:{BUSINESS_PHONE_RAW}" style="display:inline-block;background:#1F4D3A;'
+           f'color:#FFFFFB;text-decoration:none;font-size:16px;font-weight:700;padding:14px 30px;'
+           f'border-radius:999px;">Call or text {BUSINESS_PHONE}</a>')
+    return tpl["subject"], text, _email_shell(tpl["heading"], inner, cta)
+
+
+def _hours_since(iso: str):
+    try:
+        return (_now() - datetime.fromisoformat(iso)).total_seconds() / 3600
+    except Exception:
+        return None
+
+
+def _reminder_message(items: list):
+    """Build (subject, plain_text, html) for the overdue-leads digest sent to support."""
+    n = len(items)
+    subject = f"{n} quote request{'s' if n != 1 else ''} still need{'' if n != 1 else 's'} a reply"
+    heading = "These leads are still waiting"
+    intro = (f"The following came in more than {REMINDER_AFTER_HOURS} hours ago and "
+             "aren't marked as contacted yet.")
+
+    text_lines = [intro, ""]
+    rows = [f'<p style="margin:0 0 20px;font-size:16px;line-height:1.6;color:#2E2E2E;">{intro}</p>']
+    for it in items:
+        hrs = _hours_since(it.get("created_at", ""))
+        age = f"{round(hrs)} hrs ago" if hrs is not None else "recently"
+        bits = [b for b in [it.get("city"), it.get("service")] if b and b != "\u2014"]
+        meta = " \u00b7 ".join(bits) or "No details given"
+        text_lines += [
+            f"{it.get('name', 'Unknown')} \u2014 {meta} \u2014 submitted {age}",
+            f"  {it.get('phone', '')}  |  {it.get('email', '')}",
+            "",
+        ]
+        rows.append(f"""\
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 12px;background:#E8EFE9;border-radius:10px;">
+  <tr><td style="padding:14px 16px;">
+    <p style="margin:0 0 4px;font-size:16px;font-weight:700;color:#1F4D3A;">{it.get('name', 'Unknown')}</p>
+    <p style="margin:0 0 8px;font-size:13px;color:#2E2E2E;">{meta} &nbsp;&middot;&nbsp; submitted {age}</p>
+    <p style="margin:0;font-size:14px;">
+      <a href="tel:{it.get('phone', '')}" style="color:#1F4D3A;font-weight:700;text-decoration:none;">{it.get('phone', '')}</a>
+      &nbsp;&middot;&nbsp;
+      <a href="mailto:{it.get('email', '')}" style="color:#2E2E2E;text-decoration:underline;">{it.get('email', '')}</a>
+    </p>
+  </td></tr>
+</table>""")
+
+    text = "\n".join([*text_lines, f"Open your dashboard: {SITE_URL}/admin"])
+    cta = (f'<a href="{SITE_URL}/admin" style="display:inline-block;background:#1F4D3A;color:#FFFFFB;'
+           f'text-decoration:none;font-size:16px;font-weight:700;padding:14px 30px;border-radius:999px;">'
+           f'Open Admin Dashboard</a>')
+    return subject, text, _email_shell(heading, "".join(rows), cta)
+
+
+async def run_reminders():
+    """Email support a digest of quote requests still marked New after the cutoff.
+    Each lead is reminded once (reminded_at), so restarts never re-send."""
+    docs = await db.quotes.find({
+        "$or": [{"status": "new"}, {"status": {"$exists": False}}],
+        "reminded_at": {"$exists": False},
+    }).sort("created_at", 1).to_list(200)
+
+    overdue = [d for d in docs
+               if (_hours_since(d.get("created_at", "")) or 0) >= REMINDER_AFTER_HOURS]
+    if not overdue:
+        return 0
+
+    subject, text, html = _reminder_message(overdue)
+    await asyncio.to_thread(_send_smtp, FORWARD_EMAIL, subject, text, None, html)
+    await db.quotes.update_many(
+        {"id": {"$in": [d["id"] for d in overdue]}},
+        {"$set": {"reminded_at": _now().isoformat()}},
+    )
+    logging.info("Follow-up reminder sent for %d lead(s)", len(overdue))
+    return len(overdue)
+
+
+async def _reminder_loop():
+    while True:
+        await asyncio.sleep(REMINDER_CHECK_MINUTES * 60)
+        try:
+            await run_reminders()
+        except Exception as e:
+            logging.warning(f"Reminder check failed: {e}")
 
 
 def _forward_email(subject: str, fields: dict, reply_to: str = None, client_kind: str = None,
@@ -222,6 +316,7 @@ async def create_quote(body: QuoteCreate):
         "type": "quote",
         "name": body.name, "email": body.email, "phone": body.phone,
         "city": body.city, "service": body.service, "details": body.details,
+        "status": "new",
         "created_at": _now().isoformat(),
     }
     await db.quotes.insert_one(dict(doc))
@@ -250,6 +345,7 @@ async def create_application(body: ApplicationCreate):
         "type": "application",
         "name": body.name, "email": body.email, "phone": body.phone,
         "position": body.position, "message": body.message,
+        "status": "new",
         "created_at": _now().isoformat(),
     }
     await db.applications.insert_one(dict(doc))
@@ -296,6 +392,36 @@ async def summary(_: bool = Depends(require_admin)):
     }
 
 
+@api_router.patch("/admin/quotes/{item_id}/status")
+async def set_quote_status(item_id: str, body: StatusBody, _: bool = Depends(require_admin)):
+    if body.status not in QUOTE_STATUSES:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    update = {"status": body.status}
+    if body.status != "new":
+        # Handled, so it should never appear in a follow-up reminder.
+        update["reminded_at"] = _now().isoformat()
+    res = await db.quotes.update_one({"id": item_id}, {"$set": update})
+    if not res.matched_count:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"success": True, "status": body.status}
+
+
+@api_router.patch("/admin/applications/{item_id}/status")
+async def set_application_status(item_id: str, body: StatusBody, _: bool = Depends(require_admin)):
+    if body.status not in APP_STATUSES:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    res = await db.applications.update_one({"id": item_id}, {"$set": {"status": body.status}})
+    if not res.matched_count:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"success": True, "status": body.status}
+
+
+@api_router.post("/admin/reminders/run")
+async def trigger_reminders(_: bool = Depends(require_admin)):
+    sent = await run_reminders()
+    return {"success": True, "leads_reminded": sent}
+
+
 @api_router.delete("/admin/quotes/{item_id}")
 async def delete_quote(item_id: str, _: bool = Depends(require_admin)):
     await db.quotes.delete_one({"id": item_id})
@@ -321,6 +447,13 @@ app.add_middleware(
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+
+@app.on_event("startup")
+async def start_reminder_loop():
+    asyncio.create_task(_reminder_loop())
+    logging.info("Follow-up reminders: every %d min, cutoff %d hrs",
+                 REMINDER_CHECK_MINUTES, REMINDER_AFTER_HOURS)
 
 
 @app.on_event("shutdown")
