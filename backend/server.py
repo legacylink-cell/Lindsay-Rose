@@ -12,7 +12,10 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timezone, timedelta
 import jwt
-import requests
+import smtplib
+import ssl
+from email.message import EmailMessage
+from email.utils import formataddr
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -27,7 +30,11 @@ ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'changeme')
 JWT_SECRET = os.environ.get('JWT_SECRET', 'dev-secret')
 FORWARD_EMAIL = os.environ.get('FORWARD_EMAIL', 'support@brightathomecleaning.com')
-FORWARD_ORIGIN = os.environ.get('FORWARD_ORIGIN', 'https://www.brightathomecleaning.com')
+SMTP_HOST = os.environ.get('SMTP_HOST', 'smtp.gmail.com')
+SMTP_PORT = int(os.environ.get('SMTP_PORT', '587'))
+SMTP_USER = os.environ.get('SMTP_USER', '')
+SMTP_APP_PASSWORD = (os.environ.get('SMTP_APP_PASSWORD') or '').replace(' ', '')
+MAIL_FROM_NAME = os.environ.get('MAIL_FROM_NAME', 'Bright at Home Cleaning')
 JWT_ALGO = 'HS256'
 
 app = FastAPI()
@@ -71,29 +78,42 @@ def _clean(doc: dict) -> dict:
     return doc
 
 
+def _send_smtp(to: str, subject: str, body: str, reply_to: str = None):
+    msg = EmailMessage()
+    msg["From"] = formataddr((MAIL_FROM_NAME, SMTP_USER))
+    msg["To"] = to
+    msg["Subject"] = subject
+    if reply_to:
+        msg["Reply-To"] = reply_to
+    msg.set_content(body)
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as smtp:
+        smtp.ehlo()
+        smtp.starttls(context=ssl.create_default_context())
+        smtp.ehlo()
+        smtp.login(SMTP_USER, SMTP_APP_PASSWORD)
+        smtp.send_message(msg)
+
+
 def _forward_email(subject: str, fields: dict, reply_to: str = None, autoresponse: str = None):
-    """Forward a submission to the support inbox via FormSubmit, and optionally
-    send a confirmation autoresponse to the person who submitted the form."""
+    """Send the submission to the support inbox and a confirmation to the submitter.
+    Each send is independent; email failures never affect the saved submission."""
+    if not SMTP_USER or not SMTP_APP_PASSWORD:
+        logging.warning("SMTP not configured; skipping email for: %s", subject)
+        return
+
+    body = "\n".join(f"{k}: {v}" for k, v in fields.items())
     try:
-        payload = {**fields, "_subject": subject, "_template": "table", "_captcha": "false"}
-        if reply_to:
-            payload["_replyto"] = reply_to
-        if autoresponse:
-            payload["_autoresponse"] = autoresponse
-        headers = {
-            "Origin": FORWARD_ORIGIN,
-            "Referer": FORWARD_ORIGIN + "/",
-            "User-Agent": "Mozilla/5.0 (BrightAtHome Server)",
-        }
-        resp = requests.post(
-            f"https://formsubmit.co/ajax/{FORWARD_EMAIL}",
-            json=payload,
-            headers=headers,
-            timeout=12,
-        )
-        logging.info(f"FormSubmit forward [{resp.status_code}]: {resp.text[:300]}")
-    except Exception as e:  # never block a submission on email issues
-        logging.warning(f"Email forward failed: {e}")
+        _send_smtp(FORWARD_EMAIL, subject, body, reply_to)
+        logging.info("Support notification sent: %s", subject)
+    except Exception as e:
+        logging.warning(f"Support notification failed: {e}")
+
+    if autoresponse and reply_to:
+        try:
+            _send_smtp(reply_to, "We received your request \u2013 Bright at Home Cleaning", autoresponse)
+            logging.info("Client confirmation sent")
+        except Exception as e:
+            logging.warning(f"Client confirmation failed: {e}")
 
 
 def _make_token():

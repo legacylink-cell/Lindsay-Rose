@@ -22,12 +22,18 @@ Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW 
 - Applied full brand kit: palette + Montserrat/Source Sans 3 fonts + subtle marble/pebble textures.
 - Built `/brand` logo preview page.
 
+## Email delivery (2026-06, updated)
+- **FormSubmit.co REMOVED.** Emails now send via **Google Workspace SMTP** (`smtp.gmail.com:587`, STARTTLS) authenticated with an App Password for `support@brightathomecleaning.com`.
+- Env keys in `backend/.env`: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_APP_PASSWORD`, `MAIL_FROM_NAME`, `FORWARD_EMAIL`. (`FORWARD_ORIGIN`/`FORWARD_CC` removed.)
+- `_forward_email()` in `backend/server.py` now: (1) sends the submission to `FORWARD_EMAIL` with `Reply-To` = submitter, (2) sends the client confirmation to the submitter. Independent try/except; failures never affect the saved submission. **No CC to anyone.**
+- Verified in preview 2026-06: quote + career application both logged "Support notification sent" and "Client confirmation sent". Needs redeploy for production.
+
 ## Open items / backlog
 - **P0 (awaiting user)**: Pick a logo at `/brand`, then finalize it site-wide + regenerate favicon/OG.
 - Instagram social URL still placeholder (`#`) in mock.js — replace or hide.
-- FormSubmit email activation unverified in production (primary design@mozeid.com, CC support@brightathomecleaning.com).
+- Confirm production email delivery after redeploy (Google Workspace SMTP; support inbox + client confirmation).
 - Terms & Conditions text is placeholder — needs legal-approved copy.
 - Optional: city landing pages (Plano/Argyle) for local SEO; Google Business Profile work (business-side).
 
 ## Integrations
-- MongoDB (Motor), FastAPI, FormSubmit.co (email relay), Admin JWT (ADMIN_USERNAME/PASSWORD, JWT_SECRET in backend/.env — do not echo), Google review link, Facebook link, Unsplash imagery, Google Fonts.
+- MongoDB (Motor), FastAPI, Google Workspace SMTP (email delivery), Admin JWT (ADMIN_USERNAME/PASSWORD, JWT_SECRET in backend/.env — do not echo), Google review link, Facebook link, Unsplash imagery, Google Fonts.
