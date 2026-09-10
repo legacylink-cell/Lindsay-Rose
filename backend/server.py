@@ -35,6 +35,9 @@ SMTP_PORT = int(os.environ.get('SMTP_PORT', '587'))
 SMTP_USER = os.environ.get('SMTP_USER', '')
 SMTP_APP_PASSWORD = (os.environ.get('SMTP_APP_PASSWORD') or '').replace(' ', '')
 MAIL_FROM_NAME = os.environ.get('MAIL_FROM_NAME', 'Bright at Home Cleaning')
+SITE_URL = os.environ.get('SITE_URL', 'https://brightathomecleaning.com')
+BUSINESS_PHONE = '469-443-6903'
+BUSINESS_PHONE_RAW = '4694436903'
 JWT_ALGO = 'HS256'
 
 app = FastAPI()
@@ -78,14 +81,16 @@ def _clean(doc: dict) -> dict:
     return doc
 
 
-def _send_smtp(to: str, subject: str, body: str, reply_to: str = None):
+def _send_smtp(to: str, subject: str, text: str, reply_to: str = None, html: str = None):
     msg = EmailMessage()
     msg["From"] = formataddr((MAIL_FROM_NAME, SMTP_USER))
     msg["To"] = to
     msg["Subject"] = subject
     if reply_to:
         msg["Reply-To"] = reply_to
-    msg.set_content(body)
+    msg.set_content(text)
+    if html:
+        msg.add_alternative(html, subtype="html")
     with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as smtp:
         smtp.ehlo()
         smtp.starttls(context=ssl.create_default_context())
@@ -94,7 +99,79 @@ def _send_smtp(to: str, subject: str, body: str, reply_to: str = None):
         smtp.send_message(msg)
 
 
-def _forward_email(subject: str, fields: dict, reply_to: str = None, autoresponse: str = None):
+CLIENT_EMAILS = {
+    "quote": {
+        "subject": "We received your quote request \u2013 Bright at Home Cleaning",
+        "heading": "Thanks for your quote request!",
+        "paragraphs": [
+            "Thank you for requesting a quote with Bright at Home Cleaning! We've received your "
+            "request and a member of our team will reach out very soon to confirm the details and "
+            "your custom quote.",
+            "Need us sooner? Give us a call or text \u2014 we're happy to help.",
+        ],
+    },
+    "application": {
+        "subject": "We received your application \u2013 Bright at Home Cleaning",
+        "heading": "Thanks for applying!",
+        "paragraphs": [
+            "Thank you for applying to join the Bright at Home Cleaning team! We've received your "
+            "application and will review it carefully. If it looks like a good fit, we'll be in "
+            "touch about the next steps.",
+            "Questions in the meantime? Give us a call or text \u2014 we'd love to hear from you.",
+        ],
+    },
+}
+
+
+def _client_message(kind: str, first: str):
+    """Build (subject, plain_text, html) for the confirmation sent to the submitter."""
+    tpl = CLIENT_EMAILS[kind]
+    greeting = f"Hi {first},"
+
+    text = "\n\n".join([greeting, *tpl["paragraphs"]])
+    text += (
+        f"\n\nCall or text: {BUSINESS_PHONE}\n{SITE_URL}\n\n"
+        "Warm regards,\nThe Bright at Home Cleaning Team\nA brighter home, a brighter life."
+    )
+
+    body_html = "".join(
+        f'<p style="margin:0 0 16px;font-size:16px;line-height:1.65;color:#2E2E2E;">{p}</p>'
+        for p in tpl["paragraphs"]
+    )
+    html = f"""\
+<!DOCTYPE html>
+<html><body style="margin:0;padding:0;background:#E8EFE9;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#E8EFE9;padding:28px 12px;">
+<tr><td align="center">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background:#FFFFFB;border-radius:14px;overflow:hidden;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+    <tr><td align="center" style="background:#FFFFFB;padding:24px 24px 20px;">
+      <img src="{SITE_URL}/logos/logo-b-rooftop-emblem-t.png" alt="Bright at Home Cleaning" width="200" style="display:block;width:200px;max-width:74%;height:auto;border:0;">
+    </td></tr>
+    <tr><td style="height:4px;background:#C9A227;font-size:0;line-height:0;">&nbsp;</td></tr>
+    <tr><td style="padding:30px 30px 8px;">
+      <h1 style="margin:0 0 6px;font-size:22px;line-height:1.3;color:#1F4D3A;font-weight:700;">{tpl['heading']}</h1>
+      <p style="margin:0 0 18px;font-size:16px;color:#2E2E2E;">{greeting}</p>
+      {body_html}
+    </td></tr>
+    <tr><td align="center" style="padding:6px 30px 30px;">
+      <a href="tel:{BUSINESS_PHONE_RAW}" style="display:inline-block;background:#1F4D3A;color:#FFFFFB;text-decoration:none;font-size:16px;font-weight:700;padding:14px 30px;border-radius:999px;">Call or text {BUSINESS_PHONE}</a>
+    </td></tr>
+    <tr><td style="background:#E8EFE9;padding:22px 30px;text-align:center;">
+      <p style="margin:0 0 6px;font-size:14px;color:#1F4D3A;font-weight:700;">The Bright at Home Cleaning Team</p>
+      <p style="margin:0 0 10px;font-size:13px;color:#2E2E2E;font-style:italic;">A brighter home, a brighter life.</p>
+      <p style="margin:0;font-size:13px;color:#2E2E2E;">
+        <a href="{SITE_URL}" style="color:#1F4D3A;text-decoration:underline;">brightathomecleaning.com</a>
+        &nbsp;&middot;&nbsp; Serving Plano, Frisco, McKinney &amp; nearby
+      </p>
+    </td></tr>
+  </table>
+</td></tr></table>
+</body></html>"""
+    return tpl["subject"], text, html
+
+
+def _forward_email(subject: str, fields: dict, reply_to: str = None, client_kind: str = None,
+                   first_name: str = "there"):
     """Send the submission to the support inbox and a confirmation to the submitter.
     Each send is independent; email failures never affect the saved submission."""
     if not SMTP_USER or not SMTP_APP_PASSWORD:
@@ -108,10 +185,11 @@ def _forward_email(subject: str, fields: dict, reply_to: str = None, autorespons
     except Exception as e:
         logging.warning(f"Support notification failed: {e}")
 
-    if autoresponse and reply_to:
+    if client_kind and reply_to:
         try:
-            _send_smtp(reply_to, "We received your request \u2013 Bright at Home Cleaning", autoresponse)
-            logging.info("Client confirmation sent")
+            c_subject, c_text, c_html = _client_message(client_kind, first_name)
+            _send_smtp(reply_to, c_subject, c_text, html=c_html)
+            logging.info("Client confirmation sent: %s", c_subject)
         except Exception as e:
             logging.warning(f"Client confirmation failed: {e}")
 
@@ -157,14 +235,8 @@ async def create_quote(body: QuoteCreate):
             "Details": body.details or "\u2014",
         },
         body.email,
-        (
-            f"Hi {first},\n\n"
-            "Thank you for requesting a quote with Bright at Home Cleaning! We've received your "
-            "request and a member of our team will reach out very soon to confirm the details and "
-            "your custom quote.\n\n"
-            "Need us sooner? Call or text us at 469-443-6903.\n\n"
-            "Warm regards,\nThe Bright at Home Cleaning Team\nA brighter home, a brighter life."
-        ),
+        "quote",
+        first,
     ))
     return {"success": True, "id": doc["id"]}
 
@@ -190,14 +262,8 @@ async def create_application(body: ApplicationCreate):
             "Position": body.position or "\u2014", "About": body.message or "\u2014",
         },
         body.email,
-        (
-            f"Hi {first},\n\n"
-            "Thank you for applying to join the Bright at Home Cleaning team! We've received your "
-            "application and will review it carefully. If it looks like a good fit, we'll be in touch "
-            "about the next steps.\n\n"
-            "Questions in the meantime? Call us at 469-443-6903.\n\n"
-            "Warm regards,\nThe Bright at Home Cleaning Team\nA brighter home, a brighter life."
-        ),
+        "application",
+        first,
     ))
     return {"success": True, "id": doc["id"]}
 

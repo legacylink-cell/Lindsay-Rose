@@ -26,6 +26,8 @@ Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW 
 - **FormSubmit.co REMOVED.** Emails now send via **Google Workspace SMTP** (`smtp.gmail.com:587`, STARTTLS) authenticated with an App Password for `support@brightathomecleaning.com`.
 - Env keys in `backend/.env`: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_APP_PASSWORD`, `MAIL_FROM_NAME`, `FORWARD_EMAIL`. (`FORWARD_ORIGIN`/`FORWARD_CC` removed.)
 - `_forward_email()` in `backend/server.py` now: (1) sends the submission to `FORWARD_EMAIL` with `Reply-To` = submitter, (2) sends the client confirmation to the submitter. Independent try/except; failures never affect the saved submission. **No CC to anyone.**
+- **Branded HTML confirmations (2026-06)**: `CLIENT_EMAILS` + `_client_message(kind, first)` in `backend/server.py` build multipart text+HTML client emails (cream logo band, amber rule, brand-green heading, pill `tel:` CTA, tagline footer). Distinct subjects: "We received your quote request" vs "We received your application". Logo pulled from `SITE_URL/logos/logo-b-rooftop-emblem-t.png` (env `SITE_URL`, defaults to production domain). Verified in preview: 2 quote + 2 application sends, all 4 confirmations logged sent.
+
 - Verified in preview 2026-06: quote + career application both logged "Support notification sent" and "Client confirmation sent". Needs redeploy for production.
 
 ## Open items / backlog
