@@ -30,11 +30,11 @@ Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW 
 
 ## Per-route head tags / canonicals (2026-06)
 - **`frontend/src/hooks/usePageHead.js`** (new): shared hook + `absoluteUrl()`. Sets per route: `document.title`, `meta[name=description]`, self-referencing `link[rel=canonical]` (created if missing), `og:url`, `og:title`, `og:description`, `twitter:title`, `twitter:description`.
-- Host is `https://www.brightathomecleaning.com` (matches sitemap/robots/schema), **no trailing slash except the homepage**.
+- Host is `https://brightathomecleaning.com` (**apex, no www**) — matched to the live redirect direction: the platform's Root Domain Redirection is set with the apex as Primary, so `www.*` 308-redirects to apex (verified 2026-06, path + query preserved). Canonical/sitemap/robots/schema all flipped from www to apex so nothing canonicalises to a redirecting URL. No trailing slash except the homepage.
 - Wired into: `App.js` Landing (`/`, HOME_TITLE/HOME_DESCRIPTION consts), `components/Careers.jsx` (`/careers`, new jobs-focused title + description), `pages/ServicePage.jsx` (`/services/{slug}`, uses existing per-service metaTitle/metaDescription; its old inline title/meta code was removed, its `Service` JSON-LD block kept).
 - Before: every route emitted the hardcoded homepage canonical from `public/index.html` (told Google the 5 service pages + careers were duplicates of home). After: 7/7 routes verified unique title, unique description, self-referencing canonical, single canonical tag, og:url in sync, and correct reset on SPA back-navigation.
 - **KNOWN LIMITATION**: head tags are set client-side, so `curl` still shows the homepage canonical from the static shell (no JS execution). Googlebot renders JS and sees the correct per-route canonical. A build-time prerender step would be needed for raw-HTML correctness — not implemented, not verifiable in preview.
-- **OPEN (platform-side, user action)**: both `brightathomecleaning.com` and `www.` return 200 with no redirect (duplicate host). Fix = Publish → Manage Publishes → Domain tab → "Enable Root Domain Redirection" set to **root → www**. Cannot be done from code.
+- **RESOLVED (platform-side)**: duplicate host collapsed via Publish → Domain → Enable Root Domain Redirection with apex as Primary. `www` → apex is a 308 (permanent, Google treats it as 301). Only remaining `www.` reference in the codebase is the GTM hostname allow-list in index.html, which intentionally covers both hosts.
 - JSON-LD: shell `HouseCleaningService`/`LocalBusiness` block still renders on every route (static in index.html); each service page additionally injects its own `Service` block describing that service, removed on unmount.
 
 

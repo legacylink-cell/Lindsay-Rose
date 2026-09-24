@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const SITE_ORIGIN = "https://www.brightathomecleaning.com";
+export const SITE_ORIGIN = "https://brightathomecleaning.com";
 
 // Absolute URL for a route: no trailing slash anywhere except the homepage.
 export const absoluteUrl = (path) => {
