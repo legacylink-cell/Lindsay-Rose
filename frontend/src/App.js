@@ -23,6 +23,11 @@ import Careers from "./components/Careers";
 import Admin from "./components/Admin";
 import BrandPreview from "./components/BrandPreview";
 import ServicePage from "./pages/ServicePage";
+import { usePageHead } from "./hooks/usePageHead";
+
+const HOME_TITLE = "Bright at Home Cleaning | A Brighter Home. A Better Day.";
+const HOME_DESCRIPTION =
+  "Bright at Home Cleaning — trusted home & commercial cleaning serving Plano, Frisco, McKinney and the Dallas–Fort Worth metroplex. Bonded, insured, eco-friendly. 100% satisfaction guaranteed. Call 469-443-6903 for a free quote.";
 
 function useReveal() {
   useEffect(() => {
@@ -71,6 +76,7 @@ function useReveal() {
 
 const Landing = () => {
   useReveal();
+  usePageHead({ title: HOME_TITLE, description: HOME_DESCRIPTION, path: "/" });
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";

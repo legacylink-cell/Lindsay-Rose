@@ -6,7 +6,12 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { BRAND } from "../mock";
+import { usePageHead } from "../hooks/usePageHead";
 import Footer from "./Footer";
+
+const CAREERS_TITLE = "Cleaning Jobs in DFW | Now Hiring House Cleaners \u2014 Bright at Home Cleaning";
+const CAREERS_DESCRIPTION =
+  "Now hiring house cleaners and commercial cleaners in Plano, Frisco, McKinney, Denton and across DFW. Competitive pay plus tips, flexible scheduling, most weekends off, paid training and supplies provided. Apply today \u2014 no experience required.";
 
 const VALUES = [
   { icon: Heart, title: "Genuine Care", desc: "We treat every home, office, and teammate the way we'd want to be treated." },
@@ -34,6 +39,8 @@ const Careers = () => {
   const [form, setForm] = useState({ name: "", email: "", phone: "", position: POSITIONS[0].title, message: "", company: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  usePageHead({ title: CAREERS_TITLE, description: CAREERS_DESCRIPTION, path: "/careers" });
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";

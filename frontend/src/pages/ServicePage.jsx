@@ -4,6 +4,7 @@ import { ArrowLeft, Phone, Check, ArrowRight } from "lucide-react";
 import { BRAND } from "../mock";
 import QuoteForm from "../components/QuoteForm";
 import Footer from "../components/Footer";
+import { usePageHead } from "../hooks/usePageHead";
 
 export const SERVICE_CITIES = [
   "Plano", "Frisco", "McKinney", "Allen", "Celina", "Prosper",
@@ -132,17 +133,16 @@ const ServicePage = () => {
   const { slug } = useParams();
   const svc = SERVICES[slug];
 
+  usePageHead(
+    svc
+      ? { title: svc.metaTitle, description: svc.metaDescription, path: `/services/${slug}` }
+      : {}
+  );
+
   useEffect(() => {
     if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
     window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     if (!svc) return;
-    document.title = svc.metaTitle;
-    const setMeta = (name, content) => {
-      let el = document.querySelector(`meta[name="${name}"]`);
-      if (!el) { el = document.createElement("meta"); el.setAttribute("name", name); document.head.appendChild(el); }
-      el.setAttribute("content", content);
-    };
-    setMeta("description", svc.metaDescription);
     const ld = document.createElement("script");
     ld.type = "application/ld+json";
     ld.id = "service-jsonld";
