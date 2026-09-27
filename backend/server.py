@@ -12,6 +12,7 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timezone, timedelta
 import jwt
+import httpx
 import smtplib
 import ssl
 from email.message import EmailMessage
@@ -38,6 +39,10 @@ MAIL_FROM_NAME = os.environ.get('MAIL_FROM_NAME', 'Bright at Home Cleaning')
 SITE_URL = os.environ.get('SITE_URL', 'https://brightathomecleaning.com')
 REMINDER_AFTER_HOURS = int(os.environ.get('REMINDER_AFTER_HOURS', '24'))
 REMINDER_CHECK_MINUTES = int(os.environ.get('REMINDER_CHECK_MINUTES', '180'))
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '')
+TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '')
+DELIVERY_RETRY_MINUTES = int(os.environ.get('DELIVERY_RETRY_MINUTES', '10'))
+DELIVERY_MAX_ATTEMPTS = int(os.environ.get('DELIVERY_MAX_ATTEMPTS', '8'))
 BUSINESS_PHONE = '469-443-6903'
 BUSINESS_PHONE_RAW = '4694436903'
 QUOTE_STATUSES = ('new', 'contacted', 'booked')
@@ -267,17 +272,14 @@ async def _reminder_loop():
 def _forward_email(subject: str, fields: dict, reply_to: str = None, client_kind: str = None,
                    first_name: str = "there"):
     """Send the submission to the support inbox and a confirmation to the submitter.
-    Each send is independent; email failures never affect the saved submission."""
+    Raises on support-notification failure so the caller can record it and retry.
+    A failed client confirmation is logged but does not fail the dispatch."""
     if not SMTP_USER or not SMTP_APP_PASSWORD:
-        logging.warning("SMTP not configured; skipping email for: %s", subject)
-        return
+        raise RuntimeError("SMTP not configured (SMTP_USER / SMTP_APP_PASSWORD missing)")
 
     body = "\n".join(f"{k}: {v}" for k, v in fields.items())
-    try:
-        _send_smtp(FORWARD_EMAIL, subject, body, reply_to)
-        logging.info("Support notification sent: %s", subject)
-    except Exception as e:
-        logging.warning(f"Support notification failed: {e}")
+    _send_smtp(FORWARD_EMAIL, subject, body, reply_to)
+    logging.info("Support notification sent: %s", subject)
 
     if client_kind and reply_to:
         try:
@@ -286,6 +288,141 @@ def _forward_email(subject: str, fields: dict, reply_to: str = None, client_kind
             logging.info("Client confirmation sent: %s", c_subject)
         except Exception as e:
             logging.warning(f"Client confirmation failed: {e}")
+
+
+# ---------------- Lead delivery (email + Telegram, tracked and retried) ----------------
+def _send_telegram(text: str):
+    if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+        raise RuntimeError("Telegram not configured (TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID missing)")
+    r = httpx.post(
+        f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage",
+        json={"chat_id": TELEGRAM_CHAT_ID, "text": text, "parse_mode": "HTML",
+              "disable_web_page_preview": True},
+        timeout=15,
+    )
+    if r.status_code != 200:
+        raise RuntimeError(f"Telegram API {r.status_code}: {r.text[:200]}")
+
+
+def _collection(kind: str):
+    return db.quotes if kind == "quote" else db.applications
+
+
+def _email_payload(kind: str, doc: dict):
+    if kind == "quote":
+        return "New Quote Request \u2013 Bright at Home Cleaning", {
+            "Name": doc.get("name"), "Phone": doc.get("phone"), "email": doc.get("email"),
+            "City": doc.get("city") or "\u2014", "Service": doc.get("service") or "\u2014",
+            "Details": doc.get("details") or "\u2014",
+        }
+    return "New Career Application \u2013 Bright at Home Cleaning", {
+        "Name": doc.get("name"), "Phone": doc.get("phone"), "email": doc.get("email"),
+        "Position": doc.get("position") or "\u2014", "About": doc.get("message") or "\u2014",
+    }
+
+
+def _telegram_payload(kind: str, doc: dict):
+    if kind == "quote":
+        lines = [
+            "\U0001F9F9 <b>New quote request</b>",
+            f"<b>{doc.get('name', '')}</b>",
+            f"\U0001F4DE {doc.get('phone', '')}",
+            f"\u2709\uFE0F {doc.get('email', '')}",
+        ]
+        if doc.get("city"):
+            lines.append(f"\U0001F4CD {doc['city']}")
+        if doc.get("service"):
+            lines.append(f"\U0001F9FD {doc['service']}")
+        if doc.get("details"):
+            lines.append(f"\n\u201C{doc['details'][:400]}\u201D")
+    else:
+        lines = [
+            "\U0001F464 <b>New job application</b>",
+            f"<b>{doc.get('name', '')}</b>",
+            f"\U0001F4DE {doc.get('phone', '')}",
+            f"\u2709\uFE0F {doc.get('email', '')}",
+        ]
+        if doc.get("position"):
+            lines.append(f"\U0001F4BC {doc['position']}")
+        if doc.get("message"):
+            lines.append(f"\n\u201C{doc['message'][:400]}\u201D")
+    lines.append(f'\n<a href="{SITE_URL}/admin">Open dashboard</a>')
+    return "\n".join(lines)
+
+
+async def _record(kind: str, doc_id: str, channel: str, status: str, error: str = None):
+    await _collection(kind).update_one({"id": doc_id}, {
+        "$set": {
+            f"delivery.{channel}.status": status,
+            f"delivery.{channel}.error": error,
+            f"delivery.{channel}.at": _now().isoformat(),
+        },
+        "$inc": {f"delivery.{channel}.attempts": 1},
+    })
+
+
+async def dispatch_lead(kind: str, doc_id: str):
+    """Deliver one lead over every channel, recording the outcome per channel.
+    Channels are independent: a broken one can never suppress the other."""
+    doc = await _collection(kind).find_one({"id": doc_id})
+    if not doc:
+        return
+    delivery = doc.get("delivery") or {}
+    first = (doc.get("name") or "there").split()[0]
+
+    if (delivery.get("email") or {}).get("status") != "sent":
+        subject, fields = _email_payload(kind, doc)
+        try:
+            await asyncio.to_thread(_forward_email, subject, fields, doc.get("email"), kind, first)
+            await _record(kind, doc_id, "email", "sent")
+        except Exception as e:
+            logging.warning("Email delivery failed for %s %s: %s", kind, doc_id, e)
+            await _record(kind, doc_id, "email", "failed", str(e)[:300])
+
+    if (delivery.get("telegram") or {}).get("status") != "sent":
+        if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+            await _record(kind, doc_id, "telegram", "not_configured")
+        else:
+            try:
+                await asyncio.to_thread(_send_telegram, _telegram_payload(kind, doc))
+                logging.info("Telegram alert sent for %s %s", kind, doc_id)
+                await _record(kind, doc_id, "telegram", "sent")
+            except Exception as e:
+                logging.warning("Telegram delivery failed for %s %s: %s", kind, doc_id, e)
+                await _record(kind, doc_id, "telegram", "failed", str(e)[:300])
+
+
+async def retry_failed_deliveries():
+    """Re-attempt any lead whose email or Telegram alert has not landed yet."""
+    retried = 0
+    for kind in ("quote", "application"):
+        docs = await _collection(kind).find({
+            "$or": [
+                {"delivery.email.status": {"$ne": "sent"}},
+                {"delivery.telegram.status": "failed"},
+            ],
+        }).sort("created_at", -1).to_list(100)
+        for d in docs:
+            attempts = max(
+                ((d.get("delivery") or {}).get("email") or {}).get("attempts", 0),
+                ((d.get("delivery") or {}).get("telegram") or {}).get("attempts", 0),
+            )
+            if attempts >= DELIVERY_MAX_ATTEMPTS:
+                continue
+            await dispatch_lead(kind, d["id"])
+            retried += 1
+    if retried:
+        logging.info("Retried delivery for %d lead(s)", retried)
+    return retried
+
+
+async def _delivery_retry_loop():
+    while True:
+        await asyncio.sleep(DELIVERY_RETRY_MINUTES * 60)
+        try:
+            await retry_failed_deliveries()
+        except Exception as e:
+            logging.warning(f"Delivery retry sweep failed: {e}")
 
 
 def _make_token():
@@ -320,19 +457,7 @@ async def create_quote(body: QuoteCreate):
         "created_at": _now().isoformat(),
     }
     await db.quotes.insert_one(dict(doc))
-    first = body.name.split()[0] if body.name else "there"
-    asyncio.create_task(asyncio.to_thread(
-        _forward_email,
-        "New Quote Request \u2013 Bright at Home Cleaning",
-        {
-            "Name": body.name, "Phone": body.phone, "email": body.email,
-            "City": body.city or "\u2014", "Service": body.service or "\u2014",
-            "Details": body.details or "\u2014",
-        },
-        body.email,
-        "quote",
-        first,
-    ))
+    asyncio.create_task(dispatch_lead("quote", doc["id"]))
     return {"success": True, "id": doc["id"]}
 
 
@@ -349,18 +474,7 @@ async def create_application(body: ApplicationCreate):
         "created_at": _now().isoformat(),
     }
     await db.applications.insert_one(dict(doc))
-    first = body.name.split()[0] if body.name else "there"
-    asyncio.create_task(asyncio.to_thread(
-        _forward_email,
-        "New Career Application \u2013 Bright at Home Cleaning",
-        {
-            "Name": body.name, "Phone": body.phone, "email": body.email,
-            "Position": body.position or "\u2014", "About": body.message or "\u2014",
-        },
-        body.email,
-        "application",
-        first,
-    ))
+    asyncio.create_task(dispatch_lead("application", doc["id"]))
     return {"success": True, "id": doc["id"]}
 
 
@@ -390,6 +504,68 @@ async def summary(_: bool = Depends(require_admin)):
         "quotes": await db.quotes.count_documents({}),
         "applications": await db.applications.count_documents({}),
     }
+
+
+@api_router.get("/admin/delivery-health")
+async def delivery_health(_: bool = Depends(require_admin)):
+    """Tells the dashboard whether alerts can actually go out right now."""
+    email_configured = bool(SMTP_USER and SMTP_APP_PASSWORD)
+    smtp_login_ok, smtp_error = None, None
+    if email_configured:
+        def _probe():
+            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=12) as s:
+                s.ehlo()
+                s.starttls(context=ssl.create_default_context())
+                s.ehlo()
+                s.login(SMTP_USER, SMTP_APP_PASSWORD)
+        try:
+            await asyncio.to_thread(_probe)
+            smtp_login_ok = True
+        except Exception as e:
+            smtp_login_ok = False
+            smtp_error = str(e)[:200]
+
+    undelivered = 0
+    for kind in ("quote", "application"):
+        undelivered += await _collection(kind).count_documents(
+            {"delivery.email.status": {"$nin": ["sent", None]}}
+        )
+    return {
+        "email_configured": email_configured,
+        "smtp_login_ok": smtp_login_ok,
+        "smtp_error": smtp_error,
+        "telegram_configured": bool(TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID),
+        "undelivered": undelivered,
+    }
+
+
+@api_router.post("/admin/{kind}s/{item_id}/resend")
+async def resend_lead(kind: str, item_id: str, _: bool = Depends(require_admin)):
+    if kind not in ("quote", "application"):
+        raise HTTPException(status_code=400, detail="Invalid kind")
+    doc = await _collection(kind).find_one({"id": item_id})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Not found")
+    await _collection(kind).update_one(
+        {"id": item_id},
+        {"$set": {"delivery.email.status": "pending", "delivery.telegram.status": "pending"}},
+    )
+    await dispatch_lead(kind, item_id)
+    updated = await _collection(kind).find_one({"id": item_id})
+    return {"success": True, "delivery": (updated or {}).get("delivery", {})}
+
+
+@api_router.post("/admin/telegram/test")
+async def telegram_test(_: bool = Depends(require_admin)):
+    try:
+        await asyncio.to_thread(
+            _send_telegram,
+            "\u2705 <b>Bright at Home Cleaning</b>\nAlerts are connected. "
+            "You'll get a message here the moment any form is submitted.",
+        )
+        return {"success": True}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e)[:300])
 
 
 @api_router.patch("/admin/quotes/{item_id}/status")
@@ -452,8 +628,9 @@ logger = logging.getLogger(__name__)
 @app.on_event("startup")
 async def start_reminder_loop():
     asyncio.create_task(_reminder_loop())
-    logging.info("Follow-up reminders: every %d min, cutoff %d hrs",
-                 REMINDER_CHECK_MINUTES, REMINDER_AFTER_HOURS)
+    asyncio.create_task(_delivery_retry_loop())
+    logging.info("Follow-up reminders: every %d min, cutoff %d hrs | delivery retry: every %d min",
+                 REMINDER_CHECK_MINUTES, REMINDER_AFTER_HOURS, DELIVERY_RETRY_MINUTES)
 
 
 @app.on_event("shutdown")

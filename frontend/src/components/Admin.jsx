@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Lock, LogOut, Inbox, Briefcase, RefreshCw, AlarmClock, CalendarClock, Trash2, Check, CalendarCheck, RotateCcw } from "lucide-react";
+import { Lock, LogOut, Inbox, Briefcase, RefreshCw, AlarmClock, CalendarClock, Trash2, Check, CalendarCheck, RotateCcw, MailWarning, Send, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -18,7 +18,25 @@ const Admin = () => {
   const [tab, setTab] = useState("quotes");
   const [quotes, setQuotes] = useState([]);
   const [apps, setApps] = useState([]);
+  const [health, setHealth] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const resend = async (item) => {
+    const kind = tab === "quotes" ? "quote" : "application";
+    try {
+      const res = await fetch(`${API}/admin/${kind}s/${item.id}/resend`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      const ok = data?.delivery?.email?.status === "sent";
+      toast[ok ? "success" : "error"](ok ? "Sent." : "Still failing — check delivery settings.");
+      load();
+    } catch {
+      toast.error("Could not resend.");
+    }
+  };
 
   const login = async (e) => {
     e.preventDefault();
@@ -48,13 +66,15 @@ const Admin = () => {
     setLoading(true);
     try {
       const opts = { headers: { Authorization: `Bearer ${token}` } };
-      const [q, a] = await Promise.all([
+      const [q, a, h] = await Promise.all([
         fetch(`${API}/admin/quotes`, opts),
         fetch(`${API}/admin/applications`, opts),
+        fetch(`${API}/admin/delivery-health`, opts),
       ]);
       if (q.status === 401 || a.status === 401) { logout(); toast.error("Session expired, please log in."); return; }
       setQuotes(await q.json());
       setApps(await a.json());
+      if (h.ok) setHealth(await h.json());
     } catch {
       toast.error("Could not load submissions.");
     } finally {
@@ -140,6 +160,24 @@ const Admin = () => {
       </header>
 
       <div className="max-w-6xl mx-auto px-5 py-8">
+        {health && (!health.email_configured || health.smtp_login_ok === false || health.undelivered > 0) && (
+          <div data-testid="delivery-health-banner" className="mb-6 rounded-2xl bg-red-50 ring-1 ring-red-200 p-5 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <div className="text-sm text-red-900">
+              <p className="font-600">Lead alerts need attention</p>
+              <ul className="mt-1 space-y-0.5 text-red-800">
+                {!health.email_configured && <li>Email credentials are missing — no lead emails can be sent.</li>}
+                {health.smtp_login_ok === false && (
+                  <li title={health.smtp_error || ""}>
+                    Google is rejecting the mailbox sign-in, so lead emails cannot go out. The app password needs to be regenerated.
+                  </li>
+                )}
+                {health.undelivered > 0 && <li>{health.undelivered} lead{health.undelivered === 1 ? "" : "s"} {health.undelivered === 1 ? "has" : "have"} not been emailed yet — retrying automatically.</li>}
+                {!health.telegram_configured && <li>Text/Telegram alerts are not connected yet.</li>}
+              </ul>
+            </div>
+          </div>
+        )}
         {(() => {
           const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
           const all = [...quotes, ...apps];
@@ -181,6 +219,8 @@ const Admin = () => {
               const status = item.status || "new";
               const hrs = (Date.now() - new Date(item.created_at).getTime()) / 3600000;
               const overdue = tab === "quotes" && status === "new" && hrs >= OVERDUE_HRS;
+              const emailStatus = item.delivery?.email?.status;
+              const emailFailed = emailStatus && emailStatus !== "sent";
               return (
               <div key={item.id} data-testid={`submission-card-${item.id}`} className={`bg-white rounded-2xl p-5 shadow-soft ring-1 ${overdue ? "ring-2 ring-amber-300" : "ring-black/5"}`}>
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -194,6 +234,11 @@ const Admin = () => {
                     {overdue && (
                       <span data-testid={`overdue-flag-${item.id}`} className="inline-flex items-center gap-1 text-[11px] font-600 text-amber-700">
                         <AlarmClock className="w-3.5 h-3.5" /> Needs reply
+                      </span>
+                    )}
+                    {emailFailed && (
+                      <span data-testid={`email-failed-flag-${item.id}`} title={item.delivery?.email?.error || ""} className="inline-flex items-center gap-1 text-[11px] font-600 text-red-700 bg-red-50 ring-1 ring-red-200 px-2 py-1 rounded-full">
+                        <MailWarning className="w-3.5 h-3.5" /> Email not sent
                       </span>
                     )}
                   </div>
@@ -224,6 +269,11 @@ const Admin = () => {
                   {status !== "new" && (
                     <button onClick={() => setStatus(item, "new")} data-testid={`mark-new-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full text-brand-ink/60 hover:text-brand-ink transition-colors">
                       <RotateCcw className="w-3.5 h-3.5" /> Back to new
+                    </button>
+                  )}
+                  {emailFailed && (
+                    <button onClick={() => resend(item)} data-testid={`resend-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors">
+                      <Send className="w-3.5 h-3.5" /> Resend email
                     </button>
                   )}
                 </div>
