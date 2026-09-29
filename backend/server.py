@@ -392,22 +392,57 @@ async def dispatch_lead(kind: str, doc_id: str):
                 await _record(kind, doc_id, "telegram", "failed", str(e)[:300])
 
 
+def _is_channel_outage(error: str) -> bool:
+    """True when a failure was the channel being down/misconfigured rather than a bad lead.
+    Those must not burn the per-lead retry budget: once the channel is healthy the lead retries."""
+    if not error:
+        return True
+    e = error.lower()
+    return any(s in e for s in (
+        "not configured", "badcredentials", "username and password not accepted",
+        "authentication", "535", "534", "connection", "timed out", "timeout",
+        "unreachable", "disconnected", "refused", "temporarily", "try again",
+    ))
+
+
+def _smtp_healthy() -> bool:
+    if not SMTP_USER or not SMTP_APP_PASSWORD:
+        return False
+    try:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=12) as s:
+            s.ehlo()
+            s.starttls(context=ssl.create_default_context())
+            s.ehlo()
+            s.login(SMTP_USER, SMTP_APP_PASSWORD)
+        return True
+    except Exception:
+        return False
+
+
 async def retry_failed_deliveries():
-    """Re-attempt any lead whose email or Telegram alert has not landed yet."""
+    """Re-attempt any lead whose email or Telegram alert has not landed yet.
+    A lead is never abandoned because of an outage: the attempt cap only applies to
+    lead-specific errors, and is ignored once the channel is healthy again."""
+    email_ok = await asyncio.to_thread(_smtp_healthy)
     retried = 0
     for kind in ("quote", "application"):
         docs = await _collection(kind).find({
             "$or": [
                 {"delivery.email.status": {"$ne": "sent"}},
-                {"delivery.telegram.status": "failed"},
+                {"delivery.telegram.status": {"$in": ["failed", "not_configured"]}},
             ],
         }).sort("created_at", -1).to_list(100)
         for d in docs:
-            attempts = max(
-                ((d.get("delivery") or {}).get("email") or {}).get("attempts", 0),
-                ((d.get("delivery") or {}).get("telegram") or {}).get("attempts", 0),
+            channels = d.get("delivery") or {}
+            email_ch = channels.get("email") or {}
+            tg_ch = channels.get("telegram") or {}
+            attempts = max(email_ch.get("attempts", 0), tg_ch.get("attempts", 0))
+            recovered = (
+                (email_ok and email_ch.get("status") != "sent" and _is_channel_outage(email_ch.get("error")))
+                or (TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID and tg_ch.get("status") != "sent"
+                    and _is_channel_outage(tg_ch.get("error")))
             )
-            if attempts >= DELIVERY_MAX_ATTEMPTS:
+            if attempts >= DELIVERY_MAX_ATTEMPTS and not recovered:
                 continue
             await dispatch_lead(kind, d["id"])
             retried += 1
@@ -524,7 +559,6 @@ async def delivery_health(_: bool = Depends(require_admin)):
         except Exception as e:
             smtp_login_ok = False
             smtp_error = str(e)[:200]
-
     undelivered = 0
     for kind in ("quote", "application"):
         undelivered += await _collection(kind).count_documents(
