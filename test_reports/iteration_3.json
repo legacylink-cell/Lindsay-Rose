@@ -1,0 +1,44 @@
+{
+  "summary": "Verified delivery-tracking / 'never lose a lead' safety net end-to-end. Backend: 11/11 new pytest cases pass in /app/backend/tests/test_delivery.py (delivery-health auth + shape with email_configured=true, smtp_login_ok=true, telegram_configured=false, undelivered=0; POST /api/quotes and POST /api/applications record delivery.email.status='sent' with attempts>=1 within ~15s; telegram.status='not_configured' and does NOT block email; POST /api/admin/telegram/test returns 400 with 'not configured' detail; POST /api/admin/{quotes,applications}/{id}/resend requires auth, 400 on invalid kind, 404 on unknown id, returns delivery object, does not lose attempts; undelivered stays 0 across polls => retry loop is idempotent). Regression backend: 20/20 pass across backend_test.py + test_status_and_reminders.py after updating admin password from Brighth4Dyvnjh to Dallas2025!!. Frontend Playwright on /admin (brightadmin/Dallas2025!!): login works, dashboard loads all three calls (quotes, applications, delivery-health) with 0 console errors. All leads with delivery.email.status='sent' correctly render WITHOUT email-failed-flag-{id} and WITHOUT resend-{id} button (counts: 0/0). Status regression works — status-badge, mark-contacted-{id}, mark-new-{id}, mark-booked-{id} (quotes only), persistence after full page reload, and the 'Awaiting reply' stat all functional. HOWEVER: the delivery-health-banner is NOT rendered while email is healthy + Telegram unconfigured, which contradicts the review-request expectation ('banner should still appear but ONLY with the Telegram line').",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "Admin.jsx delivery-health-banner",
+        "issue": "Banner render condition is `(!health.email_configured || health.smtp_login_ok === false || health.undelivered > 0)`. When email is healthy but telegram is unconfigured, the banner is hidden entirely, so the 'Text/Telegram alerts are not connected yet' line never surfaces. Per the review request this state should still show the red banner with ONLY the Telegram line. Suggested fix: add `|| !health.telegram_configured` to the outer condition (line 163 of Admin.jsx). The inner <li> already guards on !health.telegram_configured, so no other change is needed.",
+        "selector": "[data-testid='delivery-health-banner']",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_delivery.py",
+    "/app/backend/tests/backend_test.py",
+    "/app/backend/tests/test_status_and_reminders.py",
+    "/app/test_reports/pytest/delivery.xml",
+    "/app/test_reports/pytest/regression.xml"
+  ],
+  "action_items": [
+    "In /app/frontend/src/components/Admin.jsx line 163, extend the banner visibility condition to also trigger when Telegram is unconfigured: `{health && (!health.email_configured || health.smtp_login_ok === false || health.undelivered > 0 || !health.telegram_configured) && (` — this will let the existing telegram <li> render on its own without falsely claiming email is broken."
+  ],
+  "critical_code_review_comments": [
+    "Admin.jsx: banner visibility gate excludes telegram-unconfigured case (see ui_bugs above). Also, using `health.smtp_login_ok === false` is correct (avoids null/undefined truthiness) — keep it.",
+    "server.py resend_lead sets delivery.email.status='pending' + delivery.telegram.status='pending' before dispatch. If Telegram is still unconfigured after resend, telegram becomes 'not_configured' again (verified). Good.",
+    "server.py delivery-health probe opens a fresh SMTP+STARTTLS+login on every admin dashboard load (~1-2s Google round-trip). Consider caching the probe for ~30-60s to avoid hitting Google rate-limits if the dashboard is polled frequently. Not blocking.",
+    "server.py: `retry_failed_deliveries()` selection uses `delivery.telegram.status in [failed, not_configured]` — with an unconfigured Telegram this means EVERY lead is re-selected on every retry loop tick until Telegram is configured. `_is_channel_outage()` should short-circuit for `not_configured` (no attempt-cap burn is already handled, but the DB scan cost is still there). Low priority."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py (updated ADMIN_PASS to Dallas2025!!)",
+    "/app/backend/tests/test_status_and_reminders.py (updated ADMIN_PASS to Dallas2025!!)",
+    "/app/backend/tests/test_delivery.py (new)"
+  ],
+  "success_rate": {"backend": "100% (31/31 tests)", "frontend": "90% (banner behaviour is the one deviation)"},
+  "test_credentials": "brightadmin / Dallas2025!! (preview) — per /app/memory/test_credentials.md",
+  "seed_data_creation": "Only 2 public form submissions were made from the browser (they auto-clean via the backend tests). All QA leftover leads (QA Test Quote, QA Test Applicant) were deleted via API at the end of the run. Remaining dashboard content: 1 owner-created 'test' quote (BOOKED, 9/10/2026) and 1 REMTEST application seeded in iteration_1/2 — untouched.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Three pytest files now exist and all pass against the preview URL: backend_test.py (baseline CRUD/auth), test_status_and_reminders.py (status/reminders), test_delivery.py (delivery-health, resend, telegram-test, per-lead delivery tracking). Admin password everywhere is Dallas2025!!. To retest the banner after main agent fixes Admin.jsx line 163, log into /admin as brightadmin and check `await page.locator(\"[data-testid='delivery-health-banner']\").is_visible()` — it should be True and the banner should contain the substring 'Text/Telegram alerts are not connected yet' AND should NOT contain 'Google is rejecting' or 'Email credentials are missing' while email is healthy.",
+  "rca of the issue": "delivery-health-banner not showing for telegram-only issue: Admin.jsx line 163 conditions the banner on email problems or undelivered>0 only. The inner <li> for '!health.telegram_configured' therefore never gets a chance to render when email is healthy. Reproduction: log into /admin while backend/.env has SMTP working but TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID empty (current preview state) — banner is hidden. Fix: append `|| !health.telegram_configured` to the outer visibility gate."
+}

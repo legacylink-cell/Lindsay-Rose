@@ -160,24 +160,32 @@ const Admin = () => {
       </header>
 
       <div className="max-w-6xl mx-auto px-5 py-8">
-        {health && (!health.email_configured || health.smtp_login_ok === false || health.undelivered > 0) && (
-          <div data-testid="delivery-health-banner" className="mb-6 rounded-2xl bg-red-50 ring-1 ring-red-200 p-5 flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
-            <div className="text-sm text-red-900">
-              <p className="font-600">Lead alerts need attention</p>
-              <ul className="mt-1 space-y-0.5 text-red-800">
-                {!health.email_configured && <li>Email credentials are missing — no lead emails can be sent.</li>}
-                {health.smtp_login_ok === false && (
-                  <li title={health.smtp_error || ""}>
-                    Google is rejecting the mailbox sign-in, so lead emails cannot go out. The app password needs to be regenerated.
-                  </li>
-                )}
-                {health.undelivered > 0 && <li>{health.undelivered} lead{health.undelivered === 1 ? "" : "s"} {health.undelivered === 1 ? "has" : "have"} not been emailed yet — retrying automatically.</li>}
-                {!health.telegram_configured && <li>Text/Telegram alerts are not connected yet.</li>}
-              </ul>
+        {health && (() => {
+          const emailBroken = !health.email_configured || health.smtp_login_ok === false || health.undelivered > 0;
+          const telegramMissing = !health.telegram_configured;
+          if (!emailBroken && !telegramMissing) return null;
+          const tone = emailBroken
+            ? { box: "bg-red-50 ring-red-200", icon: "text-red-600", head: "text-red-900", body: "text-red-800" }
+            : { box: "bg-amber-50 ring-amber-200", icon: "text-amber-600", head: "text-amber-900", body: "text-amber-800" };
+          return (
+            <div data-testid="delivery-health-banner" className={`mb-6 rounded-2xl ${tone.box} ring-1 p-5 flex items-start gap-3`}>
+              <AlertTriangle className={`w-5 h-5 ${tone.icon} shrink-0 mt-0.5`} />
+              <div className={`text-sm ${tone.head}`}>
+                <p className="font-600">{emailBroken ? "Lead alerts need attention" : "One more alert channel available"}</p>
+                <ul className={`mt-1 space-y-0.5 ${tone.body}`}>
+                  {!health.email_configured && <li>Email credentials are missing — no lead emails can be sent.</li>}
+                  {health.smtp_login_ok === false && (
+                    <li title={health.smtp_error || ""}>
+                      Google is rejecting the mailbox sign-in, so lead emails cannot go out. The app password needs to be regenerated.
+                    </li>
+                  )}
+                  {health.undelivered > 0 && <li>{health.undelivered} lead{health.undelivered === 1 ? "" : "s"} {health.undelivered === 1 ? "has" : "have"} not been emailed yet — retrying automatically.</li>}
+                  {telegramMissing && <li>Phone alerts aren't connected yet — you're relying on email alone.</li>}
+                </ul>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
         {(() => {
           const weekAgo = Date.now() - 7 * 24 * 3600 * 1000;
           const all = [...quotes, ...apps];

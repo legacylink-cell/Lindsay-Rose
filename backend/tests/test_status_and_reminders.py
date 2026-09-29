@@ -14,7 +14,7 @@ assert BASE_URL
 API = f"{BASE_URL}/api"
 
 ADMIN_USER = "brightadmin"
-ADMIN_PASS = "Brighth4Dyvnjh"
+ADMIN_PASS = "Dallas2025!!"
 
 
 @pytest.fixture(scope="module")

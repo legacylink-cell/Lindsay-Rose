@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import time
 import asyncio
 import logging
 from pathlib import Path
@@ -392,6 +393,29 @@ async def dispatch_lead(kind: str, doc_id: str):
                 await _record(kind, doc_id, "telegram", "failed", str(e)[:300])
 
 
+_smtp_probe_cache = {"at": 0.0, "ok": None, "error": None}
+
+
+def _smtp_probe(max_age_seconds: int = 60):
+    """Live SMTP login check, cached briefly so dashboard loads don't hammer Google."""
+    if not SMTP_USER or not SMTP_APP_PASSWORD:
+        return None, None
+    now = time.monotonic()
+    if _smtp_probe_cache["ok"] is not None and now - _smtp_probe_cache["at"] < max_age_seconds:
+        return _smtp_probe_cache["ok"], _smtp_probe_cache["error"]
+    try:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=12) as s:
+            s.ehlo()
+            s.starttls(context=ssl.create_default_context())
+            s.ehlo()
+            s.login(SMTP_USER, SMTP_APP_PASSWORD)
+        ok, err = True, None
+    except Exception as e:
+        ok, err = False, str(e)[:200]
+    _smtp_probe_cache.update({"at": now, "ok": ok, "error": err})
+    return ok, err
+
+
 def _is_channel_outage(error: str) -> bool:
     """True when a failure was the channel being down/misconfigured rather than a bad lead.
     Those must not burn the per-lead retry budget: once the channel is healthy the lead retries."""
@@ -406,17 +430,8 @@ def _is_channel_outage(error: str) -> bool:
 
 
 def _smtp_healthy() -> bool:
-    if not SMTP_USER or not SMTP_APP_PASSWORD:
-        return False
-    try:
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=12) as s:
-            s.ehlo()
-            s.starttls(context=ssl.create_default_context())
-            s.ehlo()
-            s.login(SMTP_USER, SMTP_APP_PASSWORD)
-        return True
-    except Exception:
-        return False
+    ok, _ = _smtp_probe()
+    return bool(ok)
 
 
 async def retry_failed_deliveries():
@@ -429,7 +444,7 @@ async def retry_failed_deliveries():
         docs = await _collection(kind).find({
             "$or": [
                 {"delivery.email.status": {"$ne": "sent"}},
-                {"delivery.telegram.status": {"$in": ["failed", "not_configured"]}},
+                {"delivery.telegram.status": "failed"},
             ],
         }).sort("created_at", -1).to_list(100)
         for d in docs:
@@ -545,20 +560,7 @@ async def summary(_: bool = Depends(require_admin)):
 async def delivery_health(_: bool = Depends(require_admin)):
     """Tells the dashboard whether alerts can actually go out right now."""
     email_configured = bool(SMTP_USER and SMTP_APP_PASSWORD)
-    smtp_login_ok, smtp_error = None, None
-    if email_configured:
-        def _probe():
-            with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=12) as s:
-                s.ehlo()
-                s.starttls(context=ssl.create_default_context())
-                s.ehlo()
-                s.login(SMTP_USER, SMTP_APP_PASSWORD)
-        try:
-            await asyncio.to_thread(_probe)
-            smtp_login_ok = True
-        except Exception as e:
-            smtp_login_ok = False
-            smtp_error = str(e)[:200]
+    smtp_login_ok, smtp_error = await asyncio.to_thread(_smtp_probe)
     undelivered = 0
     for kind in ("quote", "application"):
         undelivered += await _collection(kind).count_documents(

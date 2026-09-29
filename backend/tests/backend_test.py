@@ -16,7 +16,7 @@ assert BASE_URL, "REACT_APP_BACKEND_URL missing"
 API = f"{BASE_URL}/api"
 
 ADMIN_USER = "brightadmin"
-ADMIN_PASS = "Brighth4Dyvnjh"
+ADMIN_PASS = "Dallas2025!!"
 
 
 @pytest.fixture(scope="session")
