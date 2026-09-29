@@ -28,6 +28,18 @@ Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW 
 - `_forward_email()` in `backend/server.py` now: (1) sends the submission to `FORWARD_EMAIL` with `Reply-To` = submitter, (2) sends the client confirmation to the submitter. Independent try/except; failures never affect the saved submission. **No CC to anyone.**
 - **Branded HTML confirmations (2026-06)**: `CLIENT_EMAILS` + `_client_message(kind, first)` in `backend/server.py` build multipart text+HTML client emails (cream logo band, amber rule, brand-green heading, pill `tel:` CTA, tagline footer). Distinct subjects: "We received your quote request" vs "We received your application". Logo pulled from `SITE_URL/logos/logo-b-rooftop-emblem-t.png` (env `SITE_URL`, defaults to production domain). Verified in preview: 2 quote + 2 application sends, all 4 confirmations logged sent.
 
+
+## Health panel + watchdog (2026-09-29)
+- Admin health panel is now ALWAYS visible with three explicit channel rows (email / phone alerts / delivery backlog) and a `data-health` attribute of `healthy` | `warning` | `error`:
+  - **green** (`ShieldCheck`, brand sage): everything working — "All lead alerts are working".
+  - **amber**: only the optional phone channel is missing.
+  - **red**: email broken (missing creds or rejected sign-in) or undelivered backlog > 0.
+- Panel self-refreshes every 60s (`delivery-health` poll), so a channel fixed in Secrets turns the panel green without a manual reload.
+- **Watchdog** (`watchdog_check()` + `_watchdog_loop()`, every `WATCHDOG_MINUTES`=15): detects a channel going from healthy → broken and warns through the SURVIVING channel — email outage → Telegram message; Telegram outage → email to FORWARD_EMAIL. Fires only on the transition, never repeats. Module-level `_channel_state` holds the previous state.
+- Stat tiles switched from `font-serif` to `tabular-nums` (the serif face rendered "1" as "I").
+- 33/33 pytest still pass; green state verified in-browser by temporarily setting Telegram env values (reverted afterwards).
+- **PRODUCTION STATUS 2026-09-29**: owner's production screenshot showed red banner — `smtp_login_ok: false` and **21 real leads undelivered** (earliest seen 9/26 Nicole Wilhelm). Production Secrets still hold the REVOKED app password. Once `SMTP_APP_PASSWORD` is updated in Secrets + re-published, the retry sweep delivers the whole backlog automatically within ~10 min. Preview is healthy.
+
 ## Lead delivery hardening + ROOT CAUSE of missing emails (2026-09-27)
 - **ROOT CAUSE FOUND**: the Google Workspace **App Password is invalid** — `smtplib` login to smtp.gmail.com:587 returns `535 5.7.8 Username and Password not accepted / BadCredentials`. Reproduced in preview; both the stored spelling (`…ohlr…`) and the l/i alternate from the user's Secrets screenshot (`…ohir…`) are rejected, so it is revoked/expired, not mistyped. Most common trigger: the Google account password was changed or 2SV re-configured, which invalidates all existing app passwords. Production Secrets DO contain all SMTP keys (screenshot-verified), so missing config was NOT the cause. Pre-SMTP-era misses are separately explained by the never-reliable FormSubmit relay.
 - **NOTE**: production runtime logs are NOT accessible to the agent (deployment_agent only performs static scans), so all evidence came from reproducing the SMTP login locally + the new instrumentation.

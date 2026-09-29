@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Lock, LogOut, Inbox, Briefcase, RefreshCw, AlarmClock, CalendarClock, Trash2, Check, CalendarCheck, RotateCcw, MailWarning, Send, AlertTriangle } from "lucide-react";
+import { Lock, LogOut, Inbox, Briefcase, RefreshCw, AlarmClock, CalendarClock, Trash2, Check, CalendarCheck, RotateCcw, MailWarning, Send, AlertTriangle, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -84,6 +84,20 @@ const Admin = () => {
 
   useEffect(() => { load(); }, [load]);
 
+  // Keep the health panel current so a fixed channel turns green on its own.
+  useEffect(() => {
+    if (!token) return;
+    const id = setInterval(async () => {
+      try {
+        const res = await fetch(`${API}/admin/delivery-health`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) setHealth(await res.json());
+      } catch { /* transient, next tick retries */ }
+    }, 60000);
+    return () => clearInterval(id);
+  }, [token]);
+
   const fmt = (iso) => { try { return new Date(iso).toLocaleString(); } catch { return iso; } };
 
   const setStatus = async (item, status) => {
@@ -161,26 +175,42 @@ const Admin = () => {
 
       <div className="max-w-6xl mx-auto px-5 py-8">
         {health && (() => {
-          const emailBroken = !health.email_configured || health.smtp_login_ok === false || health.undelivered > 0;
+          const emailBroken = !health.email_configured || health.smtp_login_ok === false;
+          const backlog = health.undelivered > 0;
           const telegramMissing = !health.telegram_configured;
-          if (!emailBroken && !telegramMissing) return null;
-          const tone = emailBroken
+          const allGood = !emailBroken && !backlog && !telegramMissing;
+          const tone = (emailBroken || backlog)
             ? { box: "bg-red-50 ring-red-200", icon: "text-red-600", head: "text-red-900", body: "text-red-800" }
-            : { box: "bg-amber-50 ring-amber-200", icon: "text-amber-600", head: "text-amber-900", body: "text-amber-800" };
+            : telegramMissing
+              ? { box: "bg-amber-50 ring-amber-200", icon: "text-amber-600", head: "text-amber-900", body: "text-amber-800" }
+              : { box: "bg-brand-sage ring-brand-green/20", icon: "text-brand-green", head: "text-brand-green", body: "text-brand-ink/75" };
+          const Icon = allGood ? ShieldCheck : AlertTriangle;
           return (
-            <div data-testid="delivery-health-banner" className={`mb-6 rounded-2xl ${tone.box} ring-1 p-5 flex items-start gap-3`}>
-              <AlertTriangle className={`w-5 h-5 ${tone.icon} shrink-0 mt-0.5`} />
-              <div className={`text-sm ${tone.head}`}>
-                <p className="font-600">{emailBroken ? "Lead alerts need attention" : "One more alert channel available"}</p>
-                <ul className={`mt-1 space-y-0.5 ${tone.body}`}>
-                  {!health.email_configured && <li>Email credentials are missing — no lead emails can be sent.</li>}
-                  {health.smtp_login_ok === false && (
-                    <li title={health.smtp_error || ""}>
-                      Google is rejecting the mailbox sign-in, so lead emails cannot go out. The app password needs to be regenerated.
-                    </li>
-                  )}
-                  {health.undelivered > 0 && <li>{health.undelivered} lead{health.undelivered === 1 ? "" : "s"} {health.undelivered === 1 ? "has" : "have"} not been emailed yet — retrying automatically.</li>}
-                  {telegramMissing && <li>Phone alerts aren't connected yet — you're relying on email alone.</li>}
+            <div data-testid="delivery-health-banner" data-health={allGood ? "healthy" : emailBroken || backlog ? "error" : "warning"}
+                 className={`mb-6 rounded-2xl ${tone.box} ring-1 p-5 flex items-start gap-3`}>
+              <Icon className={`w-5 h-5 ${tone.icon} shrink-0 mt-0.5`} />
+              <div className={`text-sm ${tone.head} w-full`}>
+                <p className="font-600">
+                  {allGood ? "All lead alerts are working" : emailBroken || backlog ? "Lead alerts need attention" : "One more alert channel available"}
+                </p>
+                <ul className={`mt-1.5 space-y-1 ${tone.body}`}>
+                  <li data-testid="health-email" className="flex items-center gap-2">
+                    {health.email_configured && health.smtp_login_ok !== false
+                      ? <><Check className="w-3.5 h-3.5 text-brand-green" /> Email alerts working — verified with Google just now</>
+                      : !health.email_configured
+                        ? <><MailWarning className="w-3.5 h-3.5" /> Email credentials are missing — no lead emails can be sent</>
+                        : <span title={health.smtp_error || ""} className="flex items-center gap-2"><MailWarning className="w-3.5 h-3.5" /> Google is rejecting the mailbox sign-in — the app password needs to be regenerated</span>}
+                  </li>
+                  <li data-testid="health-telegram" className="flex items-center gap-2">
+                    {health.telegram_configured
+                      ? <><Check className="w-3.5 h-3.5 text-brand-green" /> Phone alerts connected</>
+                      : <><AlarmClock className="w-3.5 h-3.5" /> Phone alerts aren't connected yet — you're relying on email alone</>}
+                  </li>
+                  <li data-testid="health-backlog" className="flex items-center gap-2">
+                    {backlog
+                      ? <><MailWarning className="w-3.5 h-3.5" /> {health.undelivered} lead{health.undelivered === 1 ? "" : "s"} still waiting to be emailed — retrying automatically</>
+                      : <><Check className="w-3.5 h-3.5 text-brand-green" /> Every lead has been delivered</>}
+                  </li>
                 </ul>
               </div>
             </div>
@@ -206,7 +236,7 @@ const Admin = () => {
                   <span className="grid place-items-center w-11 h-11 rounded-xl bg-brand-sage text-brand-green">
                     <s.icon className="w-5 h-5" />
                   </span>
-                  <p className="mt-3 font-serif text-3xl font-700 text-brand-ink">{s.value}</p>
+                  <p className="mt-3 text-3xl font-700 text-brand-ink tabular-nums">{s.value}</p>
                   <p className="text-sm text-brand-ink/60">{s.label}</p>
                 </div>
               ))}

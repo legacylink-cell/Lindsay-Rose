@@ -44,6 +44,7 @@ TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '')
 DELIVERY_RETRY_MINUTES = int(os.environ.get('DELIVERY_RETRY_MINUTES', '10'))
 DELIVERY_MAX_ATTEMPTS = int(os.environ.get('DELIVERY_MAX_ATTEMPTS', '8'))
+WATCHDOG_MINUTES = int(os.environ.get('WATCHDOG_MINUTES', '15'))
 BUSINESS_PHONE = '469-443-6903'
 BUSINESS_PHONE_RAW = '4694436903'
 QUOTE_STATUSES = ('new', 'contacted', 'booked')
@@ -475,6 +476,62 @@ async def _delivery_retry_loop():
             logging.warning(f"Delivery retry sweep failed: {e}")
 
 
+# Alerting the owner when a channel itself breaks, using whichever channel still works.
+_channel_state = {"email": None, "telegram": None}
+
+
+async def watchdog_check():
+    """Detect a channel going down and warn through the surviving channel.
+    Only fires on the healthy -> broken transition, so it never spams."""
+    email_ok = await asyncio.to_thread(_smtp_healthy)
+    telegram_ok = None
+    if TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID:
+        try:
+            await asyncio.to_thread(
+                httpx.get, f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/getMe", timeout=10
+            )
+            telegram_ok = True
+        except Exception:
+            telegram_ok = False
+
+    if _channel_state["email"] is True and email_ok is False and telegram_ok:
+        try:
+            await asyncio.to_thread(_send_telegram, (
+                "\u26A0\uFE0F <b>Lead emails are failing</b>\n"
+                "Google is rejecting the mailbox sign-in, so lead notification emails "
+                "cannot go out. Leads are still being saved and will send automatically "
+                "once it's fixed.\n\nRegenerate the app password at "
+                "myaccount.google.com/apppasswords"
+            ))
+            logging.info("Watchdog: email outage alerted via Telegram")
+        except Exception as e:
+            logging.warning(f"Watchdog Telegram alert failed: {e}")
+
+    if _channel_state["telegram"] is True and telegram_ok is False and email_ok:
+        try:
+            await asyncio.to_thread(
+                _send_smtp, FORWARD_EMAIL, "Phone alerts are down \u2013 Bright at Home Cleaning",
+                "Telegram lead alerts are failing, so you are relying on email only right now.\n"
+                "Leads are still being saved and emailed normally.\n\n"
+                f"Dashboard: {SITE_URL}/admin",
+            )
+            logging.info("Watchdog: Telegram outage alerted via email")
+        except Exception as e:
+            logging.warning(f"Watchdog email alert failed: {e}")
+
+    _channel_state.update({"email": email_ok, "telegram": telegram_ok})
+    return {"email_ok": email_ok, "telegram_ok": telegram_ok}
+
+
+async def _watchdog_loop():
+    while True:
+        try:
+            await watchdog_check()
+        except Exception as e:
+            logging.warning(f"Watchdog check failed: {e}")
+        await asyncio.sleep(WATCHDOG_MINUTES * 60)
+
+
 def _make_token():
     exp = _now() + timedelta(hours=12)
     return jwt.encode({"sub": ADMIN_USERNAME, "exp": exp}, JWT_SECRET, algorithm=JWT_ALGO)
@@ -665,6 +722,7 @@ logger = logging.getLogger(__name__)
 async def start_reminder_loop():
     asyncio.create_task(_reminder_loop())
     asyncio.create_task(_delivery_retry_loop())
+    asyncio.create_task(_watchdog_loop())
     logging.info("Follow-up reminders: every %d min, cutoff %d hrs | delivery retry: every %d min",
                  REMINDER_CHECK_MINUTES, REMINDER_AFTER_HOURS, DELIVERY_RETRY_MINUTES)
 
