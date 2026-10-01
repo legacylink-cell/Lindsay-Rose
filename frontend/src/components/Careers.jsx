@@ -36,6 +36,7 @@ const POSITIONS = [
 ];
 
 const Careers = () => {
+  const startedAt = React.useRef(Date.now());
   const [form, setForm] = useState({ name: "", email: "", phone: "", position: POSITIONS[0].title, message: "", company: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -62,7 +63,7 @@ const Careers = () => {
       const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/applications`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, elapsed_ms: Date.now() - startedAt.current }),
       });
       if (!res.ok) throw new Error("Request failed");
       setSubmitted(true);

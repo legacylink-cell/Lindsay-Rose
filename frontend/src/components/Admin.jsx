@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Lock, LogOut, Inbox, Briefcase, RefreshCw, AlarmClock, CalendarClock, Trash2, Check, CalendarCheck, RotateCcw, MailWarning, Send, AlertTriangle, ShieldCheck, HeartHandshake, Eye, EyeOff, X } from "lucide-react";
+import { Lock, LogOut, Inbox, Briefcase, RefreshCw, AlarmClock, CalendarClock, Trash2, Check, CalendarCheck, RotateCcw, MailWarning, Send, AlertTriangle, ShieldCheck, HeartHandshake, Eye, EyeOff, X, Download, ShieldAlert, Undo2 } from "lucide-react";
 import { toast } from "sonner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -52,6 +52,8 @@ const Admin = () => {
   const [quotes, setQuotes] = useState([]);
   const [apps, setApps] = useState([]);
   const [noms, setNoms] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
+  const [announce, setAnnounce] = useState({ first_name: "", city: "", note: "" });
   const [settings, setSettings] = useState(null);
   const [health, setHealth] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -89,6 +91,86 @@ const Admin = () => {
     } catch {
       setSettings((s) => ({ ...s, nominations_live: !next }));
       toast.error("Could not change that. Please try again.");
+    }
+  };
+
+  const notSpam = async (item) => {
+    try {
+      const res = await fetch(`${API}/admin/${TAB_META[tab].kind}s/${item.id}/not-spam`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error();
+      toast.success("Restored and emailed to you.");
+      load();
+    } catch {
+      toast.error("Could not restore that one.");
+    }
+  };
+
+  const exportNominators = async () => {
+    try {
+      const res = await fetch(`${API}/admin/nominations/export`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error();
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "bright-blessing-nominators.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("Nominator list downloaded.");
+    } catch {
+      toast.error("Could not build the export.");
+    }
+  };
+
+  const addAnnouncement = async () => {
+    if (!announce.first_name.trim() || !announce.city.trim()) {
+      toast.error("A first name and city are required.");
+      return;
+    }
+    try {
+      const res = await fetch(`${API}/admin/announcements`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(announce),
+      });
+      if (!res.ok) throw new Error();
+      setAnnounce({ first_name: "", city: "", note: "" });
+      toast.success("Saved as a draft — publish it when you're ready.");
+      loadAnnouncements();
+    } catch {
+      toast.error("Could not save that.");
+    }
+  };
+
+  const toggleAnnouncement = async (a) => {
+    try {
+      const res = await fetch(`${API}/admin/announcements/${a.id}/publish?published=${!a.published}`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error();
+      toast.success(!a.published ? "Now showing on the page." : "Hidden from the page.");
+      loadAnnouncements();
+    } catch {
+      toast.error("Could not change that.");
+    }
+  };
+
+  const deleteAnnouncement = async (a) => {
+    if (!window.confirm(`Remove ${a.first_name} from ${a.city}?`)) return;
+    try {
+      await fetch(`${API}/admin/announcements/${a.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      loadAnnouncements();
+    } catch {
+      toast.error("Could not remove that.");
     }
   };
 
@@ -140,7 +222,18 @@ const Admin = () => {
     }
   }, [token]);
 
+  const loadAnnouncements = useCallback(async () => {
+    if (!token) return;
+    try {
+      const res = await fetch(`${API}/admin/announcements`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) setAnnouncements(await res.json());
+    } catch { /* non-critical */ }
+  }, [token]);
+
   useEffect(() => { load(); }, [load]);
+  useEffect(() => { loadAnnouncements(); }, [loadAnnouncements]);
 
   // Keep the health panel current so a fixed channel turns green on its own.
   useEffect(() => {
@@ -212,7 +305,8 @@ const Admin = () => {
     );
   }
 
-  const list = tab === "quotes" ? quotes : tab === "apps" ? apps : noms;
+  const list = (tab === "quotes" ? quotes : tab === "apps" ? apps : noms).filter((x) => !x.spam);
+  const spamList = (tab === "quotes" ? quotes : tab === "apps" ? apps : noms).filter((x) => x.spam);
 
   return (
     <div className="min-h-screen bg-brand-cream">
@@ -340,6 +434,56 @@ const Admin = () => {
           </div>
         )}
 
+        {tab === "noms" && (
+          <div className="mb-6 grid lg:grid-cols-2 gap-4">
+            <div className="bg-white rounded-2xl p-5 shadow-soft ring-1 ring-black/5">
+              <p className="font-600 text-brand-ink flex items-center gap-2"><Download className="w-4 h-4 text-brand-green" /> Nominator list</p>
+              <p className="mt-1 text-sm text-brand-ink/65">
+                Every nominator with their phone, email and whether they asked for the $25 code — ready for Mayra.
+              </p>
+              <button onClick={exportNominators} data-testid="export-nominators" className="mt-4 inline-flex items-center gap-2 text-sm font-600 px-5 py-2.5 rounded-full bg-brand-green text-brand-cream hover:bg-brand-greenDark transition-colors">
+                <Download className="w-4 h-4" /> Download CSV
+              </button>
+            </div>
+
+            <div className="bg-white rounded-2xl p-5 shadow-soft ring-1 ring-black/5" data-testid="announcements-panel">
+              <p className="font-600 text-brand-ink flex items-center gap-2"><HeartHandshake className="w-4 h-4 text-brand-green" /> Homes we've blessed</p>
+              <p className="mt-1 text-sm text-brand-ink/65">
+                Shown on the page as first name and city only — never the story.
+              </p>
+              <div className="mt-3 grid sm:grid-cols-2 gap-2">
+                <input data-testid="announce-first-name" className="rounded-xl border border-input bg-white px-3 py-2 text-sm" placeholder="First name" value={announce.first_name} onChange={(e) => setAnnounce({ ...announce, first_name: e.target.value })} />
+                <input data-testid="announce-city" className="rounded-xl border border-input bg-white px-3 py-2 text-sm" placeholder="City" value={announce.city} onChange={(e) => setAnnounce({ ...announce, city: e.target.value })} />
+              </div>
+              <input data-testid="announce-note" className="mt-2 w-full rounded-xl border border-input bg-white px-3 py-2 text-sm" placeholder="Optional short line (no story details)" value={announce.note} onChange={(e) => setAnnounce({ ...announce, note: e.target.value })} />
+              <button onClick={addAnnouncement} data-testid="announce-add" className="mt-3 inline-flex items-center gap-2 text-sm font-600 px-5 py-2.5 rounded-full bg-brand-sage text-brand-green hover:bg-brand-green hover:text-brand-cream transition-colors">
+                <Check className="w-4 h-4" /> Save as draft
+              </button>
+
+              {announcements.length > 0 && (
+                <ul className="mt-4 space-y-2 border-t border-border pt-3">
+                  {announcements.map((a) => (
+                    <li key={a.id} data-testid={`announcement-${a.id}`} className="flex items-center justify-between gap-3 text-sm">
+                      <span className="text-brand-ink/80">
+                        <span className="font-600">{a.first_name}</span> — {a.city}
+                        <span className="text-brand-ink/50"> · {a.month_label}</span>
+                      </span>
+                      <span className="flex items-center gap-2 shrink-0">
+                        <button onClick={() => toggleAnnouncement(a)} data-testid={`announcement-toggle-${a.id}`} className={`text-xs font-600 px-3 py-1.5 rounded-full transition-colors ${a.published ? "bg-brand-sage text-brand-green" : "bg-neutral-100 text-brand-ink/60"}`}>
+                          {a.published ? "Showing" : "Draft"}
+                        </button>
+                        <button onClick={() => deleteAnnouncement(a)} data-testid={`announcement-delete-${a.id}`} className="text-brand-ink/40 hover:text-red-600 transition-colors" aria-label="Remove">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        )}
+
         {list.length === 0 ? (
           <div className="bg-white rounded-2xl p-12 text-center text-brand-ink/60 shadow-soft ring-1 ring-black/5">No {TAB_META[tab].label} yet.</div>
         ) : (
@@ -436,6 +580,37 @@ const Admin = () => {
               );
             })}
           </div>
+        )}
+
+        {spamList.length > 0 && (
+          <details className="mt-6 bg-white rounded-2xl shadow-soft ring-1 ring-black/5 overflow-hidden" data-testid="spam-group">
+            <summary className="cursor-pointer px-5 py-4 text-sm font-600 text-brand-ink/70 flex items-center gap-2">
+              <ShieldAlert className="w-4 h-4 text-brand-ink/40" />
+              Filtered as spam ({spamList.length}) — not emailed to you
+            </summary>
+            <div className="border-t border-border divide-y divide-border">
+              {spamList.map((item) => {
+                const v = normalize(item, tab);
+                return (
+                  <div key={item.id} data-testid={`spam-card-${item.id}`} className="px-5 py-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-sm font-600 text-brand-ink/70">{v.name}</span>
+                      <span className="flex items-center gap-3">
+                        <span className="text-xs text-brand-ink/45" title={item.spam_reason || ""}>{item.spam_reason}</span>
+                        <button onClick={() => notSpam(item)} data-testid={`not-spam-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-1.5 rounded-full bg-brand-sage text-brand-green hover:bg-brand-green hover:text-brand-cream transition-colors">
+                          <Undo2 className="w-3.5 h-3.5" /> Not spam
+                        </button>
+                        <button onClick={() => remove(item)} data-testid={`delete-submission-${item.id}`} className="text-brand-ink/35 hover:text-red-600 transition-colors" aria-label="Delete">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </span>
+                    </div>
+                    {v.body && <p className="mt-1.5 text-xs text-brand-ink/50 line-clamp-2">{v.body}</p>}
+                  </div>
+                );
+              })}
+            </div>
+          </details>
         )}
       </div>
     </div>

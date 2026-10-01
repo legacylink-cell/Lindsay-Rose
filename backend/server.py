@@ -1,10 +1,14 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, Response
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import re
+import csv
+import io
 import time
+from collections import defaultdict
 import asyncio
 import logging
 from pathlib import Path
@@ -69,6 +73,7 @@ class QuoteCreate(BaseModel):
     city: Optional[str] = ""
     service: Optional[str] = ""
     details: Optional[str] = ""
+    elapsed_ms: Optional[int] = 0
     company: Optional[str] = ""  # honeypot (should stay empty)
 
 
@@ -78,6 +83,7 @@ class ApplicationCreate(BaseModel):
     phone: str
     position: Optional[str] = ""
     message: Optional[str] = ""
+    elapsed_ms: Optional[int] = 0
     company: Optional[str] = ""  # honeypot
 
 
@@ -103,11 +109,77 @@ class NominationBody(BaseModel):
     permission_to_contact: bool = False
     understands_selected: bool = False
     wants_discount: bool = False
+    elapsed_ms: int = 0
     company: str = ""
 
 
 class SettingsBody(BaseModel):
     nominations_live: bool
+
+
+class AnnouncementBody(BaseModel):
+    first_name: str
+    city: str
+    month_label: str = ""
+    note: str = ""
+
+
+# ---------------- Spam filtering ----------------
+MIN_FORM_SECONDS = float(os.environ.get('MIN_FORM_SECONDS', '2.5'))
+RATE_LIMIT_MAX = int(os.environ.get('RATE_LIMIT_MAX', '4'))
+RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get('RATE_LIMIT_WINDOW_SECONDS', '600'))
+
+_URL_RE = re.compile(r'https?://|www\.', re.I)
+_SPAM_PHRASES = (
+    'website redesign', 'redesign or build', 'web design', 'website development',
+    'seo services', 'seo expert', 'rank your', 'first page of google', 'backlink',
+    'guest post', 'digital marketing agency', 'lead generation service',
+    'increase your traffic', 'mobile app development', 'outsourcing', 'bitcoin',
+    'crypto', 'investment opportunity', 'loan offer', 'work from home opportunity',
+)
+_recent_posts = defaultdict(list)
+
+
+def _rate_limited(ip: str) -> bool:
+    if not ip:
+        return False
+    now = time.monotonic()
+    hits = [t for t in _recent_posts[ip] if now - t < RATE_LIMIT_WINDOW_SECONDS]
+    hits.append(now)
+    _recent_posts[ip] = hits
+    return len(hits) > RATE_LIMIT_MAX
+
+
+def _spam_check(*texts) -> tuple:
+    """Quiet heuristics for sales pitches and bots. Returns (is_spam, reason)."""
+    blob = " ".join(t for t in texts if t).lower()
+    if not blob:
+        return False, None
+    urls = len(_URL_RE.findall(blob))
+    phrases = [p for p in _SPAM_PHRASES if p in blob]
+    if urls >= 2:
+        return True, f"contains {urls} links"
+    if len(phrases) >= 2:
+        return True, f"sales pitch wording: {', '.join(phrases[:3])}"
+    if phrases and urls:
+        return True, f"link plus sales wording: {phrases[0]}"
+    return False, None
+
+
+def _screen_submission(request: Request, body, *texts):
+    """Shared gate for every public form. Returns (drop_silently, is_spam, reason)."""
+    if getattr(body, "company", ""):
+        return True, False, None
+    elapsed = getattr(body, "elapsed_ms", 0) or 0
+    if elapsed and elapsed < MIN_FORM_SECONDS * 1000:
+        logging.info("Dropped a submission filled in %dms (bot-speed)", elapsed)
+        return True, False, None
+    ip = request.client.host if request.client else ""
+    if _rate_limited(ip):
+        logging.info("Rate limited submissions from %s", ip)
+        return True, False, None
+    is_spam, reason = _spam_check(*texts)
+    return False, is_spam, reason
 
 
 # ---------------- Helpers ----------------
@@ -499,6 +571,7 @@ async def retry_failed_deliveries():
     retried = 0
     for kind in ("quote", "application", "nomination"):
         docs = await _collection(kind).find({
+            "spam": {"$ne": True},
             "$or": [
                 {"delivery.email.status": {"$ne": "sent"}},
                 {"delivery.telegram.status": "failed"},
@@ -608,8 +681,9 @@ async def root():
 
 
 @api_router.post("/quotes")
-async def create_quote(body: QuoteCreate):
-    if body.company:  # honeypot tripped -> pretend success, drop it
+async def create_quote(body: QuoteCreate, request: Request):
+    drop, is_spam, reason = _screen_submission(request, body, body.details, body.name, body.city)
+    if drop:
         return {"success": True}
     doc = {
         "id": str(uuid.uuid4()),
@@ -617,16 +691,21 @@ async def create_quote(body: QuoteCreate):
         "name": body.name, "email": body.email, "phone": body.phone,
         "city": body.city, "service": body.service, "details": body.details,
         "status": "new",
+        "spam": is_spam, "spam_reason": reason,
         "created_at": _now().isoformat(),
     }
     await db.quotes.insert_one(dict(doc))
-    asyncio.create_task(dispatch_lead("quote", doc["id"]))
+    if not is_spam:
+        asyncio.create_task(dispatch_lead("quote", doc["id"]))
+    else:
+        logging.info("Quote %s filtered as spam (%s)", doc["id"], reason)
     return {"success": True, "id": doc["id"]}
 
 
 @api_router.post("/applications")
-async def create_application(body: ApplicationCreate):
-    if body.company:
+async def create_application(body: ApplicationCreate, request: Request):
+    drop, is_spam, reason = _screen_submission(request, body, body.message, body.name)
+    if drop:
         return {"success": True}
     doc = {
         "id": str(uuid.uuid4()),
@@ -634,10 +713,14 @@ async def create_application(body: ApplicationCreate):
         "name": body.name, "email": body.email, "phone": body.phone,
         "position": body.position, "message": body.message,
         "status": "new",
+        "spam": is_spam, "spam_reason": reason,
         "created_at": _now().isoformat(),
     }
     await db.applications.insert_one(dict(doc))
-    asyncio.create_task(dispatch_lead("application", doc["id"]))
+    if not is_spam:
+        asyncio.create_task(dispatch_lead("application", doc["id"]))
+    else:
+        logging.info("Application %s filtered as spam (%s)", doc["id"], reason)
     return {"success": True, "id": doc["id"]}
 
 
@@ -695,8 +778,11 @@ async def site_settings():
 
 
 @api_router.post("/nominations")
-async def create_nomination(body: NominationBody):
-    if body.company:
+async def create_nomination(body: NominationBody, request: Request):
+    drop, is_spam, reason = _screen_submission(
+        request, body, body.why, body.nominator_name, body.nominee_name
+    )
+    if drop:
         return {"success": True}
     if not body.understands_selected:
         raise HTTPException(status_code=400, detail="Please confirm this is a selected blessing.")
@@ -713,10 +799,14 @@ async def create_nomination(body: NominationBody):
         "wants_discount": body.wants_discount,
         "cycle": cycle["cycle"],
         "status": "new",
+        "spam": is_spam, "spam_reason": reason,
         "created_at": _now().isoformat(),
     }
     await db.nominations.insert_one(dict(doc))
-    asyncio.create_task(dispatch_lead("nomination", doc["id"]))
+    if not is_spam:
+        asyncio.create_task(dispatch_lead("nomination", doc["id"]))
+    else:
+        logging.info("Nomination %s filtered as spam (%s)", doc["id"], reason)
     return {"success": True, "id": doc["id"]}
 
 
@@ -754,6 +844,101 @@ async def update_site_settings(body: SettingsBody, _: bool = Depends(require_adm
     return {"success": True, "nominations_live": body.nominations_live}
 
 
+@api_router.post("/admin/{kind}s/{item_id}/not-spam")
+async def mark_not_spam(kind: str, item_id: str, _: bool = Depends(require_admin)):
+    if kind not in ("quote", "application", "nomination"):
+        raise HTTPException(status_code=400, detail="Invalid kind")
+    res = await _collection(kind).update_one(
+        {"id": item_id}, {"$set": {"spam": False, "spam_reason": None}}
+    )
+    if not res.matched_count:
+        raise HTTPException(status_code=404, detail="Not found")
+    await dispatch_lead(kind, item_id)
+    return {"success": True}
+
+
+@api_router.get("/admin/nominations/export")
+async def export_nominations(cycle: str = "", _: bool = Depends(require_admin)):
+    """CSV of nominators so the $25 thank-you codes can be sent quickly."""
+    query = {"spam": {"$ne": True}}
+    if cycle:
+        query["cycle"] = cycle
+    items = await db.nominations.find(query).sort("created_at", 1).to_list(2000)
+
+    buf = io.StringIO()
+    writer = csv.writer(buf)
+    writer.writerow([
+        "Submitted", "Cycle", "Nominator", "Phone", "Email", "City",
+        "Wants $25 code", "Relationship", "Nominee", "Nominee city", "Status",
+    ])
+    for i in items:
+        writer.writerow([
+            i.get("created_at", ""), i.get("cycle", ""), i.get("nominator_name", ""),
+            i.get("nominator_phone", ""), i.get("nominator_email", ""),
+            i.get("nominator_city", ""), "Yes" if i.get("wants_discount") else "No",
+            i.get("relationship", ""), i.get("nominee_name", ""),
+            i.get("nominee_city", ""), i.get("status", "new"),
+        ])
+    filename = f"bright-blessing-nominators-{cycle or 'all'}.csv"
+    return Response(
+        content=buf.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+@api_router.get("/announcements")
+async def list_announcements():
+    """Public: past blessings, first name + city only (playbook privacy rule)."""
+    items = await db.announcements.find({"published": True}).sort("created_at", -1).to_list(24)
+    return [{
+        "id": i["id"], "first_name": i.get("first_name", ""), "city": i.get("city", ""),
+        "month_label": i.get("month_label", ""), "note": i.get("note", ""),
+    } for i in items]
+
+
+@api_router.get("/admin/announcements")
+async def admin_list_announcements(_: bool = Depends(require_admin)):
+    items = await db.announcements.find().sort("created_at", -1).to_list(100)
+    return [_clean(i) for i in items]
+
+
+@api_router.post("/admin/announcements")
+async def create_announcement(body: AnnouncementBody, _: bool = Depends(require_admin)):
+    # Enforced server-side: first name only, never a full name.
+    first = (body.first_name or "").strip().split()[0] if body.first_name.strip() else ""
+    if not first or not body.city.strip():
+        raise HTTPException(status_code=400, detail="First name and city are required.")
+    doc = {
+        "id": str(uuid.uuid4()),
+        "first_name": first,
+        "city": body.city.strip(),
+        "month_label": body.month_label.strip() or nomination_cycle()["month_label"],
+        "note": body.note.strip()[:280],
+        "published": False,
+        "created_at": _now().isoformat(),
+    }
+    await db.announcements.insert_one(dict(doc))
+    return {"success": True, "announcement": _clean(doc)}
+
+
+@api_router.patch("/admin/announcements/{item_id}/publish")
+async def publish_announcement(item_id: str, published: bool = True,
+                               _: bool = Depends(require_admin)):
+    res = await db.announcements.update_one({"id": item_id}, {"$set": {"published": published}})
+    if not res.matched_count:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"success": True, "published": published}
+
+
+@api_router.delete("/admin/announcements/{item_id}")
+async def delete_announcement(item_id: str, _: bool = Depends(require_admin)):
+    res = await db.announcements.delete_one({"id": item_id})
+    if not res.deleted_count:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"success": True}
+
+
 @api_router.get("/admin/delivery-health")
 async def delivery_health(_: bool = Depends(require_admin)):
     """Tells the dashboard whether alerts can actually go out right now."""
@@ -762,7 +947,7 @@ async def delivery_health(_: bool = Depends(require_admin)):
     undelivered = 0
     for kind in ("quote", "application", "nomination"):
         undelivered += await _collection(kind).count_documents(
-            {"delivery.email.status": {"$nin": ["sent", None]}}
+            {"delivery.email.status": {"$nin": ["sent", None]}, "spam": {"$ne": True}}
         )
     return {
         "email_configured": email_configured,

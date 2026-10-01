@@ -15,6 +15,7 @@ const SERVICE_TYPES = [
 ];
 
 const QuoteForm = () => {
+  const startedAt = React.useRef(Date.now());
   const [form, setForm] = useState({
     name: "", email: "", phone: "", city: "", service: SERVICE_TYPES[0], details: "", company: "",
   });
@@ -34,7 +35,7 @@ const QuoteForm = () => {
       const res = await fetch(`${API}/quotes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, elapsed_ms: Date.now() - startedAt.current }),
       });
       if (!res.ok) throw new Error("Request failed");
       setSubmitted(true);

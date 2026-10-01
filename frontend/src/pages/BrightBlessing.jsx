@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Phone, HeartHandshake, Gift, Home, CheckCircle2, Send, ShieldCheck } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowLeft, Phone, HeartHandshake, Gift, Home, CheckCircle2, Send, ShieldCheck } from "lucide-react";import { toast } from "sonner";
 import { BRAND } from "../mock";
 import { usePageHead } from "../hooks/usePageHead";
 import Footer from "../components/Footer";
@@ -23,6 +22,8 @@ const STEPS = [
 const BrightBlessing = () => {
   const [cycle, setCycle] = useState(null);
   const [live, setLive] = useState(null);
+  const [blessings, setBlessings] = useState([]);
+  const startedAt = React.useRef(Date.now());
   const [form, setForm] = useState({
     nominator_name: "", nominator_phone: "", nominator_email: "", nominator_city: "",
     nominee_name: "", nominee_city: "", nominee_phone: "", why: "",
@@ -41,6 +42,10 @@ const BrightBlessing = () => {
       .then((r) => r.json())
       .then((d) => { setCycle(d.nominations); setLive(d.nominations_live); })
       .catch(() => setCycle({ is_open: true }));
+    fetch(`${API}/announcements`)
+      .then((r) => r.json())
+      .then(setBlessings)
+      .catch(() => {});
   }, []);
 
   const update = (k) => (e) =>
@@ -65,7 +70,7 @@ const BrightBlessing = () => {
       const res = await fetch(`${API}/nominations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, elapsed_ms: Date.now() - startedAt.current }),
       });
       if (!res.ok) throw new Error("Request failed");
       setSubmitted(true);
@@ -281,6 +286,30 @@ const BrightBlessing = () => {
           )}
         </div>
       </section>
+
+      {blessings.length > 0 && (
+        <section className="bg-brand-sage/60" data-testid="blessings-honored">
+          <div className="max-w-5xl mx-auto px-5 md:px-8 py-14 md:py-20">
+            <p className="text-xs uppercase tracking-[0.22em] text-brand-amber font-semibold">Homes we've blessed</p>
+            <h2 className="mt-3 font-serif text-3xl md:text-4xl font-700 text-brand-ink">
+              Real homes. Real neighbors.
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm text-brand-ink/70">
+              We share only a first name and city — never the story — unless a family asks us to.
+            </p>
+            <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {blessings.map((b) => (
+                <div key={b.id} data-testid={`blessing-${b.id}`} className="bg-white rounded-2xl p-6 shadow-soft ring-1 ring-black/5">
+                  <p className="text-xs font-600 uppercase tracking-wider text-brand-amber">{b.month_label}</p>
+                  <p className="mt-2 font-serif text-2xl font-700 text-brand-ink">{b.first_name}</p>
+                  <p className="text-sm text-brand-green font-600">{b.city}</p>
+                  {b.note && <p className="mt-3 text-sm text-brand-ink/70 leading-relaxed italic">"{b.note}"</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
