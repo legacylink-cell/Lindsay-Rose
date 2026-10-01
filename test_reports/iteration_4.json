@@ -1,0 +1,34 @@
+{
+  "summary": "End-to-end verification of the Bright Blessing nomination feature and all regression. BACKEND (15/15 new pytest in /app/backend/tests/test_nominations.py + 33/33 existing regression PASSED, see /app/test_reports/pytest/nominations.xml): GET /api/site-settings returns {nominations_live:bool, nominations:{is_open, cycle, month_label, closes_label, next_open_label}}; PATCH /api/admin/site-settings requires auth (401 w/o token, 401 bad token); POST /api/nominations with understands_selected=false => HTTP 400; honeypot (company=...) => 200 success without id, nothing persisted to admin list; valid nomination persists with status='new', delivery.email.status='sent' within <=20s, attempts>=1; backend logs contain the 'Bright Blessing Nomination' support line and NO 'Client confirmation sent' line references our nomination id (auto thank-you correctly disabled); status workflow new->reviewing->selected->not_selected->new all persist across GET; invalid status 'booked' => 400; delete removes; publish toggle flips public /api/site-settings.nominations_live round-trip. FRONTEND (Playwright on preview URL, admin brightadmin/Dallas2025!!): PHASE1 Unpublished: /bright-blessing has correct title, canonical=https://brightathomecleaning.com/bright-blessing, robots='noindex, nofollow', visible blessing-preview-notice. Homepage + /services/deep-cleaning have ZERO nav-blessing/nav-blessing-mobile/footer-blessing/blessing-teaser elements. PHASE2 Form: empty submit shows toast 'Please add your name, phone and email...' and does NOT advance; missing understands checkbox also blocks submission; filling all fields + both consent checkboxes shows blessing-submitted panel. PHASE3 Admin Nominations tab: card chips show nominee (For: QA Nominee UI), city, relationship, OK-to-contact, and nominee phone row; mark-booked-{id} is NOT rendered on nomination cards (count=0, correct). Status buttons mark-reviewing/mark-selected/mark-not-selected/mark-new each update the badge and toast, and the final 'new' persists after a full page reload. PHASE4 Publish toggle: aria-pressed=false initially; clicking accepts the confirm dialog and flips to aria-pressed=true. In a fresh tab, homepage immediately shows nav-blessing (1), footer-blessing (1), blessing-teaser (1); /bright-blessing shows robots='index, follow' and NO preview-notice. Clicking toggle a second time flips back to aria-pressed=false, and public links disappear again. Toggle left OFF at end (verified via /api/site-settings => nominations_live=false). PHASE5 Delete: QA nomination removed via delete-submission-{id}. PHASE6 Regression: quotes tab lists 7 cards; delivery-health-banner now renders (iteration_3 fix is in place) in amber warning state for telegram-only issue; stats show Quote requests / Applications / Awaiting reply / New this week; mark-contacted/mark-booked still appear on quote cards.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_nominations.py",
+    "/app/test_reports/pytest/nominations.xml",
+    "/app/backend/tests/backend_test.py",
+    "/app/backend/tests/test_delivery.py",
+    "/app/backend/tests/test_status_and_reminders.py"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "nomination_cycle() uses `closes.replace(day=1) + timedelta(days=32)` to get next month, then .replace(day=1). Works for all months but relies on >=32 days overshoot — safe but could be simplified using relativedelta. Not blocking.",
+    "useSiteSettings.js caches at the module level with no invalidation. After the admin flips the publish toggle, other open browser tabs will NOT reflect the change until a full reload. The admin flow uses its own setSettings so the admin UI itself is fine; just note that visitors already on the site need to refresh. Consider adding a timed TTL or SWR revalidation if 'instant propagation' is a hard requirement.",
+    "frontend/src/pages/BrightBlessing.jsx reads `settings?.nominations_live` to decide noindex via `live === false`. Correct — this means during the initial loading (settings === undefined) the page defaults to NO noindex meta, which is the right fail-open choice for the live case but could briefly expose the preview page to a crawler if an unpublished page is loaded. Minor; the SSR/initial-paint window is tiny.",
+    "Admin.jsx: `newThisWeek` stat intentionally excludes nominations (uses [...quotes, ...apps]) — matches review-request expectation that nominations don't inflate general lead stats. Good.",
+    "server.py POST /api/nominations: honeypot path returns {success:true} without an id. The frontend treats missing id as still success and shows blessing-submitted, which is the correct silent-drop behaviour."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_nominations.py (new, 15 tests)"
+  ],
+  "success_rate": {"backend": "100% (15/15 nomination tests + 33/33 regression)", "frontend": "100% (all playwright assertions passed)"},
+  "test_credentials": "brightadmin / Dallas2025!! (preview) — per /app/memory/test_credentials.md",
+  "seed_data_creation": "One UI submission ('QA Nomination Test') created via the public form was deleted at the end. Backend-pytest honeypot and status-fixture nominations are cleaned up via their teardown (deleted via DELETE /api/admin/nominations/{id}). One leftover 'Ruth Carter / Dana just finished chemo' nomination was created by the main agent's own curl verification (per agent_to_agent_context_note) and was intentionally left in place since it is not QA-authored.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "test_nominations.py covers the full nomination lifecycle incl. publish toggle round-trip and leaves nominations_live=False at teardown. Admin password is Dallas2025!!. Playwright flow is in this iteration's tool output and the key testids are: bright-blessing-page, blessing-preview-notice, bb-nominator-name/phone/email/city, bb-relationship, bb-nominee-name/city/phone, bb-why, bb-permission/understands/discount, bb-submit, blessing-submitted; admin: tab-nominations, blessing-publish-panel, blessing-publish-toggle, submission-card-{id}, status-badge-{id}, mark-reviewing/selected/not-selected/new-{id}, delete-submission-{id}; public gating: nav-blessing, nav-blessing-mobile, footer-blessing, blessing-teaser.",
+  "rca of the issue": "No bugs detected — feature works as specified. Only observations: useSiteSettings module-level cache delays live propagation to open tabs (noted above, not a bug per playbook) and robots meta is only applied after /api/site-settings resolves (fail-open to indexable, acceptable because unpublished page is URL-only)."
+}

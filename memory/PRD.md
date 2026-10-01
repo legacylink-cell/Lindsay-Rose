@@ -29,6 +29,19 @@ Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW 
 - **Branded HTML confirmations (2026-06)**: `CLIENT_EMAILS` + `_client_message(kind, first)` in `backend/server.py` build multipart text+HTML client emails (cream logo band, amber rule, brand-green heading, pill `tel:` CTA, tagline footer). Distinct subjects: "We received your quote request" vs "We received your application". Logo pulled from `SITE_URL/logos/logo-b-rooftop-emblem-t.png` (env `SITE_URL`, defaults to production domain). Verified in preview: 2 quote + 2 application sends, all 4 confirmations logged sent.
 
 
+
+## Bright Blessing of the Month — nomination form (2026-10-01)
+Source: client playbook PDF (`Bright-Blessing-of-the-Month-Team-Playbook`). Agent owns the "Mo (website)" items only: §5 build the form + alert on submission, §6 the required fields. Legal framing is FIXED by the playbook — always "nominate / select / bless / gift / complimentary / faith in action", NEVER "enter to win / sweepstakes / raffle / random drawing / giveaway".
+- **Page**: `frontend/src/pages/BrightBlessing.jsx` at route `/bright-blessing` (hero, "How it works" 3 steps, $25 thank-you note, form, privacy fine print). Brand-consistent with the rest of the site, `Footer` reused.
+- **All §6 fields**: nominator name/phone/email/city; relationship (Neighbor/Family/Church/Myself/Other); nominee name, city-or-ZIP, optional phone; "why this home" textarea; 3 checkboxes — permission to contact, "selected blessing, not a random drawing" (REQUIRED, enforced client + server), "$25-off" opt-in. Honeypot `company` field.
+- **Hidden-by-default publishing**: `settings` collection doc `{id: "site", nominations_live: bool}`. `GET /api/site-settings` (public) exposes the flag + cycle; `PATCH /api/admin/site-settings` (admin JWT) toggles it. While OFF: no header/mobile/footer/homepage links, `noindex, nofollow` robots meta, and an amber "Private preview" strip on the page. While ON: header nav "Bright Blessing", footer "Bright Blessing of the Month", homepage `BlessingTeaser` section, robots restored.
+- **Admin**: third "Nominations" tab + publish panel with Preview link and Publish/Hide button. Statuses `new/reviewing/selected/not_selected`. Nomination cards use `normalize(item, tab)` since the shape differs from quotes/applications. Same delivery tracking, resend and retry safety net.
+- **Cycle is automatic** (`nomination_cycle()`): open the 1st–15th America/Chicago, closed after; closed state shows "next round opens <date>". No manual date editing.
+- **NO auto thank-you email to nominators** — `dispatch_lead()` passes `client_kind=None` for nominations because Operations (Mayra) sends BRIGHT25 manually. Support notification still goes to FORWARD_EMAIL.
+- Fixed while building: `usePageHead`'s noindex cleanup was deleting the shell's global `robots` meta; it now captures and restores the previous value.
+- Tested 2026-10-01 (iteration_4.json): 15/15 new nomination pytest + 48/48 total suite; Playwright verified hidden-state (zero links anywhere, noindex), form validation, submission, admin tab + all status transitions, and the publish toggle flipping public links on and off. Toggle left OFF. Test data cleaned.
+- **PENDING when the user approves going public**: add `/bright-blessing` to `frontend/public/sitemap.xml` (deliberately omitted while private).
+
 ## Health panel + watchdog (2026-09-29)
 - Admin health panel is now ALWAYS visible with three explicit channel rows (email / phone alerts / delivery backlog) and a `data-health` attribute of `healthy` | `warning` | `error`:
   - **green** (`ShieldCheck`, brand sage): everything working — "All lead alerts are working".

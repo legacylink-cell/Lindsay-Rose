@@ -51,19 +51,17 @@ export const usePageHead = ({ title, description, path, noindex = false }) => {
     setMetaName("twitter:description", description);
   }, [title, description, path]);
 
-  // Unpublished pages must stay out of the index; cleaned up when leaving the route.
+  // Unpublished pages must stay out of the index; the shell's own value is restored on exit.
   useEffect(() => {
-    const existing = document.head.querySelector('meta[name="robots"]');
-    if (!noindex) {
-      if (existing?.dataset.temporary) existing.remove();
-      return;
-    }
-    setMetaName("robots", "noindex, nofollow");
+    if (!noindex) return;
     const el = document.head.querySelector('meta[name="robots"]');
-    if (el) el.dataset.temporary = "true";
+    const previous = el ? el.getAttribute("content") : null;
+    setMetaName("robots", "noindex, nofollow");
     return () => {
       const cur = document.head.querySelector('meta[name="robots"]');
-      if (cur?.dataset.temporary) cur.remove();
+      if (!cur) return;
+      if (previous === null) cur.remove();
+      else cur.setAttribute("content", previous);
     };
   }, [noindex]);
 };
