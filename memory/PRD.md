@@ -33,6 +33,19 @@ Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW 
 
 
 
+
+## Build-time pre-rendering (2026-10-01)
+Problem: the served HTML was an empty CRA shell. A crawler without JS got ~11 words and no `<h1>`.
+- **`frontend/scripts/prerender.mjs`** runs as `postbuild` (`node scripts/prerender.mjs`, also available as `yarn prerender`). It reads the freshly built `build/index.html` (so asset hashes are always correct), injects real markup into `<div id="root">`, rewrites title/description/canonical/og per route, and writes `build/<route>/index.html`.
+- **PURE NODE, deliberately.** The brief asked for headless Chrome, but neither the pod nor the build image has Chromium, so a Chrome step would silently skip exactly where it must run. The script instead renders from a shared copy module. If anyone adds Chromium later, this remains valid.
+- **`frontend/src/data/site-copy.mjs`** is the single source of truth: `HOME_COPY`, `*_COPY` lists moved out of `mock.js`, and `SERVICE_PAGES` moved out of `ServicePage.jsx`. `mock.js` re-exports them and re-attaches lucide icons **by array position** (order matters, see its comment). The React app and the pre-render import the same text, so they cannot drift.
+- **Explicit `ROUTES` list** in the script, never crawled. `sitemap.xml` is generated from that same list into both `build/` and `public/` (7 urls; `/bright-blessing` carries `sitemap: false` + `noindex: true` while it stays private).
+- **Idempotent**: `pristineShell()` strips the marker class and any prior injected markup, so re-running never stacks attributes. (Caught after a double run produced `class="prerendered" class="prerendered"`.)
+- **Invisible-HTML guard**: generated files put `class="prerendered"` on `<html>`; `index.css` forces `.reveal` to `opacity: 1 / transform: none / animation: none` under that marker, and `src/index.js` removes the marker before React's first paint so visitors still get the animations. The generated markup also never uses `.reveal`, so it is belt-and-braces.
+- Homepage meta description cut from 238 to **155 chars**, ending on "Call 469-443-6903 for a free quote." Updated in `public/index.html` (description + og + twitter) and `App.js` `HOME_DESCRIPTION`.
+- Verified locally on a real `yarn build`: every one of the 8 routes has exactly **1 `<h1>`** and **450-660 words** of real copy with tags stripped (acceptance asked for 300+), titles 56-76 chars, descriptions 155-198.
+- **UNVERIFIED, needs a post-deploy check**: whether the production static host serves `build/services/<slug>/index.html` for that path or always falls back to `build/index.html`. The homepage is correct either way. Check with `curl -s https://brightathomecleaning.com/services/deep-cleaning | grep -c "<h1"`.
+
 ## Dark-mode native control flash (2026-10-01)
 - Symptom (reported on production): opening the relationship dropdown on `/bright-blessing` flashed solid black for about a second before the options appeared.
 - Root cause: nothing declared a colour scheme, so `getComputedStyle(document.documentElement).colorScheme` was `normal`. On a device in OS dark mode the browser paints native controls (select popups, date pickers, scrollbars) with its DARK user-agent palette first, then repaints. Not a React or data bug.

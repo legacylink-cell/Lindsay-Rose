@@ -14,6 +14,12 @@ const queryClient = new QueryClient({
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// The pre-rendered HTML ships with entrance animations forced visible (see the
+// .prerendered guard in index.css). React is in charge now, so hand the
+// animations back before the first paint of the live app.
+document.documentElement.classList.remove("prerendered");
+
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

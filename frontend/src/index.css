@@ -111,6 +111,18 @@ html { scroll-behavior: smooth; }
 .reveal { opacity: 0; }
 .reveal.in-view { animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
 
+/* Pre-render guard: the build-time HTML must never be saved invisible.
+   While the root carries the marker, entrance animations are forced to their
+   finished state. index.js removes the marker once React takes over, so real
+   visitors still get the animations. */
+.prerendered .reveal,
+.prerendered [data-prerendered] .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+
 @keyframes floaty {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }

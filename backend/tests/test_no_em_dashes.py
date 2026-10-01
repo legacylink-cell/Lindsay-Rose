@@ -8,8 +8,9 @@ import pathlib
 import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-TARGETS = [ROOT / "frontend" / "src", ROOT / "frontend" / "public", ROOT / "backend"]
-SUFFIXES = {".js", ".jsx", ".ts", ".tsx", ".json", ".html", ".txt", ".xml", ".py", ".md", ".css"}
+TARGETS = [ROOT / "frontend" / "src", ROOT / "frontend" / "public", ROOT / "frontend" / "scripts",
+           ROOT / "backend"]
+SUFFIXES = {".js", ".mjs", ".jsx", ".ts", ".tsx", ".json", ".html", ".txt", ".xml", ".py", ".md", ".css"}
 SKIP_DIRS = {"node_modules", "build", "__pycache__", ".git", "venv"}
 FORBIDDEN = ("\u2014", "\\u2014", "&mdash;", "&#8212;", "&#x2014;")
 

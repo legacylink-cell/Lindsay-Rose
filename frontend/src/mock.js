@@ -6,6 +6,18 @@ import {
   Blinds, DoorOpen, Flame, AppWindow, Fan, Refrigerator, Archive, Utensils,
 } from "lucide-react";
 
+import {
+  RESIDENTIAL_SERVICES_COPY, COMMERCIAL_SERVICES_COPY, PROCESS_COPY, AREAS_COPY, FAQS_COPY,
+} from "./data/site-copy.mjs";
+
+// Order matters: icons are paired with RESIDENTIAL_SERVICES_COPY by position.
+export const RESIDENTIAL_SERVICES = RESIDENTIAL_SERVICES_COPY.map((s, i) => ({ ...s, icon: [Repeat, SprayCan, Home, Truck][i] }));
+// Order matters: icons are paired with COMMERCIAL_SERVICES_COPY by position.
+export const COMMERCIAL_SERVICES = COMMERCIAL_SERVICES_COPY.map((s, i) => ({ ...s, icon: [Building2, Store, Wrench][i] }));
+export const PROCESS = PROCESS_COPY;
+export const AREAS = AREAS_COPY;
+export const FAQS = FAQS_COPY;
+
 export const BRAND = {
   name: "Bright at Home",
   full: "Bright at Home Cleaning",
@@ -81,47 +93,7 @@ export const IMAGES = {
   commercialCleaner: "https://images.pexels.com/photos/6196223/pexels-photo-6196223.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
 };
 
-export const RESIDENTIAL_SERVICES = [
-  {
-    icon: Repeat,
-    title: "Recurring Cleaning",
-    desc: "Weekly, biweekly, or monthly upkeep that keeps your home consistently fresh. Best value, never a contract.",
-    tag: "Most popular",
-  },
-  {
-    icon: SprayCan,
-    title: "Deep Cleaning",
-    desc: "A thorough top-to-bottom reset, including baseboards, blinds, buildup and all. The perfect first visit.",
-  },
-  {
-    icon: Home,
-    title: "One-Time Cleaning",
-    desc: "Hosting, a big event, or just need a refresh? A single spotless visit, whenever you need it.",
-  },
-  {
-    icon: Truck,
-    title: "Move In / Move Out",
-    desc: "Detailed cleaning for empty homes so you get your deposit back, or welcome a fresh start.",
-  },
-];
 
-export const COMMERCIAL_SERVICES = [
-  {
-    icon: Building2,
-    title: "Offices & Workspaces",
-    desc: "Reliable janitorial care that keeps your team healthy and your space presentable, day after day.",
-  },
-  {
-    icon: Store,
-    title: "Retail & Medical",
-    desc: "Disinfection-focused cleaning that meets high-traffic and hygiene-sensitive standards.",
-  },
-  {
-    icon: Wrench,
-    title: "Post-Construction",
-    desc: "Dust, debris, and detail work after a build or remodel. Turnover-ready in one visit.",
-  },
-];
 
 export const COMMERCIAL_BENEFITS = [
   "Flexible day or after-hours scheduling",
@@ -169,23 +141,6 @@ export const CHECKLIST = [
   "Clean glass on entry doors",
 ];
 
-export const PROCESS = [
-  {
-    step: "01",
-    title: "Tell us about your space",
-    desc: "Share a few details in our quick quote form, or call us. We listen first, because every home and office is different.",
-  },
-  {
-    step: "02",
-    title: "Get a clear, honest quote",
-    desc: "A transparent estimate within 24 hours on weekdays. No pressure, no surprises, no hidden fees.",
-  },
-  {
-    step: "03",
-    title: "Relax, we brighten it",
-    desc: "Our vetted, insured team arrives on time and treats your space like their own. 100% satisfaction guaranteed.",
-  },
-];
 
 export const PRICING = [
   {
@@ -229,10 +184,6 @@ export const PRICING = [
   },
 ];
 
-export const AREAS = [
-  "Plano", "Frisco", "McKinney", "Allen", "Celina", "Prosper",
-  "Denton", "Flower Mound", "Grapevine", "Fort Worth",
-];
 
 // Real customer reviews from the Bright at Home Cleaning Google Business Profile.
 export const TESTIMONIALS = [
@@ -292,36 +243,6 @@ export const TESTIMONIALS = [
   },
 ];
 
-export const FAQS = [
-  {
-    q: "Do I need to be home during the cleaning?",
-    a: "Not at all. Many clients provide a key or entry code. Our team is fully vetted, insured, and bonded, so your home is in trusted hands whether you're there or not.",
-  },
-  {
-    q: "What products do you use?",
-    a: "We bring everything we need, including strong, effective, non-toxic and biodegradable eco-friendly products that are safe for kids and pets.",
-  },
-  {
-    q: "Why is the first cleaning different?",
-    a: "In line with industry standards, your first visit is a deeper initial cleaning to remove built-up dust and grime and prepare your home for easy recurring upkeep.",
-  },
-  {
-    q: "Am I locked into a contract?",
-    a: "Never. Recurring clients get our best pricing with zero contracts. Adjust, pause, or cancel your schedule anytime.",
-  },
-  {
-    q: "Which areas do you serve?",
-    a: "We focus on the popular Collin County communities of Plano, Frisco, McKinney, Allen, Celina and Prosper, and also serve Denton, Flower Mound, Grapevine and Fort Worth, where we're based and have long-standing relationships. Don't see your city? Just ask, we're happy to check.",
-  },
-  {
-    q: "Do you serve commercial spaces?",
-    a: "Yes. We clean offices, retail, medical suites, and post-construction sites across the DFW metroplex, with day or after-hours scheduling.",
-  },
-  {
-    q: "What if I'm not satisfied?",
-    a: "We back every visit with a 100% satisfaction guarantee. If something isn't right, tell us within 24 hours and we'll make it right, free of charge.",
-  },
-];
 
 export const STATS = [
   { value: "6+", label: "Years serving North Texas" },
