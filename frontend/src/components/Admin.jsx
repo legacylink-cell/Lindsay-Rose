@@ -148,15 +148,17 @@ const Admin = () => {
   };
 
   const toggleAnnouncement = async (a) => {
+    const next = !a.published;
+    setAnnouncements((prev) => prev.map((x) => (x.id === a.id ? { ...x, published: next } : x)));
     try {
-      const res = await fetch(`${API}/admin/announcements/${a.id}/publish?published=${!a.published}`, {
+      const res = await fetch(`${API}/admin/announcements/${a.id}/publish?published=${next}`, {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error();
-      toast.success(!a.published ? "Now showing on the page." : "Hidden from the page.");
-      loadAnnouncements();
+      toast.success(next ? "Now showing on the page." : "Hidden from the page.");
     } catch {
+      setAnnouncements((prev) => prev.map((x) => (x.id === a.id ? { ...x, published: a.published } : x)));
       toast.error("Could not change that.");
     }
   };

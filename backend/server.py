@@ -126,7 +126,7 @@ class AnnouncementBody(BaseModel):
 
 # ---------------- Spam filtering ----------------
 MIN_FORM_SECONDS = float(os.environ.get('MIN_FORM_SECONDS', '2.5'))
-RATE_LIMIT_MAX = int(os.environ.get('RATE_LIMIT_MAX', '4'))
+RATE_LIMIT_MAX = int(os.environ.get('RATE_LIMIT_MAX', '6'))
 RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get('RATE_LIMIT_WINDOW_SECONDS', '600'))
 
 _URL_RE = re.compile(r'https?://|www\.', re.I)
@@ -138,6 +138,16 @@ _SPAM_PHRASES = (
     'crypto', 'investment opportunity', 'loan offer', 'work from home opportunity',
 )
 _recent_posts = defaultdict(list)
+
+
+def _client_ip(request: Request) -> str:
+    """Real visitor IP. Behind the ingress/CDN request.client.host is the proxy,
+    which would otherwise put every visitor in one shared rate-limit bucket."""
+    for header in ("cf-connecting-ip", "x-real-ip", "x-forwarded-for"):
+        value = request.headers.get(header)
+        if value:
+            return value.split(",")[0].strip()
+    return request.client.host if request.client else ""
 
 
 def _rate_limited(ip: str) -> bool:
@@ -167,17 +177,18 @@ def _spam_check(*texts) -> tuple:
 
 
 def _screen_submission(request: Request, body, *texts):
-    """Shared gate for every public form. Returns (drop_silently, is_spam, reason)."""
+    """Shared gate for every public form. Returns (drop_silently, is_spam, reason).
+    Only bots are dropped outright; anything a human might have sent is kept and
+    merely flagged, so a real lead can always be recovered from the dashboard."""
     if getattr(body, "company", ""):
         return True, False, None
     elapsed = getattr(body, "elapsed_ms", 0) or 0
     if elapsed and elapsed < MIN_FORM_SECONDS * 1000:
         logging.info("Dropped a submission filled in %dms (bot-speed)", elapsed)
         return True, False, None
-    ip = request.client.host if request.client else ""
-    if _rate_limited(ip):
-        logging.info("Rate limited submissions from %s", ip)
-        return True, False, None
+    if _rate_limited(_client_ip(request)):
+        logging.info("Flagging a burst of submissions from one visitor")
+        return False, True, "unusual number of submissions in a few minutes"
     is_spam, reason = _spam_check(*texts)
     return False, is_spam, reason
 

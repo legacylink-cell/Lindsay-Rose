@@ -30,6 +30,27 @@ Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW 
 
 
 
+
+## Spam filtering, nominator export, blessing announcements (2026-10-01)
+### Spam protection (all three public forms, no visible captcha)
+- `_screen_submission(request, body, *texts)` gates `/api/quotes`, `/api/applications`, `/api/nominations`. Layers: honeypot `company`; timing trap (`elapsed_ms` < `MIN_FORM_SECONDS`=2.5s → dropped as bot); per-visitor burst check; `_spam_check()` content heuristics (>=2 links, >=2 pitch phrases from `_SPAM_PHRASES`, or 1 phrase + 1 link).
+- **Design rule: only bots are discarded.** Anything a human might have sent is STORED with `spam: true` + `spam_reason` and simply not emailed, so it stays visible and restorable — never lost.
+- `_client_ip()` reads `cf-connecting-ip` / `x-real-ip` / `x-forwarded-for` before `request.client.host`. **This was a genuine bug caught in testing**: behind the ingress every visitor shared ONE rate-limit bucket, so real leads would have been dropped site-wide after 4 submissions. `RATE_LIMIT_MAX`=6 per `RATE_LIMIT_WINDOW_SECONDS`=600 per real IP.
+- Spam docs are excluded from `delivery_health` undelivered counts and from `retry_failed_deliveries()`.
+- `POST /api/admin/{kind}s/{id}/not-spam` clears the flag and dispatches the email. Admin UI: collapsible `spam-group` with `not-spam-{id}`; flagged items never appear in the main list.
+- Frontend: `QuoteForm`, `Careers` and `BrightBlessing` all send `elapsed_ms` from a mount-time ref.
+
+### Nominator CSV export
+- `GET /api/admin/nominations/export?cycle=YYYY-MM` (admin JWT) → `text/csv` attachment, 11 columns incl. "Wants $25 code", spam rows excluded. Admin UI button `export-nominators` (fetch + blob download, since the header can't ride on a plain link).
+
+### "Homes we've blessed" announcements
+- `announcements` collection. Public `GET /api/announcements` returns published entries only. Admin `GET/POST/PATCH ?published=/DELETE /api/admin/announcements`.
+- **Playbook privacy rule enforced server-side**: `first_name` is split and only the first token stored, so a full name can never leak. Note capped at 280 chars; the story itself is never shown.
+- Entries start as drafts (`published: false`). Admin panel `announcements-panel` can add/toggle/delete; toggle is optimistic (fixed a double-click staleness bug flagged in review).
+- Public section `blessings-honored` on `/bright-blessing` renders only when at least one entry is published.
+
+- Tested 2026-10-01 (iteration_5.json + follow-ups): **64/64 pytest** incl. the new `tests/test_spam_export_announcements.py`; verified 8 leads from 8 distinct IPs are all stored unflagged (no false positives), a 2-link sales pitch is flagged and silent, bot-speed submissions vanish, and a genuine lead still emails. Test data cleaned, announcements cleared, publish toggle left OFF.
+
 ## Bright Blessing of the Month — nomination form (2026-10-01)
 Source: client playbook PDF (`Bright-Blessing-of-the-Month-Team-Playbook`). Agent owns the "Mo (website)" items only: §5 build the form + alert on submission, §6 the required fields. Legal framing is FIXED by the playbook — always "nominate / select / bless / gift / complimentary / faith in action", NEVER "enter to win / sweepstakes / raffle / random drawing / giveaway".
 - **Page**: `frontend/src/pages/BrightBlessing.jsx` at route `/bright-blessing` (hero, "How it works" 3 steps, $25 thank-you note, form, privacy fine print). Brand-consistent with the rest of the site, `Footer` reused.
