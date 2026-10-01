@@ -32,6 +32,15 @@ Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW 
 
 
 
+
+## Dark-mode native control flash (2026-10-01)
+- Symptom (reported on production): opening the relationship dropdown on `/bright-blessing` flashed solid black for about a second before the options appeared.
+- Root cause: nothing declared a colour scheme, so `getComputedStyle(document.documentElement).colorScheme` was `normal`. On a device in OS dark mode the browser paints native controls (select popups, date pickers, scrollbars) with its DARK user-agent palette first, then repaints. Not a React or data bug.
+- Fix: `html { color-scheme: light; }` plus explicit `background-color`/`color` on `select`, `option` and `optgroup` in `frontend/src/index.css`, and `<meta name="color-scheme" content="light">` in `public/index.html` so the browser knows before CSS parses.
+- Applies site-wide, so it also covers the Service dropdown on the quote form and the Position dropdown on Careers.
+- Verified with Playwright `emulate_media(color_scheme="dark")`: root scheme now reports `light` and select/option backgrounds are white on `/bright-blessing`, `/` and `/careers`.
+- NOTE: `public/index.html` does not hot reload; restart the frontend after editing it.
+
 ## COPY RULE: no em dashes, ever (2026-10-01)
 Client instruction, verbatim: "remove all hem dashed from the site. we should never have any hem dashes now or in the future."
 - All 107 em dashes removed from `frontend/src`, `frontend/public` and `backend/server.py`. Each one was rewritten by hand with natural punctuation (comma, colon, period, parentheses or a rephrase) rather than swapped for a hyphen, so the copy still reads properly.

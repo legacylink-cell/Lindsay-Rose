@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* The site is light-only. Without this, a phone in dark mode paints native
+   controls (select popups, date pickers, scrollbars) with the dark UA palette
+   first, which looked like a black flash when a dropdown opened. */
+html {
+    color-scheme: light;
+}
+
+select,
+select option,
+select optgroup {
+    background-color: #ffffff;
+    color: #2e2e2e;
+}
+
 body {
     margin: 0;
     font-family: 'Mulish', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
