@@ -23,6 +23,8 @@ import Careers from "./components/Careers";
 import Admin from "./components/Admin";
 import BrandPreview from "./components/BrandPreview";
 import ServicePage from "./pages/ServicePage";
+import BrightBlessing from "./pages/BrightBlessing";
+import BlessingTeaser from "./components/BlessingTeaser";
 import { usePageHead } from "./hooks/usePageHead";
 
 const HOME_TITLE = "Bright at Home Cleaning | A Brighter Home. A Better Day.";
@@ -109,6 +111,7 @@ const Landing = () => {
         <ServiceAreas />
         <Testimonials />
         <FAQ />
+        <BlessingTeaser />
         <QuoteForm />
       </main>
       <Footer />
@@ -124,6 +127,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/careers" element={<Careers />} />
+        <Route path="/bright-blessing" element={<BrightBlessing />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/brand" element={<BrandPreview />} />
         <Route path="/services/:slug" element={<ServicePage />} />

@@ -32,7 +32,7 @@ const setMetaProp = (property, content) =>
   }, "content", content);
 
 /** Keeps title, description, self-referencing canonical and OG tags in sync per route. */
-export const usePageHead = ({ title, description, path }) => {
+export const usePageHead = ({ title, description, path, noindex = false }) => {
   useEffect(() => {
     if (!title || !description || !path) return;
     const url = absoluteUrl(path);
@@ -50,6 +50,22 @@ export const usePageHead = ({ title, description, path }) => {
     setMetaName("twitter:title", title);
     setMetaName("twitter:description", description);
   }, [title, description, path]);
+
+  // Unpublished pages must stay out of the index; cleaned up when leaving the route.
+  useEffect(() => {
+    const existing = document.head.querySelector('meta[name="robots"]');
+    if (!noindex) {
+      if (existing?.dataset.temporary) existing.remove();
+      return;
+    }
+    setMetaName("robots", "noindex, nofollow");
+    const el = document.head.querySelector('meta[name="robots"]');
+    if (el) el.dataset.temporary = "true";
+    return () => {
+      const cur = document.head.querySelector('meta[name="robots"]');
+      if (cur?.dataset.temporary) cur.remove();
+    };
+  }, [noindex]);
 };
 
 export default usePageHead;

@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional
 import uuid
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 import jwt
 import httpx
 import smtplib
@@ -49,6 +50,10 @@ BUSINESS_PHONE = '469-443-6903'
 BUSINESS_PHONE_RAW = '4694436903'
 QUOTE_STATUSES = ('new', 'contacted', 'booked')
 APP_STATUSES = ('new', 'contacted')
+NOMINATION_STATUSES = ('new', 'reviewing', 'selected', 'not_selected')
+NOMINATIONS_OPEN_DAY = 1
+NOMINATIONS_CLOSE_DAY = 15
+DFW_TZ = ZoneInfo('America/Chicago')
 JWT_ALGO = 'HS256'
 
 app = FastAPI()
@@ -83,6 +88,26 @@ class LoginBody(BaseModel):
 
 class StatusBody(BaseModel):
     status: str
+
+
+class NominationBody(BaseModel):
+    nominator_name: str
+    nominator_phone: str
+    nominator_email: str
+    nominator_city: str = ""
+    nominee_name: str
+    nominee_city: str = ""
+    nominee_phone: str = ""
+    why: str
+    relationship: str = ""
+    permission_to_contact: bool = False
+    understands_selected: bool = False
+    wants_discount: bool = False
+    company: str = ""
+
+
+class SettingsBody(BaseModel):
+    nominations_live: bool
 
 
 # ---------------- Helpers ----------------
@@ -307,7 +332,11 @@ def _send_telegram(text: str):
 
 
 def _collection(kind: str):
-    return db.quotes if kind == "quote" else db.applications
+    if kind == "quote":
+        return db.quotes
+    if kind == "nomination":
+        return db.nominations
+    return db.applications
 
 
 def _email_payload(kind: str, doc: dict):
@@ -316,6 +345,21 @@ def _email_payload(kind: str, doc: dict):
             "Name": doc.get("name"), "Phone": doc.get("phone"), "email": doc.get("email"),
             "City": doc.get("city") or "\u2014", "Service": doc.get("service") or "\u2014",
             "Details": doc.get("details") or "\u2014",
+        }
+    if kind == "nomination":
+        return "New Bright Blessing Nomination \u2013 Bright at Home Cleaning", {
+            "Nominated by": doc.get("nominator_name"),
+            "Nominator phone": doc.get("nominator_phone"),
+            "email": doc.get("nominator_email"),
+            "Nominator city": doc.get("nominator_city") or "\u2014",
+            "Relationship": doc.get("relationship") or "\u2014",
+            "Nominee": doc.get("nominee_name"),
+            "Nominee city / ZIP": doc.get("nominee_city") or "\u2014",
+            "Nominee phone": doc.get("nominee_phone") or "not provided",
+            "Why this home": doc.get("why") or "\u2014",
+            "OK to contact nominee": "Yes" if doc.get("permission_to_contact") else "No",
+            "Wants $25 off (BRIGHT25)": "Yes" if doc.get("wants_discount") else "No",
+            "Confirmed it is a selected blessing": "Yes" if doc.get("understands_selected") else "No",
         }
     return "New Career Application \u2013 Bright at Home Cleaning", {
         "Name": doc.get("name"), "Phone": doc.get("phone"), "email": doc.get("email"),
@@ -337,6 +381,15 @@ def _telegram_payload(kind: str, doc: dict):
             lines.append(f"\U0001F9FD {doc['service']}")
         if doc.get("details"):
             lines.append(f"\n\u201C{doc['details'][:400]}\u201D")
+    elif kind == "nomination":
+        lines = [
+            "\U0001F54A\uFE0F <b>New Bright Blessing nomination</b>",
+            f"Nominee: <b>{doc.get('nominee_name', '')}</b> ({doc.get('nominee_city') or 'city not given'})",
+            f"From: {doc.get('nominator_name', '')} \u2014 {doc.get('relationship') or 'relationship not given'}",
+            f"\U0001F4DE {doc.get('nominator_phone', '')}",
+        ]
+        if doc.get("why"):
+            lines.append(f"\n\u201C{doc['why'][:400]}\u201D")
     else:
         lines = [
             "\U0001F464 <b>New job application</b>",
@@ -370,12 +423,15 @@ async def dispatch_lead(kind: str, doc_id: str):
     if not doc:
         return
     delivery = doc.get("delivery") or {}
-    first = (doc.get("name") or "there").split()[0]
+    first = (doc.get("name") or doc.get("nominator_name") or "there").split()[0]
+    reply_to = doc.get("email") or doc.get("nominator_email")
+    # Nominators are thanked manually by Operations (playbook §5), so no auto-confirmation.
+    client_kind = None if kind == "nomination" else kind
 
     if (delivery.get("email") or {}).get("status") != "sent":
         subject, fields = _email_payload(kind, doc)
         try:
-            await asyncio.to_thread(_forward_email, subject, fields, doc.get("email"), kind, first)
+            await asyncio.to_thread(_forward_email, subject, fields, reply_to, client_kind, first)
             await _record(kind, doc_id, "email", "sent")
         except Exception as e:
             logging.warning("Email delivery failed for %s %s: %s", kind, doc_id, e)
@@ -441,7 +497,7 @@ async def retry_failed_deliveries():
     lead-specific errors, and is ignored once the channel is healthy again."""
     email_ok = await asyncio.to_thread(_smtp_healthy)
     retried = 0
-    for kind in ("quote", "application"):
+    for kind in ("quote", "application", "nomination"):
         docs = await _collection(kind).find({
             "$or": [
                 {"delivery.email.status": {"$ne": "sent"}},
@@ -613,13 +669,98 @@ async def summary(_: bool = Depends(require_admin)):
     }
 
 
+def nomination_cycle(now: datetime = None):
+    """Nominations run the 1st through the 15th, DFW time (playbook §4)."""
+    local = (now or _now()).astimezone(DFW_TZ)
+    closes = local.replace(day=NOMINATIONS_CLOSE_DAY, hour=23, minute=59, second=59, microsecond=0)
+    is_open = local.day <= NOMINATIONS_CLOSE_DAY
+    next_open = (closes.replace(day=1) + timedelta(days=32)).replace(day=1)
+    return {
+        "is_open": is_open,
+        "cycle": local.strftime("%Y-%m"),
+        "month_label": local.strftime("%B"),
+        "closes_label": closes.strftime("%B %-d"),
+        "next_open_label": next_open.strftime("%B %-d"),
+    }
+
+
+@api_router.get("/site-settings")
+async def site_settings():
+    """Public: whether the Bright Blessing page is published, plus the current cycle."""
+    doc = await db.settings.find_one({"id": "site"}) or {}
+    return {
+        "nominations_live": bool(doc.get("nominations_live", False)),
+        "nominations": nomination_cycle(),
+    }
+
+
+@api_router.post("/nominations")
+async def create_nomination(body: NominationBody):
+    if body.company:
+        return {"success": True}
+    if not body.understands_selected:
+        raise HTTPException(status_code=400, detail="Please confirm this is a selected blessing.")
+    cycle = nomination_cycle()
+    doc = {
+        "id": str(uuid.uuid4()), "type": "nomination",
+        "nominator_name": body.nominator_name, "nominator_phone": body.nominator_phone,
+        "nominator_email": body.nominator_email, "nominator_city": body.nominator_city,
+        "nominee_name": body.nominee_name, "nominee_city": body.nominee_city,
+        "nominee_phone": body.nominee_phone, "why": body.why,
+        "relationship": body.relationship,
+        "permission_to_contact": body.permission_to_contact,
+        "understands_selected": body.understands_selected,
+        "wants_discount": body.wants_discount,
+        "cycle": cycle["cycle"],
+        "status": "new",
+        "created_at": _now().isoformat(),
+    }
+    await db.nominations.insert_one(dict(doc))
+    asyncio.create_task(dispatch_lead("nomination", doc["id"]))
+    return {"success": True, "id": doc["id"]}
+
+
+@api_router.get("/admin/nominations")
+async def list_nominations(_: bool = Depends(require_admin)):
+    items = await db.nominations.find().sort("created_at", -1).to_list(1000)
+    return [_clean(i) for i in items]
+
+
+@api_router.patch("/admin/nominations/{item_id}/status")
+async def set_nomination_status(item_id: str, body: StatusBody, _: bool = Depends(require_admin)):
+    if body.status not in NOMINATION_STATUSES:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    res = await db.nominations.update_one({"id": item_id}, {"$set": {"status": body.status}})
+    if not res.matched_count:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"success": True, "status": body.status}
+
+
+@api_router.delete("/admin/nominations/{item_id}")
+async def delete_nomination(item_id: str, _: bool = Depends(require_admin)):
+    res = await db.nominations.delete_one({"id": item_id})
+    if not res.deleted_count:
+        raise HTTPException(status_code=404, detail="Not found")
+    return {"success": True}
+
+
+@api_router.patch("/admin/site-settings")
+async def update_site_settings(body: SettingsBody, _: bool = Depends(require_admin)):
+    await db.settings.update_one(
+        {"id": "site"},
+        {"$set": {"nominations_live": body.nominations_live, "updated_at": _now().isoformat()}},
+        upsert=True,
+    )
+    return {"success": True, "nominations_live": body.nominations_live}
+
+
 @api_router.get("/admin/delivery-health")
 async def delivery_health(_: bool = Depends(require_admin)):
     """Tells the dashboard whether alerts can actually go out right now."""
     email_configured = bool(SMTP_USER and SMTP_APP_PASSWORD)
     smtp_login_ok, smtp_error = await asyncio.to_thread(_smtp_probe)
     undelivered = 0
-    for kind in ("quote", "application"):
+    for kind in ("quote", "application", "nomination"):
         undelivered += await _collection(kind).count_documents(
             {"delivery.email.status": {"$nin": ["sent", None]}}
         )

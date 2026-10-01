@@ -1,6 +1,7 @@
 import React from "react";
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-react";
 import { BRAND, NAV_LINKS } from "../mock";
+import { useSiteSettings } from "../hooks/useSiteSettings";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "./ui/dialog";
@@ -72,6 +73,7 @@ const TermsDialog = ({ children }) => (
 );
 
 const Footer = () => {
+  const settings = useSiteSettings();
   return (
     <footer className="bg-brand-ink text-brand-cream">
       <div className="max-w-7xl mx-auto px-5 md:px-8 py-14">
@@ -107,6 +109,13 @@ const Footer = () => {
                   Careers
                 </a>
               </li>
+              {settings?.nominations_live && (
+                <li>
+                  <a href="/bright-blessing" data-testid="footer-blessing" className="text-brand-cream/70 hover:text-brand-amberLight transition-colors text-sm">
+                    Bright Blessing of the Month
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
 

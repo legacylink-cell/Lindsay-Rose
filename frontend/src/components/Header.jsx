@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { BRAND, NAV_LINKS } from "../mock";
+import { useSiteSettings } from "../hooks/useSiteSettings";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const settings = useSiteSettings();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -50,6 +52,15 @@ const Header = () => {
           >
             Careers
           </a>
+          {settings?.nominations_live && (
+            <a
+              href="/bright-blessing"
+              data-testid="nav-blessing"
+              className="text-sm font-medium text-brand-ink/75 hover:text-brand-green transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-brand-amber after:transition-all hover:after:w-full"
+            >
+              Bright Blessing
+            </a>
+          )}
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
@@ -80,6 +91,11 @@ const Header = () => {
             <a href="/careers" className="text-left py-3 text-brand-ink/80 font-medium border-b border-border/60">
               Careers
             </a>
+            {settings?.nominations_live && (
+              <a href="/bright-blessing" className="text-left py-3 text-brand-ink/80 font-medium border-b border-border/60" data-testid="nav-blessing-mobile">
+                Bright Blessing
+              </a>
+            )}
             <a href={BRAND.phoneHref} className="flex items-center gap-2 py-3 text-brand-green font-semibold">
               <Phone className="w-4 h-4" /> {BRAND.phone}
             </a>

@@ -1,15 +1,48 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Lock, LogOut, Inbox, Briefcase, RefreshCw, AlarmClock, CalendarClock, Trash2, Check, CalendarCheck, RotateCcw, MailWarning, Send, AlertTriangle, ShieldCheck } from "lucide-react";
+import { Lock, LogOut, Inbox, Briefcase, RefreshCw, AlarmClock, CalendarClock, Trash2, Check, CalendarCheck, RotateCcw, MailWarning, Send, AlertTriangle, ShieldCheck, HeartHandshake, Eye, EyeOff, X } from "lucide-react";
 import { toast } from "sonner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const TOKEN_KEY = "bah_admin_token";
 const OVERDUE_HRS = 24;
 
+const TAB_META = {
+  quotes: { path: "quotes", kind: "quote", label: "quote requests" },
+  apps: { path: "applications", kind: "application", label: "applications" },
+  noms: { path: "nominations", kind: "nomination", label: "nominations" },
+};
+
 const STATUS_STYLES = {
   new: "bg-amber-50 text-amber-800 ring-1 ring-amber-200",
   contacted: "bg-blue-50 text-blue-800 ring-1 ring-blue-200",
   booked: "bg-brand-sage text-brand-green ring-1 ring-brand-green/20",
+  reviewing: "bg-blue-50 text-blue-800 ring-1 ring-blue-200",
+  selected: "bg-brand-sage text-brand-green ring-1 ring-brand-green/20",
+  not_selected: "bg-neutral-100 text-neutral-600 ring-1 ring-neutral-200",
+};
+
+// Nominations carry a different shape to quotes/applications.
+const normalize = (item, tab) => {
+  if (tab !== "noms") {
+    return {
+      name: item.name, phone: item.phone, email: item.email,
+      chips: [item.service, item.city, item.position].filter(Boolean),
+      body: item.details || item.message,
+    };
+  }
+  return {
+    name: item.nominator_name,
+    phone: item.nominator_phone,
+    email: item.nominator_email,
+    chips: [
+      item.nominee_name ? `For: ${item.nominee_name}` : null,
+      item.nominee_city,
+      item.relationship,
+      item.wants_discount ? "Wants BRIGHT25" : null,
+      item.permission_to_contact ? "OK to contact" : "No contact permission",
+    ].filter(Boolean),
+    body: item.why,
+  };
 };
 
 const Admin = () => {
@@ -18,13 +51,16 @@ const Admin = () => {
   const [tab, setTab] = useState("quotes");
   const [quotes, setQuotes] = useState([]);
   const [apps, setApps] = useState([]);
+  const [noms, setNoms] = useState([]);
+  const [settings, setSettings] = useState(null);
   const [health, setHealth] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const setterFor = (t) => (t === "quotes" ? setQuotes : t === "apps" ? setApps : setNoms);
+
   const resend = async (item) => {
-    const kind = tab === "quotes" ? "quote" : "application";
     try {
-      const res = await fetch(`${API}/admin/${kind}s/${item.id}/resend`, {
+      const res = await fetch(`${API}/admin/${TAB_META[tab].kind}s/${item.id}/resend`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -35,6 +71,24 @@ const Admin = () => {
       load();
     } catch {
       toast.error("Could not resend.");
+    }
+  };
+
+  const togglePublish = async () => {
+    const next = !settings?.nominations_live;
+    if (next && !window.confirm("Publish the Bright Blessing page? It will be linked in the header, footer and homepage, and visible to search engines.")) return;
+    setSettings((s) => ({ ...s, nominations_live: next }));
+    try {
+      const res = await fetch(`${API}/admin/site-settings`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ nominations_live: next }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success(next ? "Bright Blessing page is now live on the site." : "Bright Blessing page is hidden again.");
+    } catch {
+      setSettings((s) => ({ ...s, nominations_live: !next }));
+      toast.error("Could not change that. Please try again.");
     }
   };
 
@@ -66,15 +120,19 @@ const Admin = () => {
     setLoading(true);
     try {
       const opts = { headers: { Authorization: `Bearer ${token}` } };
-      const [q, a, h] = await Promise.all([
+      const [q, a, n, h, s] = await Promise.all([
         fetch(`${API}/admin/quotes`, opts),
         fetch(`${API}/admin/applications`, opts),
+        fetch(`${API}/admin/nominations`, opts),
         fetch(`${API}/admin/delivery-health`, opts),
+        fetch(`${API}/site-settings`),
       ]);
       if (q.status === 401 || a.status === 401) { logout(); toast.error("Session expired, please log in."); return; }
       setQuotes(await q.json());
       setApps(await a.json());
+      if (n.ok) setNoms(await n.json());
       if (h.ok) setHealth(await h.json());
+      if (s.ok) setSettings(await s.json());
     } catch {
       toast.error("Could not load submissions.");
     } finally {
@@ -101,17 +159,16 @@ const Admin = () => {
   const fmt = (iso) => { try { return new Date(iso).toLocaleString(); } catch { return iso; } };
 
   const setStatus = async (item, status) => {
-    const path = tab === "quotes" ? "quotes" : "applications";
-    const setter = tab === "quotes" ? setQuotes : setApps;
+    const setter = setterFor(tab);
     setter((p) => p.map((x) => (x.id === item.id ? { ...x, status } : x)));
     try {
-      const res = await fetch(`${API}/admin/${path}/${item.id}/status`, {
+      const res = await fetch(`${API}/admin/${TAB_META[tab].path}/${item.id}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ status }),
       });
       if (!res.ok) throw new Error();
-      toast.success(status === "new" ? "Moved back to New." : `Marked ${status}.`);
+      toast.success(status === "new" ? "Moved back to New." : `Marked ${status.replace("_", " ")}.`);
     } catch {
       setter((p) => p.map((x) => (x.id === item.id ? { ...x, status: item.status || "new" } : x)));
       toast.error("Could not update. Please try again.");
@@ -119,16 +176,15 @@ const Admin = () => {
   };
 
   const remove = async (item) => {
-    if (!window.confirm(`Delete this ${tab === "quotes" ? "quote request" : "application"} from ${item.name}? This can't be undone.`)) return;
+    const who = item.name || item.nominator_name;
+    if (!window.confirm(`Delete this submission from ${who}? This can't be undone.`)) return;
     try {
-      const path = tab === "quotes" ? "quotes" : "applications";
-      const res = await fetch(`${API}/admin/${path}/${item.id}`, {
+      const res = await fetch(`${API}/admin/${TAB_META[tab].path}/${item.id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error();
-      if (tab === "quotes") setQuotes((p) => p.filter((x) => x.id !== item.id));
-      else setApps((p) => p.filter((x) => x.id !== item.id));
+      setterFor(tab)((p) => p.filter((x) => x.id !== item.id));
       toast.success("Deleted.");
     } catch {
       toast.error("Could not delete. Please try again.");
@@ -156,7 +212,7 @@ const Admin = () => {
     );
   }
 
-  const list = tab === "quotes" ? quotes : apps;
+  const list = tab === "quotes" ? quotes : tab === "apps" ? apps : noms;
 
   return (
     <div className="min-h-screen bg-brand-cream">
@@ -247,10 +303,45 @@ const Admin = () => {
         <div className="inline-flex bg-white rounded-full p-1 shadow-soft ring-1 ring-black/5 mb-6">
           <button onClick={() => setTab("quotes")} className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-600 transition-all ${tab === "quotes" ? "bg-brand-green text-brand-cream" : "text-brand-ink/60"}`}><Inbox className="w-4 h-4" /> Quote Requests ({quotes.length})</button>
           <button onClick={() => setTab("apps")} className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-600 transition-all ${tab === "apps" ? "bg-brand-green text-brand-cream" : "text-brand-ink/60"}`}><Briefcase className="w-4 h-4" /> Applications ({apps.length})</button>
+          <button onClick={() => setTab("noms")} data-testid="tab-nominations" className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-600 transition-all ${tab === "noms" ? "bg-brand-green text-brand-cream" : "text-brand-ink/60"}`}><HeartHandshake className="w-4 h-4" /> Nominations ({noms.length})</button>
         </div>
 
+        {tab === "noms" && settings && (
+          <div data-testid="blessing-publish-panel" className="mb-6 bg-white rounded-2xl p-5 shadow-soft ring-1 ring-black/5 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="font-600 text-brand-ink flex items-center gap-2">
+                <HeartHandshake className="w-4 h-4 text-brand-green" /> Bright Blessing page
+              </p>
+              <p className="mt-1 text-sm text-brand-ink/65">
+                {settings.nominations_live
+                  ? "Live on the site — linked in the header, footer and homepage."
+                  : "Hidden — reachable only by direct link, and kept out of Google."}
+                {" "}
+                <a href="/bright-blessing" target="_blank" rel="noreferrer" className="text-brand-green font-600 underline-offset-2 hover:underline" data-testid="blessing-preview-link">
+                  Preview the page
+                </a>
+              </p>
+              {settings.nominations && (
+                <p className="mt-1 text-xs text-brand-ink/55">
+                  {settings.nominations.is_open
+                    ? `This month's nominations are open and close ${settings.nominations.closes_label}.`
+                    : `Nominations are closed for ${settings.nominations.month_label}; the next round opens ${settings.nominations.next_open_label}.`}
+                </p>
+              )}
+            </div>
+            <button
+              onClick={togglePublish}
+              data-testid="blessing-publish-toggle"
+              aria-pressed={!!settings.nominations_live}
+              className={`inline-flex items-center gap-2 text-sm font-600 px-5 py-2.5 rounded-full transition-colors ${settings.nominations_live ? "bg-brand-sage text-brand-green hover:bg-red-50 hover:text-red-700" : "bg-brand-green text-brand-cream hover:bg-brand-greenDark"}`}
+            >
+              {settings.nominations_live ? <><EyeOff className="w-4 h-4" /> Hide from site</> : <><Eye className="w-4 h-4" /> Publish to site</>}
+            </button>
+          </div>
+        )}
+
         {list.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center text-brand-ink/60 shadow-soft ring-1 ring-black/5">No {tab === "quotes" ? "quote requests" : "applications"} yet.</div>
+          <div className="bg-white rounded-2xl p-12 text-center text-brand-ink/60 shadow-soft ring-1 ring-black/5">No {TAB_META[tab].label} yet.</div>
         ) : (
           <div className="space-y-3">
             {list.map((item) => {
@@ -259,15 +350,16 @@ const Admin = () => {
               const overdue = tab === "quotes" && status === "new" && hrs >= OVERDUE_HRS;
               const emailStatus = item.delivery?.email?.status;
               const emailFailed = emailStatus && emailStatus !== "sent";
+              const v = normalize(item, tab);
               return (
               <div key={item.id} data-testid={`submission-card-${item.id}`} className={`bg-white rounded-2xl p-5 shadow-soft ring-1 ${overdue ? "ring-2 ring-amber-300" : "ring-black/5"}`}>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="font-600 text-brand-ink">{item.name}</span>
-                    <a href={`tel:${item.phone}`} className="text-sm text-brand-green">{item.phone}</a>
-                    <a href={`mailto:${item.email}`} className="text-sm text-brand-ink/60">{item.email}</a>
+                    <span className="font-600 text-brand-ink">{v.name}</span>
+                    <a href={`tel:${v.phone}`} className="text-sm text-brand-green">{v.phone}</a>
+                    <a href={`mailto:${v.email}`} className="text-sm text-brand-ink/60">{v.email}</a>
                     <span data-testid={`status-badge-${item.id}`} className={`text-[11px] font-600 uppercase tracking-wide px-2.5 py-1 rounded-full ${STATUS_STYLES[status]}`}>
-                      {status}
+                      {status.replace("_", " ")}
                     </span>
                     {overdue && (
                       <span data-testid={`overdue-flag-${item.id}`} className="inline-flex items-center gap-1 text-[11px] font-600 text-amber-700">
@@ -288,21 +380,46 @@ const Admin = () => {
                   </div>
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2 text-xs">
-                  {item.service && <span className="bg-brand-sage text-brand-green px-2.5 py-1 rounded-full">{item.service}</span>}
-                  {item.city && <span className="bg-brand-sage text-brand-green px-2.5 py-1 rounded-full">{item.city}</span>}
-                  {item.position && <span className="bg-brand-sage text-brand-green px-2.5 py-1 rounded-full">{item.position}</span>}
+                  {v.chips.map((c) => (
+                    <span key={c} className="bg-brand-sage text-brand-green px-2.5 py-1 rounded-full">{c}</span>
+                  ))}
                 </div>
-                {(item.details || item.message) && <p className="mt-3 text-sm text-brand-ink/75">{item.details || item.message}</p>}
+                {tab === "noms" && item.nominee_phone && (
+                  <p className="mt-2 text-xs text-brand-ink/60">Nominee phone: <a href={`tel:${item.nominee_phone}`} className="text-brand-green">{item.nominee_phone}</a></p>
+                )}
+                {v.body && <p className="mt-3 text-sm text-brand-ink/75 whitespace-pre-line">{v.body}</p>}
                 <div className="mt-4 pt-3 border-t border-border flex flex-wrap gap-2">
-                  {status !== "contacted" && (
-                    <button onClick={() => setStatus(item, "contacted")} data-testid={`mark-contacted-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full bg-brand-green text-brand-cream hover:bg-brand-greenDark transition-colors">
-                      <Check className="w-3.5 h-3.5" /> Mark contacted
-                    </button>
-                  )}
-                  {tab === "quotes" && status !== "booked" && (
-                    <button onClick={() => setStatus(item, "booked")} data-testid={`mark-booked-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full bg-brand-sage text-brand-green hover:bg-brand-green hover:text-brand-cream transition-colors">
-                      <CalendarCheck className="w-3.5 h-3.5" /> Mark booked
-                    </button>
+                  {tab === "noms" ? (
+                    <>
+                      {status !== "reviewing" && (
+                        <button onClick={() => setStatus(item, "reviewing")} data-testid={`mark-reviewing-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full bg-brand-green text-brand-cream hover:bg-brand-greenDark transition-colors">
+                          <Check className="w-3.5 h-3.5" /> Mark reviewing
+                        </button>
+                      )}
+                      {status !== "selected" && (
+                        <button onClick={() => setStatus(item, "selected")} data-testid={`mark-selected-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full bg-brand-sage text-brand-green hover:bg-brand-green hover:text-brand-cream transition-colors">
+                          <HeartHandshake className="w-3.5 h-3.5" /> Select this home
+                        </button>
+                      )}
+                      {status !== "not_selected" && (
+                        <button onClick={() => setStatus(item, "not_selected")} data-testid={`mark-not-selected-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full text-brand-ink/60 hover:text-brand-ink transition-colors">
+                          <X className="w-3.5 h-3.5" /> Not this month
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {status !== "contacted" && (
+                        <button onClick={() => setStatus(item, "contacted")} data-testid={`mark-contacted-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full bg-brand-green text-brand-cream hover:bg-brand-greenDark transition-colors">
+                          <Check className="w-3.5 h-3.5" /> Mark contacted
+                        </button>
+                      )}
+                      {tab === "quotes" && status !== "booked" && (
+                        <button onClick={() => setStatus(item, "booked")} data-testid={`mark-booked-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full bg-brand-sage text-brand-green hover:bg-brand-green hover:text-brand-cream transition-colors">
+                          <CalendarCheck className="w-3.5 h-3.5" /> Mark booked
+                        </button>
+                      )}
+                    </>
                   )}
                   {status !== "new" && (
                     <button onClick={() => setStatus(item, "new")} data-testid={`mark-new-${item.id}`} className="inline-flex items-center gap-1.5 text-xs font-600 px-3 py-2 rounded-full text-brand-ink/60 hover:text-brand-ink transition-colors">
