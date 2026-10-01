@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Send, Phone, Mail, Clock, MapPin, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { BRAND } from "../mock";
+import { FieldSelect } from "./FieldSelect";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -124,9 +125,13 @@ const QuoteForm = () => {
                 </div>
                 <div>
                   <label htmlFor="qf-service" className="block text-sm font-medium text-brand-ink mb-1.5">Service needed</label>
-                  <select id="qf-service" name="service" className={inputCls} value={form.service} onChange={update("service")}>
-                    {SERVICE_TYPES.map((s) => <option key={s} value={s}>{s}</option>)}
-                  </select>
+                  <FieldSelect
+                    id="qf-service"
+                    testId="qf-service"
+                    value={form.service}
+                    onChange={(v) => setForm({ ...form, service: v })}
+                    options={SERVICE_TYPES}
+                  />
                 </div>
                 <div>
                   <label htmlFor="qf-details" className="block text-sm font-medium text-brand-ink mb-1.5">Tell us about your space</label>

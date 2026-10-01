@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { BRAND } from "../mock";
 import { usePageHead } from "../hooks/usePageHead";
 import Footer from "./Footer";
+import { FieldSelect } from "./FieldSelect";
 
 const CAREERS_TITLE = "Cleaning Jobs in DFW | Now Hiring House Cleaners | Bright at Home Cleaning";
 const CAREERS_DESCRIPTION =
@@ -271,9 +272,13 @@ const Careers = () => {
                   </div>
                   <div>
                     <label htmlFor="c-position" className="block text-sm font-medium text-brand-ink mb-1.5">Position of interest</label>
-                    <select id="c-position" name="position" className={inputCls} value={form.position} onChange={update("position")}>
-                      {POSITIONS.map((p) => <option key={p.title} value={p.title}>{p.title}</option>)}
-                    </select>
+                    <FieldSelect
+                      id="c-position"
+                      testId="c-position"
+                      value={form.position}
+                      onChange={(v) => setForm({ ...form, position: v })}
+                      options={POSITIONS.map((p) => p.title)}
+                    />
                   </div>
                   <div>
                     <label htmlFor="c-message" className="block text-sm font-medium text-brand-ink mb-1.5">Tell us about yourself</label>

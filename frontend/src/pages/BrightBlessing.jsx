@@ -4,6 +4,7 @@ import { ArrowLeft, Phone, HeartHandshake, Gift, Home, CheckCircle2, Send, Shiel
 import { BRAND } from "../mock";
 import { usePageHead } from "../hooks/usePageHead";
 import Footer from "../components/Footer";
+import { FieldSelect } from "../components/FieldSelect";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -224,9 +225,13 @@ const BrightBlessing = () => {
                 </div>
                 <div>
                   <label htmlFor="bb-rel" className={labelCls}>Your relationship to them</label>
-                  <select id="bb-rel" data-testid="bb-relationship" className={inputCls} value={form.relationship} onChange={update("relationship")}>
-                    {RELATIONSHIPS.map((r) => <option key={r} value={r}>{r}</option>)}
-                  </select>
+                  <FieldSelect
+                    id="bb-rel"
+                    testId="bb-relationship"
+                    value={form.relationship}
+                    onChange={(v) => setForm({ ...form, relationship: v })}
+                    options={RELATIONSHIPS}
+                  />
                 </div>
               </fieldset>
 

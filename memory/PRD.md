@@ -152,3 +152,8 @@ Source: client playbook PDF (`Bright-Blessing-of-the-Month-Team-Playbook`). Agen
 
 ## Integrations
 - MongoDB (Motor), FastAPI, Google Workspace SMTP (email delivery), Admin JWT (ADMIN_USERNAME/PASSWORD, JWT_SECRET in backend/.env — do not echo), Google review link, Facebook link, Unsplash imagery, Google Fonts.
+
+## 2026-06 Dropdown black flash (real fix)
+- Cause: CSS color-scheme/select styling cannot control the OS-drawn native select popup on Android/iOS, so the dark system picker still flashed black before repainting.
+- Fix: replaced all 3 native <select> elements (bright-blessing relationship, quote service, careers position) with in-page Radix dropdown via frontend/src/components/FieldSelect.jsx. No native widget is involved anymore.
+- Verified in dark-mode emulation: popup background rgb(255,255,255) on all three, selection updates state, build + prerender pass.
