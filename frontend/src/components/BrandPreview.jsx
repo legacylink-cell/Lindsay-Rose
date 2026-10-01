@@ -9,7 +9,7 @@ const LOGOS = [
     file: "/logos/logo-a-house-horizontal-t.png",
     h: "h-11 md:h-12",
     name: "House “B” Horizontal",
-    desc: "The primary lockup from your brand sheet — house-B mark with the green wordmark and gold “Cleaning” rule marks. Clean, balanced, instantly readable.",
+    desc: "The primary lockup from your brand sheet, the house-B mark with the green wordmark and gold “Cleaning” rule marks. Clean, balanced, instantly readable.",
     recommended: true,
   },
   {
@@ -17,14 +17,14 @@ const LOGOS = [
     file: "/logos/logo-b-rooftop-emblem-t.png",
     h: "h-14 md:h-16",
     name: "Rooftop Emblem",
-    desc: "Upscale twin-roof crest with a green swoosh and classic serif wordmark. Premium and distinctive — great as a statement mark.",
+    desc: "Upscale twin-roof crest with a green swoosh and classic serif wordmark. Premium and distinctive, great as a statement mark.",
   },
   {
     id: "C",
     file: "/logos/logo-c-script-t.png",
     h: "h-11 md:h-12",
     name: "Script Signature",
-    desc: "Gold handwritten “Bright” paired with a bold serif. Warm, personal and boutique — feels hand-crafted.",
+    desc: "Gold handwritten “Bright” paired with a bold serif. Warm, personal and boutique, it feels hand-crafted.",
   },
   {
     id: "D",
@@ -37,7 +37,7 @@ const LOGOS = [
 
 const HeaderMock = ({ logo }) => (
   <div className="rounded-2xl overflow-hidden ring-1 ring-black/10 shadow-lift">
-    {/* Mock site header — real cream theme, unchanged */}
+    {/* Mock site header: real cream theme, unchanged */}
     <div className="flex items-center justify-between px-5 md:px-8 py-4 bg-brand-cream border-b border-black/5">
       <img src={logo.file} alt={logo.name} className={`${logo.h} w-auto object-contain`} />
       <nav className="hidden lg:flex items-center gap-6">
@@ -76,9 +76,9 @@ const BrandPreview = () => {
       <header className="border-b border-black/10 bg-white/70 backdrop-blur">
         <div className="max-w-5xl mx-auto px-5 md:px-8 py-6">
           <p className="text-xs uppercase tracking-[0.24em] text-brand-green/70 font-semibold">Bright at Home Cleaning</p>
-          <h1 className="mt-2 font-serif text-3xl md:text-4xl font-700 text-brand-green">Logo Options — On Your Live Header</h1>
+          <h1 className="mt-2 font-serif text-3xl md:text-4xl font-700 text-brand-green">Logo Options On Your Live Header</h1>
           <p className="mt-3 text-brand-ink/70 max-w-2xl">
-            Same cream header we already use — the header color isn’t changing. I’ve removed each logo’s dark background so it sits cleanly on the real theme. Tell me which letter you want (e.g. “Let’s go with Logo A”) and I’ll set it live everywhere and build a matching favicon + share image.
+            Same cream header we already use, and the header color isn’t changing. I’ve removed each logo’s dark background so it sits cleanly on the real theme. Tell me which letter you want (e.g. “Let’s go with Logo A”) and I’ll set it live everywhere and build a matching favicon + share image.
           </p>
         </div>
       </header>

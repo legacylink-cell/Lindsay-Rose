@@ -5,6 +5,13 @@ import pytest
 import requests
 from pathlib import Path
 
+
+def _visitor_headers():
+    """Each test submission looks like a different visitor. Behind a proxy the backend
+    trusts X-Forwarded-For, so without this the whole suite shares one rate-limit bucket."""
+    import random
+    return {"X-Forwarded-For": f"198.18.%d.%d" % (random.randint(1, 250), random.randint(1, 250))}
+
 # Load frontend .env to get REACT_APP_BACKEND_URL
 FRONTEND_ENV = Path(__file__).resolve().parents[2] / "frontend" / ".env"
 BASE_URL = None
@@ -60,7 +67,7 @@ def test_create_quote_and_persist(s, admin_token):
         "service": "Deep cleaning",
         "details": "Automated QA test submission",
     }
-    r = s.post(f"{API}/quotes", json=payload, timeout=15)
+    r = s.post(f"{API}/quotes", json=payload, timeout=15, headers=_visitor_headers())
     assert r.status_code == 200, r.text
     data = r.json()
     assert data.get("success") is True
@@ -81,7 +88,7 @@ def test_quote_honeypot(s):
     r = s.post(f"{API}/quotes", json={
         "name": "Bot", "email": "bot@x.com", "phone": "1",
         "company": "spam",
-    }, timeout=10)
+    }, timeout=10, headers=_visitor_headers())
     assert r.status_code == 200
     assert "id" not in r.json()
 
@@ -95,7 +102,7 @@ def test_create_application_and_persist(s, admin_token):
         "position": "Team Lead & Trainer",
         "message": "Automated QA test application",
     }
-    r = s.post(f"{API}/applications", json=payload, timeout=15)
+    r = s.post(f"{API}/applications", json=payload, timeout=15, headers=_visitor_headers())
     assert r.status_code == 200, r.text
     data = r.json()
     assert data.get("success") is True
@@ -132,7 +139,7 @@ def test_delete_quote_flow(s, admin_token):
     # create
     r = s.post(f"{API}/quotes", json={
         "name": "QA Delete Me", "email": "qa+del@example.com", "phone": "555-0000",
-    }, timeout=15)
+    }, timeout=15, headers=_visitor_headers())
     assert r.status_code == 200
     qid = r.json()["id"]
 
@@ -164,7 +171,7 @@ def test_formsubmit_forward_logged(s):
         "service": "One-time cleaning",
         "details": "log verification",
     }
-    r = s.post(f"{API}/quotes", json=payload, timeout=15)
+    r = s.post(f"{API}/quotes", json=payload, timeout=15, headers=_visitor_headers())
     assert r.status_code == 200
     # Give background thread time to POST to formsubmit
     time.sleep(6)

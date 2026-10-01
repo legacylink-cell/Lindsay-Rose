@@ -7,16 +7,16 @@ import Footer from "../components/Footer";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
-const TITLE = "Bright Blessing of the Month | Nominate a DFW Home \u2014 Bright at Home Cleaning";
+const TITLE = "Bright Blessing of the Month | Nominate a DFW Home | Bright at Home Cleaning";
 const DESCRIPTION =
-  "Each month Bright at Home Cleaning gifts one complimentary home cleaning to a DFW neighbor walking through a hard season. Nominate a neighbor, a friend, or yourself \u2014 nominators receive $25 off their first cleaning.";
+  "Each month Bright at Home Cleaning gifts one complimentary home cleaning to a DFW neighbor walking through a hard season. Nominate a neighbor, a friend, or yourself. Nominators receive $25 off their first cleaning.";
 
 const RELATIONSHIPS = ["Neighbor", "Family", "Church", "Myself", "Other"];
 
 const STEPS = [
-  { icon: HeartHandshake, title: "Nominate someone", body: "Tell us about a neighbor, friend, family member, church member \u2014 or yourself. The story stays private with our team." },
+  { icon: HeartHandshake, title: "Nominate someone", body: "Tell us about a neighbor, friend, family member, church member, or yourself. The story stays private with our team." },
   { icon: Home, title: "We prayerfully select one home", body: "Our owners and Operations Director choose one DFW home each month and confirm the family wants it. This is a blessing, not a random drawing." },
-  { icon: Gift, title: "We clean it at no cost", body: "A standard clean \u2014 living areas, kitchen, baths and floors \u2014 gifted free to a home that needs a little extra brightness." },
+  { icon: Gift, title: "We clean it at no cost", body: "A standard clean of living areas, kitchen, baths and floors, gifted free to a home that needs a little extra brightness." },
 ];
 
 const BrightBlessing = () => {
@@ -103,7 +103,7 @@ const BrightBlessing = () => {
       {live === false && (
         <div data-testid="blessing-preview-notice" className="bg-brand-amber/15 border-b border-brand-amber/30">
           <p className="max-w-5xl mx-auto px-5 md:px-8 py-2.5 text-xs text-brand-ink/75">
-            Private preview — this page isn't linked anywhere on the site or visible to search engines yet.
+            Private preview: this page isn't linked anywhere on the site or visible to search engines yet.
           </p>
         </div>
       )}
@@ -117,7 +117,7 @@ const BrightBlessing = () => {
           <p className="mt-5 font-serif text-lg md:text-xl italic text-brand-amberLight">One home made bright.</p>
           <p className="mt-6 max-w-2xl text-brand-cream/80 leading-relaxed">
             Every month, Bright at Home Cleaning gifts one complimentary home cleaning to a DFW neighbor
-            walking through a hard season — illness, grief, caregiving, a new baby, job loss, recovery
+            walking through a hard season such as illness, grief, caregiving, a new baby, job loss, recovery
             after surgery. Know someone who could use a clean home and a deep breath? Nominate them.
             You can even nominate yourself.
           </p>
@@ -196,7 +196,7 @@ const BrightBlessing = () => {
               <div>
                 <h2 className="font-serif text-3xl font-700 text-brand-ink">Nominate a home</h2>
                 <p className="mt-2 text-sm text-brand-ink/65">
-                  Private form — their story stays with our team and is never posted publicly.
+                  Private form. Their story stays with our team and is never posted publicly.
                 </p>
               </div>
 
@@ -295,7 +295,7 @@ const BrightBlessing = () => {
               Real homes. Real neighbors.
             </h2>
             <p className="mt-3 max-w-2xl text-sm text-brand-ink/70">
-              We share only a first name and city — never the story — unless a family asks us to.
+              We share only a first name and city, never the story, unless a family asks us to.
             </p>
             <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {blessings.map((b) => (

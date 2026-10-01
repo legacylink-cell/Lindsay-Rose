@@ -3,8 +3,8 @@ import { Heart, Users, SearchCheck, Cross } from "lucide-react";
 import { IMAGES, BRAND } from "../mock";
 
 const VALUES = [
-  { icon: Cross, title: "Faith-driven", desc: "Guided by our Christian faith — we serve every home with honesty, humility, and care." },
-  { icon: Heart, title: "Genuine care", desc: "We clean like it's our own home — because to us, trust is everything." },
+  { icon: Cross, title: "Faith-driven", desc: "Guided by our Christian faith, we serve every home with honesty, humility, and care." },
+  { icon: Heart, title: "Genuine care", desc: "We clean like it's our own home, because to us, trust is everything." },
   { icon: Users, title: "The same faces", desc: "Consistent, vetted crews who get to know you and your space." },
   { icon: SearchCheck, title: "Detail obsessed", desc: "The corners others skip are the ones we notice first." },
 ];
@@ -19,7 +19,7 @@ const About = () => {
           </div>
           <div className="absolute -bottom-6 -right-4 md:-right-8 bg-brand-green text-brand-cream rounded-2xl p-5 shadow-lift max-w-[220px]">
             <p className="font-serif text-lg leading-snug">“We brighten your home and free up your time.”</p>
-            <p className="text-xs text-brand-cream/70 mt-2">— Our promise since day one</p>
+            <p className="text-xs text-brand-cream/70 mt-2">Our promise since day one</p>
           </div>
         </div>
 
@@ -30,10 +30,10 @@ const About = () => {
           </h2>
           <p className="reveal mt-3 font-serif text-2xl italic text-brand-green">{BRAND.tagline}</p>
           <p className="reveal mt-5 text-brand-ink/70 text-lg leading-relaxed">
-            What started as a family cleaning homes in Collin County has grown into a trusted name across the Dallas–Fort Worth metroplex — for homes and businesses alike. We never lost the thing that made us special: real people who show up, care deeply, and do the job right every single time.
+            What started as a family cleaning homes in Collin County has grown into a trusted name across the Dallas–Fort Worth metroplex, for homes and businesses alike. We never lost the thing that made us special: real people who show up, care deeply, and do the job right every single time.
           </p>
           <p className="reveal mt-4 text-brand-ink/70 leading-relaxed">
-            Above all, we're a <span className="font-600 text-brand-ink">faith-driven</span> team. Our Christian values — honesty, humility, and genuine care — guide the way we treat your home and everyone on it. No call centers. No cutting corners. Just a dependable crew, eco-friendly products, and a 100% satisfaction guarantee behind every visit.
+            Above all, we're a <span className="font-600 text-brand-ink">faith-driven</span> team. Our Christian values of honesty, humility, and genuine care guide the way we treat your home and everyone on it. No call centers. No cutting corners. Just a dependable crew, eco-friendly products, and a 100% satisfaction guarantee behind every visit.
           </p>
 
           <div className="reveal mt-8 grid grid-cols-2 gap-5">

@@ -9,20 +9,20 @@ import { BRAND } from "../mock";
 import { usePageHead } from "../hooks/usePageHead";
 import Footer from "./Footer";
 
-const CAREERS_TITLE = "Cleaning Jobs in DFW | Now Hiring House Cleaners \u2014 Bright at Home Cleaning";
+const CAREERS_TITLE = "Cleaning Jobs in DFW | Now Hiring House Cleaners | Bright at Home Cleaning";
 const CAREERS_DESCRIPTION =
-  "Now hiring house cleaners and commercial cleaners in Plano, Frisco, McKinney, Denton and across DFW. Competitive pay plus tips, flexible scheduling, most weekends off, paid training and supplies provided. Apply today \u2014 no experience required.";
+  "Now hiring house cleaners and commercial cleaners in Plano, Frisco, McKinney, Denton and across DFW. Competitive pay plus tips, flexible scheduling, most weekends off, paid training and supplies provided. Apply today, no experience required.";
 
 const VALUES = [
   { icon: Heart, title: "Genuine Care", desc: "We treat every home, office, and teammate the way we'd want to be treated." },
-  { icon: ShieldCheck, title: "Integrity", desc: "We do what we say — on time, every time, whether or not anyone is watching." },
+  { icon: ShieldCheck, title: "Integrity", desc: "We do what we say, on time, every time, whether or not anyone is watching." },
   { icon: Users, title: "Teamwork", desc: "We win together, support each other, and celebrate the wins big and small." },
   { icon: TrendingUp, title: "Growth", desc: "We invest in training and promote from within so you can build a real career." },
 ];
 
 const PERKS = [
   { icon: DollarSign, label: "Competitive pay plus tips & bonuses" },
-  { icon: Clock, label: "Flexible scheduling — most weekends off" },
+  { icon: Clock, label: "Flexible scheduling, most weekends off" },
   { icon: Leaf, label: "All eco-friendly supplies & equipment provided" },
   { icon: TrendingUp, label: "Paid training and room to grow into lead roles" },
   { icon: Heart, label: "A supportive, family-run team culture" },
@@ -108,7 +108,7 @@ const Careers = () => {
             <span className="block text-brand-green">proud to come home to.</span>
           </h1>
           <p className="mt-6 text-lg text-brand-ink/70 max-w-2xl mx-auto leading-relaxed">
-            At {BRAND.full}, our people are everything. If you take pride in your work, love a job well done, and want to be part of a team that treats you like family — we'd love to meet you.
+            At {BRAND.full}, our people are everything. If you take pride in your work, love a job well done, and want to be part of a team that treats you like family, we'd love to meet you.
           </p>
           <a href="#apply" className="mt-8 inline-flex items-center gap-2 bg-brand-green hover:bg-brand-greenDark text-brand-cream font-600 px-7 py-4 rounded-full transition-all hover:shadow-lift hover:-translate-y-0.5">
             Apply now
@@ -125,7 +125,7 @@ const Careers = () => {
             </span>
             <h2 className="mt-5 font-serif text-3xl font-700">Our Mission</h2>
             <p className="mt-4 text-brand-cream/85 leading-relaxed text-lg">
-              To give families and businesses across North Texas the gift of time and peace of mind — delivering meticulous, eco-friendly cleaning through a team we treat like family. We show up on time, care for every detail, and leave every space brighter than we found it.
+              To give families and businesses across North Texas the gift of time and peace of mind, delivering meticulous, eco-friendly cleaning through a team we treat like family. We show up on time, care for every detail, and leave every space brighter than we found it.
             </p>
           </div>
           <div className="bg-white rounded-[1.75rem] p-8 md:p-10 shadow-soft ring-1 ring-black/5">
@@ -134,7 +134,7 @@ const Careers = () => {
             </span>
             <h2 className="mt-5 font-serif text-3xl font-700 text-brand-ink">Our Vision</h2>
             <p className="mt-4 text-brand-ink/70 leading-relaxed text-lg">
-              To become the most trusted and loved cleaning company in the Dallas–Fort Worth metroplex — known not only for spotless homes and workspaces, but for creating rewarding, respectful careers and setting the standard for integrity, sustainability, and genuine care in our industry.
+              To become the most trusted and loved cleaning company in the Dallas–Fort Worth metroplex, known not only for spotless homes and workspaces, but for creating rewarding, respectful careers and setting the standard for integrity, sustainability, and genuine care in our industry.
             </p>
           </div>
         </div>
@@ -205,11 +205,11 @@ const Careers = () => {
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
               ["$20+ per hour", "Paid weekly", "$20+ por hora · pago semanal"],
-              ["Set your own schedule", "Daytime, evenings or weekends — you choose what fits your family", "Tú eliges tu horario"],
-              ["Paid training", "We train you — no experience required", "Capacitación pagada"],
-              ["W-2 or 1099 — your choice", "Be an employee or a contractor, whatever suits you", "W-2 o 1099, tú decides"],
+              ["Set your own schedule", "Daytime, evenings or weekends, you choose what fits your family", "Tú eliges tu horario"],
+              ["Paid training", "We train you, no experience required", "Capacitación pagada"],
+              ["W-2 or 1099, your choice", "Be an employee or a contractor, whatever suits you", "W-2 o 1099, tú decides"],
               ["Referral bonus", "Refer a great cleaner and earn a bonus", "Bono por referir"],
-              ["Bilingual team", "Our operations director is bilingual — no language barrier", "Equipo bilingüe, sin barreras"],
+              ["Bilingual team", "Our operations director is bilingual, so there's no language barrier", "Equipo bilingüe, sin barreras"],
             ].map(([en, sub, es]) => (
               <div key={en} className="bg-brand-cream rounded-2xl p-6 ring-1 ring-black/5">
                 <h3 className="font-600 text-brand-ink">{en}</h3>
@@ -221,14 +221,14 @@ const Careers = () => {
 
           <div className="mt-10 rounded-2xl bg-brand-green text-brand-cream p-7 md:p-9">
             <p className="font-serif text-2xl font-700">Three easy ways to apply · Tres formas de aplicar</p>
-            <p className="mt-1 text-brand-cream/80">Text us, call us, or fill out the form — whatever's easiest. · Textéanos, llámanos o llena el formulario.</p>
+            <p className="mt-1 text-brand-cream/80">Text us, call us, or fill out the form, whatever's easiest. · Textéanos, llámanos o llena el formulario.</p>
             <div className="mt-5 flex flex-wrap gap-3">
               <a href="sms:+14694436903?&body=Hi%21%20I%27d%20like%20to%20apply%20for%20a%20cleaning%20position." data-testid="text-to-apply" className="inline-flex items-center gap-2 bg-brand-amber hover:bg-brand-amberLight text-brand-ink font-600 px-6 py-3 rounded-full transition-all"><MessageSquare className="w-4 h-4" /> Text us</a>
               <a href={BRAND.phoneHref} className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/25 text-brand-cream font-600 px-6 py-3 rounded-full transition-all"><Phone className="w-4 h-4" /> Call us</a>
               <a href="#apply" className="inline-flex items-center gap-2 bg-brand-cream text-brand-green font-600 px-6 py-3 rounded-full transition-all"><Send className="w-4 h-4" /> Apply online</a>
             </div>
             <p className="mt-6 text-sm text-brand-cream/75 max-w-2xl leading-relaxed">
-              A background check is part of joining our team — it's simply how we keep the families and homes we serve safe. Having a record does <span className="font-600">not</span> automatically disqualify you, so please don't let that stop you from applying. · La verificación de antecedentes es parte del proceso, pero tener antecedentes no te descalifica automáticamente. ¡Anímate a aplicar!
+              A background check is part of joining our team. It's simply how we keep the families and homes we serve safe. Having a record does <span className="font-600">not</span> automatically disqualify you, so please don't let that stop you from applying. · La verificación de antecedentes es parte del proceso, pero tener antecedentes no te descalifica automáticamente. ¡Anímate a aplicar!
             </p>
           </div>
         </div>
@@ -252,7 +252,7 @@ const Careers = () => {
                 <div className="text-center mb-8">
                   <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Join the team</p>
                   <h2 className="mt-3 font-serif text-4xl font-700 text-brand-ink">Apply today</h2>
-                  <p className="mt-3 text-brand-ink/65">Tell us a little about yourself — we read every application.</p>
+                  <p className="mt-3 text-brand-ink/65">Tell us a little about yourself. We read every application.</p>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-4">

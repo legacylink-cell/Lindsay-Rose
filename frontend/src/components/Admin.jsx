@@ -69,7 +69,7 @@ const Admin = () => {
       if (!res.ok) throw new Error();
       const data = await res.json();
       const ok = data?.delivery?.email?.status === "sent";
-      toast[ok ? "success" : "error"](ok ? "Sent." : "Still failing — check delivery settings.");
+      toast[ok ? "success" : "error"](ok ? "Sent." : "Still failing. Check delivery settings.");
       load();
     } catch {
       toast.error("Could not resend.");
@@ -140,7 +140,7 @@ const Admin = () => {
       });
       if (!res.ok) throw new Error();
       setAnnounce({ first_name: "", city: "", note: "" });
-      toast.success("Saved as a draft — publish it when you're ready.");
+      toast.success("Saved as a draft. Publish it when you're ready.");
       loadAnnouncements();
     } catch {
       toast.error("Could not save that.");
@@ -348,19 +348,19 @@ const Admin = () => {
                 <ul className={`mt-1.5 space-y-1 ${tone.body}`}>
                   <li data-testid="health-email" className="flex items-center gap-2">
                     {health.email_configured && health.smtp_login_ok !== false
-                      ? <><Check className="w-3.5 h-3.5 text-brand-green" /> Email alerts working — verified with Google just now</>
+                      ? <><Check className="w-3.5 h-3.5 text-brand-green" /> Email alerts working, verified with Google just now</>
                       : !health.email_configured
-                        ? <><MailWarning className="w-3.5 h-3.5" /> Email credentials are missing — no lead emails can be sent</>
-                        : <span title={health.smtp_error || ""} className="flex items-center gap-2"><MailWarning className="w-3.5 h-3.5" /> Google is rejecting the mailbox sign-in — the app password needs to be regenerated</span>}
+                        ? <><MailWarning className="w-3.5 h-3.5" /> Email credentials are missing, so no lead emails can be sent</>
+                        : <span title={health.smtp_error || ""} className="flex items-center gap-2"><MailWarning className="w-3.5 h-3.5" /> Google is rejecting the mailbox sign-in, so the app password needs to be regenerated</span>}
                   </li>
                   <li data-testid="health-telegram" className="flex items-center gap-2">
                     {health.telegram_configured
                       ? <><Check className="w-3.5 h-3.5 text-brand-green" /> Phone alerts connected</>
-                      : <><AlarmClock className="w-3.5 h-3.5" /> Phone alerts aren't connected yet — you're relying on email alone</>}
+                      : <><AlarmClock className="w-3.5 h-3.5" /> Phone alerts aren't connected yet, so you're relying on email alone</>}
                   </li>
                   <li data-testid="health-backlog" className="flex items-center gap-2">
                     {backlog
-                      ? <><MailWarning className="w-3.5 h-3.5" /> {health.undelivered} lead{health.undelivered === 1 ? "" : "s"} still waiting to be emailed — retrying automatically</>
+                      ? <><MailWarning className="w-3.5 h-3.5" /> {health.undelivered} lead{health.undelivered === 1 ? "" : "s"} still waiting to be emailed, retrying automatically</>
                       : <><Check className="w-3.5 h-3.5 text-brand-green" /> Every lead has been delivered</>}
                   </li>
                 </ul>
@@ -410,8 +410,8 @@ const Admin = () => {
               </p>
               <p className="mt-1 text-sm text-brand-ink/65">
                 {settings.nominations_live
-                  ? "Live on the site — linked in the header, footer and homepage."
-                  : "Hidden — reachable only by direct link, and kept out of Google."}
+                  ? "Live on the site, linked in the header, footer and homepage."
+                  : "Hidden, reachable only by direct link and kept out of Google."}
                 {" "}
                 <a href="/bright-blessing" target="_blank" rel="noreferrer" className="text-brand-green font-600 underline-offset-2 hover:underline" data-testid="blessing-preview-link">
                   Preview the page
@@ -441,7 +441,7 @@ const Admin = () => {
             <div className="bg-white rounded-2xl p-5 shadow-soft ring-1 ring-black/5">
               <p className="font-600 text-brand-ink flex items-center gap-2"><Download className="w-4 h-4 text-brand-green" /> Nominator list</p>
               <p className="mt-1 text-sm text-brand-ink/65">
-                Every nominator with their phone, email and whether they asked for the $25 code — ready for Mayra.
+                Every nominator with their phone, email and whether they asked for the $25 code, ready for Mayra.
               </p>
               <button onClick={exportNominators} data-testid="export-nominators" className="mt-4 inline-flex items-center gap-2 text-sm font-600 px-5 py-2.5 rounded-full bg-brand-green text-brand-cream hover:bg-brand-greenDark transition-colors">
                 <Download className="w-4 h-4" /> Download CSV
@@ -451,7 +451,7 @@ const Admin = () => {
             <div className="bg-white rounded-2xl p-5 shadow-soft ring-1 ring-black/5" data-testid="announcements-panel">
               <p className="font-600 text-brand-ink flex items-center gap-2"><HeartHandshake className="w-4 h-4 text-brand-green" /> Homes we've blessed</p>
               <p className="mt-1 text-sm text-brand-ink/65">
-                Shown on the page as first name and city only — never the story.
+                Shown on the page as first name and city only, never the story.
               </p>
               <div className="mt-3 grid sm:grid-cols-2 gap-2">
                 <input data-testid="announce-first-name" className="rounded-xl border border-input bg-white px-3 py-2 text-sm" placeholder="First name" value={announce.first_name} onChange={(e) => setAnnounce({ ...announce, first_name: e.target.value })} />
@@ -467,7 +467,7 @@ const Admin = () => {
                   {announcements.map((a) => (
                     <li key={a.id} data-testid={`announcement-${a.id}`} className="flex items-center justify-between gap-3 text-sm">
                       <span className="text-brand-ink/80">
-                        <span className="font-600">{a.first_name}</span> — {a.city}
+                        <span className="font-600">{a.first_name}</span>, {a.city}
                         <span className="text-brand-ink/50"> · {a.month_label}</span>
                       </span>
                       <span className="flex items-center gap-2 shrink-0">
@@ -588,7 +588,7 @@ const Admin = () => {
           <details className="mt-6 bg-white rounded-2xl shadow-soft ring-1 ring-black/5 overflow-hidden" data-testid="spam-group">
             <summary className="cursor-pointer px-5 py-4 text-sm font-600 text-brand-ink/70 flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-brand-ink/40" />
-              Filtered as spam ({spamList.length}) — not emailed to you
+              Filtered as spam ({spamList.length}), not emailed to you
             </summary>
             <div className="border-t border-border divide-y divide-border">
               {spamList.map((item) => {

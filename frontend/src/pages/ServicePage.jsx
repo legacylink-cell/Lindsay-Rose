@@ -19,7 +19,7 @@ const SERVICES = {
       "Reliable recurring house cleaning across the Dallas–Fort Worth metroplex. Weekly, biweekly or monthly visits from the same trusted, background-checked team. Get a free quote.",
     tagline: "Weekly, biweekly & monthly upkeep",
     intro:
-      "Keep your home consistently spotless with recurring house cleaning from Bright at Home Cleaning. You get the same trusted, background-checked team on a schedule that fits your life — so your home stays fresh without you lifting a finger.",
+      "Keep your home consistently spotless with recurring house cleaning from Bright at Home Cleaning. You get the same trusted, background-checked team on a schedule that fits your life, so your home stays fresh without you lifting a finger.",
     included: [
       "Dusting of all reachable surfaces, sills & fixtures",
       "Kitchen: counters, exterior appliances, sink & floors",
@@ -32,7 +32,7 @@ const SERVICES = {
       "Busy families and professionals who want a reliably clean home every week or two without the hassle of managing it themselves.",
     faqs: [
       { q: "How often should I schedule recurring cleaning?", a: "Most clients choose weekly or biweekly. We'll recommend a cadence based on your home size, pets, and lifestyle during your free quote." },
-      { q: "Do I get the same cleaners each time?", a: "Yes — we intentionally send the same trusted, background-checked team so they get to know your home and preferences." },
+      { q: "Do I get the same cleaners each time?", a: "Yes, we intentionally send the same trusted, background-checked team so they get to know your home and preferences." },
     ],
   },
   "deep-cleaning": {
@@ -42,20 +42,20 @@ const SERVICES = {
       "Professional deep cleaning services in Denton, Plano, Frisco & across DFW. A meticulous top-to-bottom reset of your home. Bonded, insured & eco-friendly. Free quote.",
     tagline: "The thorough top-to-bottom reset",
     intro:
-      "Our deep cleaning is the detailed, top-to-bottom reset your home deserves — reaching the build-up and hidden spots regular cleaning misses. It's the perfect starting point before recurring service, or a refresh whenever your home needs it.",
+      "Our deep cleaning is the detailed, top-to-bottom reset your home deserves, reaching the build-up and hidden spots regular cleaning misses. It's the perfect starting point before recurring service, or a refresh whenever your home needs it.",
     included: [
       "Everything in a standard clean, done more intensively",
       "Baseboards, door frames, and detailed dusting",
       "Inside microwave and exterior of all appliances",
       "Cabinet fronts, switch plates & light fixtures",
-      "Detailed bathroom scrubbing — grout, tile & fixtures",
+      "Detailed bathroom scrubbing: grout, tile & fixtures",
       "Edge-to-edge vacuuming and hand-detailed corners",
     ],
     idealFor:
       "First-time clients, seasonal refreshes, homes that haven't had a professional clean in a while, or anyone wanting a truly deep, detailed result.",
     faqs: [
-      { q: "How long does a deep clean take?", a: "It depends on the size and condition of your home — a deep clean typically takes longer than a standard visit. We'll give you a clear estimate with your free quote." },
-      { q: "Should I get a deep clean before recurring service?", a: "Yes — we recommend starting with a deep clean so recurring visits can keep your home effortlessly maintained." },
+      { q: "How long does a deep clean take?", a: "It depends on the size and condition of your home. A deep clean typically takes longer than a standard visit. We'll give you a clear estimate with your free quote." },
+      { q: "Should I get a deep clean before recurring service?", a: "Yes, we recommend starting with a deep clean so recurring visits can keep your home effortlessly maintained." },
     ],
   },
   "one-time-house-cleaning": {
@@ -65,7 +65,7 @@ const SERVICES = {
       "Need a one-time house cleaning in the Dallas–Fort Worth area? Perfect for special occasions or a quick reset. No contracts, no commitment. Get your free quote today.",
     tagline: "A fresh clean, exactly when you need it",
     intro:
-      "Sometimes you just need a great clean once — before guests arrive, after a party, or simply to reset. Our one-time house cleaning gives you a professional, thorough result with no contracts and no commitment.",
+      "Sometimes you just need a great clean once, whether before guests arrive, after a party, or simply to reset. Our one-time house cleaning gives you a professional, thorough result with no contracts and no commitment.",
     included: [
       "Full clean of kitchens and bathrooms",
       "Dusting, vacuuming and mopping throughout",
@@ -77,7 +77,7 @@ const SERVICES = {
     idealFor:
       "Special occasions, pre- or post-event cleanups, holidays, or anyone who wants a one-off professional clean without an ongoing plan.",
     faqs: [
-      { q: "Is there a contract for one-time cleaning?", a: "None at all. One-time cleaning is exactly that — book it when you need it, with no ongoing commitment." },
+      { q: "Is there a contract for one-time cleaning?", a: "None at all. One-time cleaning is exactly that: book it when you need it, with no ongoing commitment." },
       { q: "Can I add extras like inside the oven or fridge?", a: "Absolutely. Just let us know when you request your quote and we'll include them." },
     ],
   },
@@ -86,9 +86,9 @@ const SERVICES = {
     metaTitle: "Move-In / Move-Out Cleaning in DFW | Move Cleaning Services",
     metaDescription:
       "Move-in and move-out cleaning services across DFW. Leave your old place spotless or start fresh in a truly clean new home. Great for renters, buyers & sellers. Free quote.",
-    tagline: "Start fresh — or leave it spotless",
+    tagline: "Start fresh, or leave it spotless",
     intro:
-      "Moving is stressful enough. Whether you're handing back keys or settling into a new place, our move-in / move-out cleaning delivers a spotless, top-to-bottom result on empty rooms — helping renters protect deposits and buyers start fresh.",
+      "Moving is stressful enough. Whether you're handing back keys or settling into a new place, our move-in / move-out cleaning delivers a spotless, top-to-bottom result on empty rooms, helping renters protect deposits and buyers start fresh.",
     included: [
       "Detailed clean of empty rooms, top to bottom",
       "Inside cabinets, drawers and closets",
@@ -100,18 +100,18 @@ const SERVICES = {
     idealFor:
       "Renters wanting their deposit back, landlords turning over units, and home buyers or sellers who want the property truly move-ready.",
     faqs: [
-      { q: "Do you clean inside cabinets and appliances?", a: "Yes — move-in/move-out cleaning includes inside cabinets, drawers, closets, and appliances since the home is typically empty." },
-      { q: "Can you work with my closing or lease-end date?", a: "We build the schedule around your move dates — just share them when you request your quote." },
+      { q: "Do you clean inside cabinets and appliances?", a: "Yes, move-in/move-out cleaning includes inside cabinets, drawers, closets, and appliances since the home is typically empty." },
+      { q: "Can you work with my closing or lease-end date?", a: "We build the schedule around your move dates, so just share them when you request your quote." },
     ],
   },
   "commercial-cleaning": {
     name: "Commercial Cleaning",
     metaTitle: "Commercial Cleaning in DFW | Offices, Retail & Medical",
     metaDescription:
-      "Professional commercial cleaning across the Dallas–Fort Worth metroplex — offices, retail, medical suites & post-construction. Day or after-hours scheduling. Free quote.",
+      "Professional commercial cleaning across the Dallas–Fort Worth metroplex: offices, retail, medical suites & post-construction. Day or after-hours scheduling. Free quote.",
     tagline: "Spotless workspaces that keep business moving",
     intro:
-      "A clean, healthy workspace makes a real impression on your clients and team. Bright at Home Cleaning provides dependable commercial cleaning across DFW — with flexible day or after-hours scheduling built around your operation.",
+      "A clean, healthy workspace makes a real impression on your clients and team. Bright at Home Cleaning provides dependable commercial cleaning across DFW, with flexible day or after-hours scheduling built around your operation.",
     included: [
       "Offices, workspaces and common areas",
       "Retail floors and customer-facing spaces",
@@ -123,7 +123,7 @@ const SERVICES = {
     idealFor:
       "Offices, retail stores, medical and dental practices, property managers, and post-construction sites that need a reliable, professional cleaning partner.",
     faqs: [
-      { q: "Do you clean after business hours?", a: "Yes — we offer day or after-hours scheduling so cleaning never disrupts your operation." },
+      { q: "Do you clean after business hours?", a: "Yes, we offer day or after-hours scheduling so cleaning never disrupts your operation." },
       { q: "Can you handle post-construction cleanup?", a: "We do. We handle fine dust, debris removal, and detailed finishing so your space is client-ready." },
     ],
   },

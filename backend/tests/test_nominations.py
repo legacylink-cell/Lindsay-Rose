@@ -6,6 +6,13 @@ import pytest
 import requests
 from pathlib import Path
 
+
+def _visitor_headers():
+    """Each test submission looks like a different visitor. Behind a proxy the backend
+    trusts X-Forwarded-For, so without this the whole suite shares one rate-limit bucket."""
+    import random
+    return {"X-Forwarded-For": f"198.18.%d.%d" % (random.randint(1, 250), random.randint(1, 250))}
+
 FRONTEND_ENV = Path(__file__).resolve().parents[2] / "frontend" / ".env"
 BASE_URL = None
 for line in FRONTEND_ENV.read_text().splitlines():
@@ -80,7 +87,7 @@ def test_nomination_rejects_missing_understands(s):
         "understands_selected": False,
         "wants_discount": False,
     }
-    r = s.post(f"{API}/nominations", json=payload, timeout=15)
+    r = s.post(f"{API}/nominations", json=payload, timeout=15, headers=_visitor_headers())
     assert r.status_code == 400
 
 
@@ -96,7 +103,7 @@ def test_nomination_honeypot_returns_success_without_store(s, auth_headers):
         "understands_selected": True,
         "company": "SPAMMER INC",  # honeypot tripped
     }
-    r = s.post(f"{API}/nominations", json=payload, timeout=15)
+    r = s.post(f"{API}/nominations", json=payload, timeout=15, headers=_visitor_headers())
     assert r.status_code == 200
     body = r.json()
     assert body.get("success") is True
@@ -125,7 +132,7 @@ def created_nomination(s, auth_headers):
         "understands_selected": True,
         "wants_discount": False,
     }
-    r = s.post(f"{API}/nominations", json=payload, timeout=15)
+    r = s.post(f"{API}/nominations", json=payload, timeout=15, headers=_visitor_headers())
     assert r.status_code == 200, r.text
     nid = r.json()["id"]
     assert nid

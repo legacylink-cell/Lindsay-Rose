@@ -4,6 +4,13 @@ import pytest
 import requests
 from pathlib import Path
 
+
+def _visitor_headers():
+    """Each test submission looks like a different visitor. Behind a proxy the backend
+    trusts X-Forwarded-For, so without this the whole suite shares one rate-limit bucket."""
+    import random
+    return {"X-Forwarded-For": f"198.18.%d.%d" % (random.randint(1, 250), random.randint(1, 250))}
+
 FRONTEND_ENV = Path(__file__).resolve().parents[2] / "frontend" / ".env"
 BASE_URL = None
 for line in FRONTEND_ENV.read_text().splitlines():
@@ -84,7 +91,7 @@ def test_quote_records_email_sent_and_telegram_not_configured(s, auth):
         "city": "Dallas",
         "service": "Deep cleaning",
         "details": "QA delivery-tracking regression",
-    }, timeout=15)
+    }, timeout=15, headers=_visitor_headers())
     assert r.status_code == 200
     qid = r.json()["id"]
 
@@ -110,7 +117,7 @@ def test_application_records_email_sent(s, auth):
         "phone": "555-000-7002",
         "position": "Cleaner",
         "message": "QA delivery-tracking regression",
-    }, timeout=15)
+    }, timeout=15, headers=_visitor_headers())
     assert r.status_code == 200
     aid = r.json()["id"]
 
@@ -148,7 +155,7 @@ def test_resend_reincrements_attempts_and_returns_delivery(s, auth):
         "city": "Plano",
         "service": "One-time cleaning",
         "details": "QA resend test",
-    }, timeout=15)
+    }, timeout=15, headers=_visitor_headers())
     qid = r.json()["id"]
     m = _wait_for_email_sent(s, auth, "quotes", qid, timeout=25)
     attempts_before = (m["delivery"]["email"]).get("attempts", 0)

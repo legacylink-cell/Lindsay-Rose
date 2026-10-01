@@ -59,7 +59,7 @@ const Services = () => {
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 items-center">
             <div>
               <h3 className="font-serif text-2xl md:text-3xl font-700 text-brand-ink">What's included in every clean</h3>
-              <p className="mt-3 text-brand-ink/65">A consistent, detail-obsessed checklist — so nothing gets missed.</p>
+              <p className="mt-3 text-brand-ink/65">A consistent, detail-obsessed checklist, so nothing gets missed.</p>
             </div>
             <div className="grid sm:grid-cols-2 gap-x-8 gap-y-3">
               {CHECKLIST.map((c) => (

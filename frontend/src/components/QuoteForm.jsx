@@ -59,7 +59,7 @@ const QuoteForm = () => {
             <p className="text-xs uppercase tracking-[0.22em] text-brand-amberLight font-semibold">Get a free quote</p>
             <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700">Let's brighten your space</h2>
             <p className="mt-4 text-brand-cream/75 leading-relaxed max-w-md">
-              Tell us a little about your home or business and we'll send a clear, no-obligation quote — usually within 24 hours on weekdays.
+              Tell us a little about your home or business and we'll send a clear, no-obligation quote, usually within 24 hours on weekdays.
             </p>
 
             <div className="mt-10 space-y-5">

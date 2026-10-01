@@ -35,7 +35,7 @@ export const DIFFERENTIATORS = [
   {
     icon: "ShieldCheck",
     title: "Background-Checked Team",
-    desc: "Every single team member passes a thorough background check before they ever set foot in your home \u2014 a step far too many cleaning companies quietly skip. Your safety and peace of mind always come first.",
+    desc: "Every single team member passes a thorough background check before they ever set foot in your home, a step far too many cleaning companies quietly skip. Your safety and peace of mind always come first.",
     featured: true,
   },
   {
@@ -46,7 +46,7 @@ export const DIFFERENTIATORS = [
   {
     icon: "Users",
     title: "The Same Trusted Faces",
-    desc: "You get a consistent, familiar crew who learn your home and preferences \u2014 not a rotating cast of strangers.",
+    desc: "You get a consistent, familiar crew who learn your home and preferences, not a rotating cast of strangers.",
   },
   {
     icon: "Leaf",
@@ -61,7 +61,7 @@ export const DIFFERENTIATORS = [
   {
     icon: "Star",
     title: "100% Satisfaction Guarantee",
-    desc: "If anything isn't perfect, tell us within 24 hours and we'll make it right \u2014 free. That's our promise.",
+    desc: "If anything isn't perfect, tell us within 24 hours and we'll make it right, free of charge. That's our promise.",
   },
 ];
 
@@ -91,7 +91,7 @@ export const RESIDENTIAL_SERVICES = [
   {
     icon: SprayCan,
     title: "Deep Cleaning",
-    desc: "A thorough top-to-bottom reset — baseboards, blinds, buildup and all. The perfect first visit.",
+    desc: "A thorough top-to-bottom reset, including baseboards, blinds, buildup and all. The perfect first visit.",
   },
   {
     icon: Home,
@@ -101,7 +101,7 @@ export const RESIDENTIAL_SERVICES = [
   {
     icon: Truck,
     title: "Move In / Move Out",
-    desc: "Detailed cleaning for empty homes so you get your deposit back — or welcome a fresh start.",
+    desc: "Detailed cleaning for empty homes so you get your deposit back, or welcome a fresh start.",
   },
 ];
 
@@ -119,7 +119,7 @@ export const COMMERCIAL_SERVICES = [
   {
     icon: Wrench,
     title: "Post-Construction",
-    desc: "Dust, debris, and detail work after a build or remodel — turnover-ready in one visit.",
+    desc: "Dust, debris, and detail work after a build or remodel. Turnover-ready in one visit.",
   },
 ];
 
@@ -129,7 +129,7 @@ export const COMMERCIAL_BENEFITS = [
   "Consistent quality with a dedicated account contact",
   "Custom scopes & supply management",
   "Disinfection for high-traffic & sensitive spaces",
-  "Flat, transparent pricing \u2014 no surprises",
+  "Flat, transparent pricing with no surprises",
 ];
 
 export const COMMERCIAL_INDUSTRIES = [
@@ -152,7 +152,7 @@ export const ADDONS_NOTE = "Just give us a call or email about a week before you
 
 export const ONE_TIME = {
   title: "Need a one-time clean?",
-  body: "We're known for keeping homes fresh on a regular schedule \u2014 but we're just as happy to help for a single visit. Our one-time cleans follow our full scope of services at a deeper level, and you can pair them with any add-ons you like. Reach out and we'll build a clear, no-obligation quote around your home.",
+  body: "We're known for keeping homes fresh on a regular schedule, but we're just as happy to help for a single visit. Our one-time cleans follow our full scope of services at a deeper level, and you can pair them with any add-ons you like. Reach out and we'll build a clear, no-obligation quote around your home.",
 };
 
 // MOCK DATA continues below.
@@ -173,7 +173,7 @@ export const PROCESS = [
   {
     step: "01",
     title: "Tell us about your space",
-    desc: "Share a few details in our quick quote form, or call us. We listen first — every home and office is different.",
+    desc: "Share a few details in our quick quote form, or call us. We listen first, because every home and office is different.",
   },
   {
     step: "02",
@@ -182,7 +182,7 @@ export const PROCESS = [
   },
   {
     step: "03",
-    title: "Relax — we brighten it",
+    title: "Relax, we brighten it",
     desc: "Our vetted, insured team arrives on time and treats your space like their own. 100% satisfaction guaranteed.",
   },
 ];
@@ -287,7 +287,7 @@ export const TESTIMONIALS = [
   {
     name: "Becky Hurst",
     role: "Local Guide · Google Review",
-    quote: "18 months later, I am still thrilled with Bright at Home Cleaning. They handle everything in a purely professional and helpful manner — they're kind, always punctual, and I'm so thankful to see them. From the initial consult to payment, the whole process is easy and full of considerate communication. Highly recommend!",
+    quote: "18 months later, I am still thrilled with Bright at Home Cleaning. They handle everything in a purely professional and helpful manner. They're kind, always punctual, and I'm so thankful to see them. From the initial consult to payment, the whole process is easy and full of considerate communication. Highly recommend!",
     rating: 5,
   },
 ];
@@ -311,7 +311,7 @@ export const FAQS = [
   },
   {
     q: "Which areas do you serve?",
-    a: "We focus on the popular Collin County communities of Plano, Frisco, McKinney, Allen, Celina and Prosper, and also serve Denton, Flower Mound, Grapevine and Fort Worth, where we're based and have long-standing relationships. Don't see your city? Just ask — we're happy to check.",
+    a: "We focus on the popular Collin County communities of Plano, Frisco, McKinney, Allen, Celina and Prosper, and also serve Denton, Flower Mound, Grapevine and Fort Worth, where we're based and have long-standing relationships. Don't see your city? Just ask, we're happy to check.",
   },
   {
     q: "Do you serve commercial spaces?",
@@ -319,7 +319,7 @@ export const FAQS = [
   },
   {
     q: "What if I'm not satisfied?",
-    a: "We back every visit with a 100% satisfaction guarantee. If something isn't right, tell us within 24 hours and we'll make it right — free.",
+    a: "We back every visit with a 100% satisfaction guarantee. If something isn't right, tell us within 24 hours and we'll make it right, free of charge.",
   },
 ];
 

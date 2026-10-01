@@ -29,7 +29,7 @@ import { usePageHead } from "./hooks/usePageHead";
 
 const HOME_TITLE = "Bright at Home Cleaning | A Brighter Home. A Better Day.";
 const HOME_DESCRIPTION =
-  "Bright at Home Cleaning — trusted home & commercial cleaning serving Plano, Frisco, McKinney and the Dallas–Fort Worth metroplex. Bonded, insured, eco-friendly. 100% satisfaction guaranteed. Call 469-443-6903 for a free quote.";
+  "Bright at Home Cleaning: trusted home & commercial cleaning serving Plano, Frisco, McKinney and the Dallas–Fort Worth metroplex. Bonded, insured, eco-friendly. 100% satisfaction guaranteed. Call 469-443-6903 for a free quote.";
 
 function useReveal() {
   useEffect(() => {
@@ -85,7 +85,7 @@ const Landing = () => {
     }
     const hash = window.location.hash;
     if (hash && hash.length > 1) {
-      // Arrived from another page with a section hash (e.g. /#commercial) — scroll to it once rendered.
+      // Arrived from another page with a section hash (e.g. /#commercial), so scroll to it once rendered.
       const t = setTimeout(() => {
         const el = document.querySelector(hash);
         if (el) el.scrollIntoView({ behavior: "smooth" });

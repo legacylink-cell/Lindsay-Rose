@@ -31,6 +31,17 @@ Premium, conversion-focused marketing site for **Bright at Home Cleaning** (DFW 
 
 
 
+
+## COPY RULE: no em dashes, ever (2026-10-01)
+Client instruction, verbatim: "remove all hem dashed from the site. we should never have any hem dashes now or in the future."
+- All 107 em dashes removed from `frontend/src`, `frontend/public` and `backend/server.py`. Each one was rewritten by hand with natural punctuation (comma, colon, period, parentheses or a rephrase) rather than swapped for a hyphen, so the copy still reads properly.
+- Covered the literal `—`, the escaped `\u2014` form in JS strings and Python string literals, and HTML entities.
+- Email-field placeholders that used `—` for a blank value now read "Not provided" (and `_reminder_message` compares against that string).
+- **ENFORCED BY TEST**: `backend/tests/test_no_em_dashes.py` scans `frontend/src`, `frontend/public` and `backend` for `—`, `\u2014`, `&mdash;`, `&#8212;`, `&#x2014;` and fails with file:line if any appear. **When writing ANY future copy, use commas/colons/periods instead; the suite will fail otherwise.**
+- NOTE: en dashes (`–`) were deliberately left alone, e.g. "Dallas–Fort Worth" and "Mon–Fri", since the request was specifically about em dashes. Ask before changing those.
+- Tests: 69/69 pass. Verified 0 em dashes in the rendered text and page titles of the homepage, a service page, Careers and Bright Blessing.
+- Also fixed while here: the older pytest files now send a unique `X-Forwarded-For` per submission (the suite previously shared one rate-limit bucket and tripped the new burst filter), and the timing-trap test is scoped to its own marker so parallel tests don't break it.
+
 ## Spam filtering, nominator export, blessing announcements (2026-10-01)
 ### Spam protection (all three public forms, no visible captcha)
 - `_screen_submission(request, body, *texts)` gates `/api/quotes`, `/api/applications`, `/api/nominations`. Layers: honeypot `company`; timing trap (`elapsed_ms` < `MIN_FORM_SECONDS`=2.5s → dropped as bot); per-visitor burst check; `_spam_check()` content heuristics (>=2 links, >=2 pitch phrases from `_SPAM_PHRASES`, or 1 phrase + 1 link).

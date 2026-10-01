@@ -178,7 +178,10 @@ def test_timing_trap_drops_silently(s, auth):
     assert r.status_code == 200
     assert r.json() == {"success": True}  # no id
     after = s.get(f"{API}/admin/quotes", headers=auth, timeout=15).json()
-    new_items = [i for i in after if i["id"] not in before_ids]
+    # Scope to this test's own marker: the suite runs in parallel, so other tests
+    # legitimately add quotes of their own while this one runs.
+    new_items = [i for i in after
+                 if i["id"] not in before_ids and (i.get("name") or "") == "TEST_Timing Trap"]
     assert new_items == [], f"timing trap should drop, got {new_items}"
 
 

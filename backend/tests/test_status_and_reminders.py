@@ -5,6 +5,13 @@ import pytest
 import requests
 from pathlib import Path
 
+
+def _visitor_headers():
+    """Each test submission looks like a different visitor. Behind a proxy the backend
+    trusts X-Forwarded-For, so without this the whole suite shares one rate-limit bucket."""
+    import random
+    return {"X-Forwarded-For": f"198.18.%d.%d" % (random.randint(1, 250), random.randint(1, 250))}
+
 FRONTEND_ENV = Path(__file__).resolve().parents[2] / "frontend" / ".env"
 BASE_URL = None
 for line in FRONTEND_ENV.read_text().splitlines():
@@ -53,7 +60,7 @@ def _make_quote(s, name="TEST_status"):
     r = s.post(f"{API}/quotes", json={
         "name": name, "email": "qa+status@example.com", "phone": "555-000-3333",
         "city": "Frisco", "service": "Deep cleaning", "details": "status test",
-    }, timeout=15)
+    }, timeout=15, headers=_visitor_headers())
     assert r.status_code == 200
     return r.json()["id"]
 
@@ -101,7 +108,7 @@ def test_application_status_transitions(s, auth):
     r = s.post(f"{API}/applications", json={
         "name": "TEST_status_app", "email": "qa+appstatus@example.com",
         "phone": "555-000-4444", "position": "Cleaner",
-    }, timeout=15)
+    }, timeout=15, headers=_visitor_headers())
     aid = r.json()["id"]
 
     r = s.patch(f"{API}/admin/applications/{aid}/status", json={"status": "contacted"}, headers=auth)
@@ -149,7 +156,7 @@ def test_smtp_send_logged(s):
         "name": "TEST_SMTP_Log", "email": "qa+smtp@example.com",
         "phone": "555-000-9999", "city": "Plano", "service": "One-time",
         "details": "smtp log check",
-    }, timeout=15)
+    }, timeout=15, headers=_visitor_headers())
     time.sleep(8)
     import glob
     logs = ""

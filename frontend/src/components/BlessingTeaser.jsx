@@ -21,7 +21,7 @@ export const BlessingTeaser = () => {
             </h2>
             <p className="mt-4 text-brand-cream/80 leading-relaxed">
               Each month we gift one complimentary home cleaning to a DFW neighbor walking through a hard
-              season — illness, grief, caregiving, a new baby, recovery, job loss. Nominate a neighbor, a
+              season such as illness, grief, caregiving, a new baby, recovery, job loss. Nominate a neighbor, a
               friend, or yourself. Nominators receive $25 off their first cleaning.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">

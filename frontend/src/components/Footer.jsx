@@ -12,7 +12,7 @@ const go = (href) => {
   if (el) {
     el.scrollIntoView({ behavior: "smooth" });
   } else {
-    // Not on the homepage — navigate there and let it scroll to the section.
+    // Not on the homepage, so navigate there and let it scroll to the section.
     window.location.href = "/" + href;
   }
 };
@@ -84,7 +84,7 @@ const Footer = () => {
             </div>
             <p className="mt-3 font-serif text-lg italic text-brand-amberLight">{BRAND.tagline}</p>
             <p className="mt-3 text-brand-cream/70 max-w-sm leading-relaxed">
-              Family-run, bonded & insured, and obsessed with the details — for homes and businesses across all of the Dallas–Fort Worth Metroplex.
+              Family-run, bonded & insured, and obsessed with the details, for homes and businesses across all of the Dallas–Fort Worth Metroplex.
             </p>
             <button
               onClick={() => go("#quote")}

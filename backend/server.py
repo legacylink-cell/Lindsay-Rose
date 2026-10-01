@@ -262,7 +262,7 @@ CLIENT_EMAILS = {
             "Thank you for requesting a quote with Bright at Home Cleaning! We've received your "
             "request and a member of our team will reach out very soon to confirm the details and "
             "your custom quote.",
-            "Need us sooner? Give us a call or text \u2014 we're happy to help.",
+            "Need us sooner? Give us a call or text, we're happy to help.",
         ],
     },
     "application": {
@@ -272,7 +272,7 @@ CLIENT_EMAILS = {
             "Thank you for applying to join the Bright at Home Cleaning team! We've received your "
             "application and will review it carefully. If it looks like a good fit, we'll be in "
             "touch about the next steps.",
-            "Questions in the meantime? Give us a call or text \u2014 we'd love to hear from you.",
+            "Questions in the meantime? Give us a call or text, we'd love to hear from you.",
         ],
     },
 }
@@ -320,10 +320,10 @@ def _reminder_message(items: list):
     for it in items:
         hrs = _hours_since(it.get("created_at", ""))
         age = f"{round(hrs)} hrs ago" if hrs is not None else "recently"
-        bits = [b for b in [it.get("city"), it.get("service")] if b and b != "\u2014"]
+        bits = [b for b in [it.get("city"), it.get("service")] if b and b != "Not provided"]
         meta = " \u00b7 ".join(bits) or "No details given"
         text_lines += [
-            f"{it.get('name', 'Unknown')} \u2014 {meta} \u2014 submitted {age}",
+            f"{it.get('name', 'Unknown')}, {meta}, submitted {age}",
             f"  {it.get('phone', '')}  |  {it.get('email', '')}",
             "",
         ]
@@ -426,27 +426,27 @@ def _email_payload(kind: str, doc: dict):
     if kind == "quote":
         return "New Quote Request \u2013 Bright at Home Cleaning", {
             "Name": doc.get("name"), "Phone": doc.get("phone"), "email": doc.get("email"),
-            "City": doc.get("city") or "\u2014", "Service": doc.get("service") or "\u2014",
-            "Details": doc.get("details") or "\u2014",
+            "City": doc.get("city") or "Not provided", "Service": doc.get("service") or "Not provided",
+            "Details": doc.get("details") or "Not provided",
         }
     if kind == "nomination":
         return "New Bright Blessing Nomination \u2013 Bright at Home Cleaning", {
             "Nominated by": doc.get("nominator_name"),
             "Nominator phone": doc.get("nominator_phone"),
             "email": doc.get("nominator_email"),
-            "Nominator city": doc.get("nominator_city") or "\u2014",
-            "Relationship": doc.get("relationship") or "\u2014",
+            "Nominator city": doc.get("nominator_city") or "Not provided",
+            "Relationship": doc.get("relationship") or "Not provided",
             "Nominee": doc.get("nominee_name"),
-            "Nominee city / ZIP": doc.get("nominee_city") or "\u2014",
+            "Nominee city / ZIP": doc.get("nominee_city") or "Not provided",
             "Nominee phone": doc.get("nominee_phone") or "not provided",
-            "Why this home": doc.get("why") or "\u2014",
+            "Why this home": doc.get("why") or "Not provided",
             "OK to contact nominee": "Yes" if doc.get("permission_to_contact") else "No",
             "Wants $25 off (BRIGHT25)": "Yes" if doc.get("wants_discount") else "No",
             "Confirmed it is a selected blessing": "Yes" if doc.get("understands_selected") else "No",
         }
     return "New Career Application \u2013 Bright at Home Cleaning", {
         "Name": doc.get("name"), "Phone": doc.get("phone"), "email": doc.get("email"),
-        "Position": doc.get("position") or "\u2014", "About": doc.get("message") or "\u2014",
+        "Position": doc.get("position") or "Not provided", "About": doc.get("message") or "Not provided",
     }
 
 
@@ -468,7 +468,7 @@ def _telegram_payload(kind: str, doc: dict):
         lines = [
             "\U0001F54A\uFE0F <b>New Bright Blessing nomination</b>",
             f"Nominee: <b>{doc.get('nominee_name', '')}</b> ({doc.get('nominee_city') or 'city not given'})",
-            f"From: {doc.get('nominator_name', '')} \u2014 {doc.get('relationship') or 'relationship not given'}",
+            f"From: {doc.get('nominator_name', '')} ({doc.get('relationship') or 'relationship not given'})",
             f"\U0001F4DE {doc.get('nominator_phone', '')}",
         ]
         if doc.get("why"):

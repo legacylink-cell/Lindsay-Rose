@@ -17,7 +17,7 @@ const Pricing = () => {
             Fair quotes, no contracts, no surprises
           </h2>
           <p className="mt-4 text-brand-ink/65 text-lg">
-            Every home and business is different — final pricing comes from your free quote. Here's where most clients start.
+            Every home and business is different, so final pricing comes from your free quote. Here's where most clients start.
           </p>
         </div>
 
