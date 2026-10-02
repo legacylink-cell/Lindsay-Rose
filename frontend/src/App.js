@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "./components/ui/sonner";
@@ -122,6 +122,12 @@ const Landing = () => {
 };
 
 function App() {
+  // Runs synchronously after React's first commit and before the browser paints:
+  // the static shell is already gone from #root, so the guard can go too.
+  useLayoutEffect(() => {
+    document.getElementById("prerender-splash")?.remove();
+    document.documentElement.classList.remove("prerendered");
+  }, []);
   return (
     <BrowserRouter>
       <Routes>

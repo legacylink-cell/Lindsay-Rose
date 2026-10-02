@@ -173,6 +173,9 @@ function footer() {
 <li><a href="/">Home</a></li><li><a href="/#how-it-works">How it works</a></li>
 <li><a href="/#areas">Areas we serve</a></li><li><a href="/#reviews">Reviews</a></li>
 <li><a href="/careers">Careers</a></li></ul></nav>
+<nav><h3>Follow us</h3><ul>
+<li><a href="https://www.facebook.com/brightathomecleaning/">Facebook</a></li>
+<li><a href="https://www.instagram.com/brightathomecleaning_/">Instagram</a></li></ul></nav>
 <p>&copy; ${new Date().getFullYear()} Bright at Home Cleaning. All rights reserved.</p>
 </footer>`;
 }
@@ -188,18 +191,19 @@ function pristineShell(html) {
 }
 
 /* The injected markup is deliberately class-free, so with the app's stylesheet it
-   still looks like a plain text document. Humans must never see that: this keeps
-   the copy in the HTML for crawlers while hiding it from the first paint, and the
-   <noscript> block puts it back for anyone browsing without JavaScript. */
+   still looks like a plain text document. Humans must never see that: the hide
+   rule is unconditional (not tied to the <html> marker) so no ordering of
+   script execution can ever paint it. The <noscript> block puts it back for
+   anyone browsing without JavaScript. */
 const PRERENDER_GUARD =
   `<style id="prerender-guard">` +
   `html.prerendered body{background:#FFFEF9}` +
-  `html.prerendered [data-prerendered]{position:absolute!important;width:1px;height:1px;` +
+  `[data-prerendered]{position:absolute!important;width:1px;height:1px;` +
   `overflow:hidden;clip-path:inset(50%);white-space:nowrap}` +
   `</style>` +
   `<noscript><style>` +
   `#prerender-splash{display:none!important}` +
-  `html.prerendered [data-prerendered]{position:static!important;width:auto;height:auto;` +
+  `[data-prerendered]{position:static!important;width:auto;height:auto;` +
   `overflow:visible;clip-path:none;white-space:normal;max-width:46rem;margin:0 auto;` +
   `padding:2.5rem 1.25rem;line-height:1.65}` +
   `</style></noscript>`;
