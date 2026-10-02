@@ -157,3 +157,10 @@ Source: client playbook PDF (`Bright-Blessing-of-the-Month-Team-Playbook`). Agen
 - Cause: CSS color-scheme/select styling cannot control the OS-drawn native select popup on Android/iOS, so the dark system picker still flashed black before repainting.
 - Fix: replaced all 3 native <select> elements (bright-blessing relationship, quote service, careers position) with in-page Radix dropdown via frontend/src/components/FieldSelect.jsx. No native widget is involved anymore.
 - Verified in dark-mode emulation: popup background rgb(255,255,255) on all three, selection updates state, build + prerender pass.
+
+## 2026-06 Unstyled flash on first load (root cause + fix)
+- Symptom (user video): clicking a link showed a plain, unstyled text page for ~300-800ms, then the real site. Looked like the page failed to load. Happened on all routes, intermittently (cache dependent).
+- Cause: the build-time prerender injected class-free HTML into #root. That markup is the first paint, and since it carries no Tailwind classes it always renders as a bare text document until React mounts and replaces #root.
+- Secondary bug found: prerender used a string replacement, so the "$25" in the Bright Blessing copy was read as capture group $2 and injected a stray </div>, truncating the prerendered container. Now uses a function replacement.
+- Fix: prerender adds an inline guard style that clips the static layer (crawlers still read it, humans never see it) plus a cream brand splash inside #root; React clears both on mount. A <noscript> block restores the static copy for JS-disabled visitors. index.js now drops the marker class and splash in a rAF after render instead of before.
+- Verified by serving the real build artifacts through request interception: first paint = branded cream splash, 347 words still in the HTML, then the full styled page with no page errors.

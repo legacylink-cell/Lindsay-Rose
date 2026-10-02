@@ -183,8 +183,33 @@ function footer() {
 function pristineShell(html) {
   return html
     .replace(/<html((?:\s+class="prerendered")+)/, "<html")
+    .replace(/<style id="prerender-guard">[\s\S]*?<\/noscript>/g, "")
     .replace(/(<div id="root">)[\s\S]*?(<\/div>\s*<\/body>)/, "$1$2");
 }
+
+/* The injected markup is deliberately class-free, so with the app's stylesheet it
+   still looks like a plain text document. Humans must never see that: this keeps
+   the copy in the HTML for crawlers while hiding it from the first paint, and the
+   <noscript> block puts it back for anyone browsing without JavaScript. */
+const PRERENDER_GUARD =
+  `<style id="prerender-guard">` +
+  `html.prerendered body{background:#FFFEF9}` +
+  `html.prerendered [data-prerendered]{position:absolute!important;width:1px;height:1px;` +
+  `overflow:hidden;clip-path:inset(50%);white-space:nowrap}` +
+  `</style>` +
+  `<noscript><style>` +
+  `#prerender-splash{display:none!important}` +
+  `html.prerendered [data-prerendered]{position:static!important;width:auto;height:auto;` +
+  `overflow:visible;clip-path:none;white-space:normal;max-width:46rem;margin:0 auto;` +
+  `padding:2.5rem 1.25rem;line-height:1.65}` +
+  `</style></noscript>`;
+
+/* Shown for the few hundred milliseconds before React paints. It lives inside
+   #root, so React clears it on mount with no extra code. */
+const SPLASH =
+  `<div id="prerender-splash" style="position:fixed;inset:0;display:flex;align-items:center;` +
+  `justify-content:center;background:#FFFEF9;color:#1E4634;font-family:'Cormorant Garamond',Georgia,serif;` +
+  `font-size:26px;letter-spacing:0.06em">Bright at Home Cleaning</div>`;
 
 function applyHead(html, route) {
   const url = route.path === "/" ? `${ORIGIN}/` : `${ORIGIN}${route.path}`;
@@ -198,6 +223,7 @@ function applyHead(html, route) {
   if (route.noindex) {
     out = out.replace(/(<meta name="robots" content=")[^"]*(")/, "$1noindex, nofollow$2");
   }
+  out = out.replace("</head>", `${PRERENDER_GUARD}</head>`);
   return out.replace("<html", `<html class="${MARKER}"`);
 }
 
@@ -205,7 +231,9 @@ function writeRoute(shell, route) {
   const body = `${route.render()}${footer()}`;
   const html = applyHead(shell, route).replace(
     /(<div id="root">)(<\/div>)/,
-    `$1<div data-prerendered="true">${body}</div>$2`
+    // Function form on purpose: the copy contains "$25", and a string replacement
+    // would read that as a capture-group reference and corrupt the markup.
+    (_m, open, close) => `${open}<div data-prerendered="true">${body}</div>${SPLASH}${close}`
   );
   const dir = route.path === "/" ? BUILD : path.join(BUILD, route.path);
   fs.mkdirSync(dir, { recursive: true });

@@ -15,11 +15,9 @@ const queryClient = new QueryClient({
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-// The pre-rendered HTML ships with entrance animations forced visible (see the
-// .prerendered guard in index.css). React is in charge now, so hand the
-// animations back before the first paint of the live app.
-document.documentElement.classList.remove("prerendered");
-
+// The pre-rendered HTML ships a brand splash and a guard class (see the
+// .prerendered rules in index.css). React clears #root on mount, so hand the
+// animations back only once the live app has painted, never before.
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
@@ -27,3 +25,8 @@ root.render(
     </QueryClientProvider>
   </React.StrictMode>,
 );
+
+requestAnimationFrame(() => {
+  document.getElementById("prerender-splash")?.remove();
+  document.documentElement.classList.remove("prerendered");
+});
