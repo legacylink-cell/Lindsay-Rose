@@ -12,11 +12,11 @@ const HowItWorks = () => {
     <section id="process" className="section-pad">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">How it works</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-brand-greenLight font-semibold">How it works</p>
           <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">
             Booking us is refreshingly simple
           </h2>
-          <p className="mt-4 text-brand-ink/65 text-lg">Three easy steps between you and a spotless space.</p>
+          <p className="mt-4 text-brand-ink/70 text-lg">Three easy steps between you and a spotless space.</p>
         </div>
 
         <div className="mt-14 grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
@@ -30,7 +30,7 @@ const HowItWorks = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-600 text-brand-ink">{p.title}</h3>
-                  <p className="mt-1.5 text-brand-ink/65 leading-relaxed">{p.desc}</p>
+                  <p className="mt-1.5 text-brand-ink/70 leading-relaxed">{p.desc}</p>
                 </div>
               </div>
             ))}

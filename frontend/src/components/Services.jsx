@@ -18,7 +18,7 @@ const ServiceCard = ({ s }) => (
       <s.icon className="w-6 h-6" />
     </span>
     <h3 className="mt-5 text-xl font-600 text-brand-ink">{s.title}</h3>
-    <p className="mt-2 text-brand-ink/65 text-sm leading-relaxed">{s.desc}</p>
+    <p className="mt-2 text-brand-ink/70 text-sm leading-relaxed">{s.desc}</p>
     <button onClick={() => go("#quote")} className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-green hover:gap-2 transition-all">
       Get a quote <ArrowUpRight className="w-4 h-4" />
     </button>
@@ -31,11 +31,11 @@ const Services = () => {
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-2xl">
-            <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Residential cleaning</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-brand-greenLight font-semibold">Residential cleaning</p>
             <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">
               Cleaning built around your home
             </h2>
-            <p className="mt-4 text-brand-ink/65 text-lg">
+            <p className="mt-4 text-brand-ink/70 text-lg">
               From weekly upkeep to move-out deep cleans, every visit is tailored, thorough, and handled by people who genuinely care.
             </p>
           </div>
@@ -59,7 +59,7 @@ const Services = () => {
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 items-center">
             <div>
               <h3 className="font-serif text-2xl md:text-3xl font-700 text-brand-ink">What's included in every clean</h3>
-              <p className="mt-3 text-brand-ink/65">A consistent, detail-obsessed checklist, so nothing gets missed.</p>
+              <p className="mt-3 text-brand-ink/70">A consistent, detail-obsessed checklist, so nothing gets missed.</p>
             </div>
             <div className="grid sm:grid-cols-2 gap-x-8 gap-y-3">
               {CHECKLIST.map((c) => (

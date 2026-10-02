@@ -56,7 +56,7 @@ const HeaderMock = ({ logo }) => (
     </div>
     {/* Mock hero strip for context */}
     <div className="bg-white px-5 md:px-8 py-8">
-      <p className="text-[11px] uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Guided by our Christian faith</p>
+      <p className="text-[11px] uppercase tracking-[0.22em] text-brand-greenLight font-semibold">Guided by our Christian faith</p>
       <h3 className="mt-2 font-serif text-2xl md:text-3xl font-700 leading-tight text-brand-ink">
         We brighten your space, <span className="text-brand-green">so you get your time back.</span>
       </h3>
@@ -75,7 +75,7 @@ const BrandPreview = () => {
     <div className="min-h-screen bg-brand-cream text-brand-ink" data-testid="brand-preview-page">
       <header className="border-b border-black/10 bg-white/70 backdrop-blur">
         <div className="max-w-5xl mx-auto px-5 md:px-8 py-6">
-          <p className="text-xs uppercase tracking-[0.24em] text-brand-green/70 font-semibold">Bright at Home Cleaning</p>
+          <p className="text-xs uppercase tracking-[0.24em] text-brand-greenLight font-semibold">Bright at Home Cleaning</p>
           <h1 className="mt-2 font-serif text-3xl md:text-4xl font-700 text-brand-green">Logo Options On Your Live Header</h1>
           <p className="mt-3 text-brand-ink/70 max-w-2xl">
             Same cream header we already use, and the header color isn’t changing. I’ve removed each logo’s dark background so it sits cleanly on the real theme. Tell me which letter you want (e.g. “Let’s go with Logo A”) and I’ll set it live everywhere and build a matching favicon + share image.

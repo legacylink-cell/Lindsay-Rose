@@ -2,17 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <!-- Google Tag Manager (production domain only) -->
-        <script>
-        if (['brightathomecleaning.com','www.brightathomecleaning.com'].indexOf(location.hostname) !== -1) {
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-NXNZPZNH');
-        }
-        </script>
-        <!-- End Google Tag Manager -->
+        <script>window.dataLayer = window.dataLayer || [];</script>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#1F4D3A" />
         <meta name="color-scheme" content="light" />
@@ -46,10 +36,7 @@
         <meta name="twitter:description" content="Trusted, insured house and commercial cleaning in Plano, Frisco, McKinney and across DFW. Same vetted team every visit. Call 469-443-6903 for a free quote." />
         <meta name="twitter:image" content="https://brightathomecleaning.com/og-image.jpg" />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
-        <link rel="preconnect" href="https://images.pexels.com" crossorigin />
         <link
           rel="preload"
           as="image"
@@ -58,7 +45,6 @@
           imagesizes="(min-width: 1024px) 600px, 100vw"
           href="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHwxfHxicmlnaHQlMjBjbGVhbiUyMGxpdmluZyUyMHJvb218ZW58MHx8fHwxNzg0MzgwMzI4fDA&ixlib=rb-4.1.0&q=75&auto=format&w=900"
         />
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Mulish:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <!--
         manifest.json provides metadata used when your web app is installed on a
         user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -146,7 +132,23 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+        <!-- Third-party tags (Google Tag Manager + product analytics) are deferred
+             until the visitor's first interaction, or a few seconds after load,
+             so they never compete with the page's own content for bandwidth. -->
         <script>
+        (function () {
+            var started = false;
+            function startTags() {
+                if (started) return;
+                started = true;
+                if (['brightathomecleaning.com', 'www.brightathomecleaning.com'].indexOf(location.hostname) !== -1) {
+                    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                    })(window,document,'script','dataLayer','GTM-NXNZPZNH');
+                }
+
             !(function (t, e) {
                 var o, n, p, r;
                 e.__SV ||
@@ -216,6 +218,15 @@
                     capturePerformance: false,
                 },
             });
+            }
+            var events = ['pointerdown', 'touchstart', 'keydown', 'scroll', 'mousemove'];
+            function onFirstInteraction() {
+                events.forEach(function (e) { window.removeEventListener(e, onFirstInteraction, { passive: true }); });
+                startTags();
+            }
+            events.forEach(function (e) { window.addEventListener(e, onFirstInteraction, { passive: true }); });
+            window.addEventListener('load', function () { setTimeout(startTags, 3500); });
+        })();
         </script>
     </body>
 </html>

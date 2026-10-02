@@ -17,7 +17,7 @@ const Card = ({ t }) => (
       </span>
       <div>
         <p className="font-600 text-brand-ink">{t.name}</p>
-        <p className="text-sm text-brand-ink/60">{t.role}</p>
+        <p className="text-sm text-brand-ink/70">{t.role}</p>
       </div>
     </div>
   </div>
@@ -29,7 +29,7 @@ const Testimonials = () => {
     <section id="reviews" className="section-pad bg-white overflow-hidden tex-marble">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Kind words</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-brand-greenLight font-semibold">Kind words</p>
           <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">
             Loved by DFW homes & businesses
           </h2>
@@ -39,7 +39,7 @@ const Testimonials = () => {
                 <Star key={i} className="w-5 h-5 fill-brand-amber text-brand-amber" />
               ))}
             </span>
-            <span className="text-brand-ink/65 font-medium">5.0 average · 65+ Google reviews</span>
+            <span className="text-brand-ink/70 font-medium">5.0 average · 65+ Google reviews</span>
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@ const Testimonials = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-5 md:px-8">
-        <p className="mt-10 text-center text-xs text-brand-ink/60">Verified reviews from our Google Business Profile.</p>
+        <p className="mt-10 text-center text-xs text-brand-ink/70">Verified reviews from our Google Business Profile.</p>
         <div className="mt-5 flex flex-col items-center gap-3">
           <p className="text-brand-ink/70">Loved your clean? We'd be grateful for a quick review.</p>
           <a

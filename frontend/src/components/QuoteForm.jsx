@@ -49,7 +49,7 @@ const QuoteForm = () => {
   };
 
   const inputCls =
-    "w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-ink/55 focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green transition";
+    "w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-ink/70 focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green transition";
 
   return (
     <section id="quote" className="section-pad">
@@ -91,7 +91,7 @@ const QuoteForm = () => {
                   <CheckCircle2 className="w-8 h-8" />
                 </span>
                 <h3 className="font-serif text-3xl font-700 text-brand-ink">Request received!</h3>
-                <p className="mt-3 text-brand-ink/65 max-w-sm">
+                <p className="mt-3 text-brand-ink/70 max-w-sm">
                   Thanks, {form.name.split(" ")[0]}. We'll review your details and reply within 24 hours on weekdays. Check your spam folder just in case.
                 </p>
                 <button
@@ -145,7 +145,7 @@ const QuoteForm = () => {
                 >
                   {loading ? "Sending..." : "Send my quote request"} <Send className="w-4 h-4" />
                 </button>
-                <p className="text-center text-xs text-brand-ink/60">No obligation. We never share your details.</p>
+                <p className="text-center text-xs text-brand-ink/70">No obligation. We never share your details.</p>
               </form>
             )}
           </div>

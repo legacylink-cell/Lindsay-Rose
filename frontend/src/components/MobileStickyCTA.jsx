@@ -11,7 +11,8 @@ const MobileStickyCTA = () => {
   };
 
   return (
-    <div
+    <nav
+      aria-label="Quick contact"
       data-testid="mobile-sticky-cta"
       className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-brand-cream/95 backdrop-blur-md border-t border-border flex gap-3 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_-8px_24px_-12px_rgba(0,0,0,0.25)]"
     >
@@ -30,7 +31,7 @@ const MobileStickyCTA = () => {
       >
         Get a free quote
       </a>
-    </div>
+    </nav>
   );
 };
 

@@ -1,3 +1,4 @@
+import logo from "../assets/logo.webp";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -51,7 +52,7 @@ const Careers = () => {
 
   const update = (k) => (e) => setForm({ ...form, [k]: e.target.value });
   const inputCls =
-    "w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-ink/55 focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green transition";
+    "w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-ink/70 focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green transition";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -82,7 +83,7 @@ const Careers = () => {
       <header className="bg-brand-cream border-b border-border">
         <div className="max-w-7xl mx-auto px-5 md:px-8 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center group" data-testid="careers-logo">
-            <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-16 md:h-20 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80" />
+            <img src={logo} width="340" height="233" alt={BRAND.full} className="h-16 md:h-20 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80" />
           </Link>
           <div className="flex items-center gap-4">
             <Link to="/" className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-brand-ink/75 hover:text-brand-green transition-colors">
@@ -145,7 +146,7 @@ const Careers = () => {
       <section className="section-pad">
         <div className="max-w-7xl mx-auto px-5 md:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">What we stand for</p>
+            <p className="text-xs uppercase tracking-[0.22em] text-brand-greenLight font-semibold">What we stand for</p>
             <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">Our core values</h2>
           </div>
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -155,7 +156,7 @@ const Careers = () => {
                   <v.icon className="w-5 h-5" />
                 </span>
                 <h3 className="mt-4 text-lg font-600 text-brand-ink">{v.title}</h3>
-                <p className="mt-1.5 text-sm text-brand-ink/65 leading-relaxed">{v.desc}</p>
+                <p className="mt-1.5 text-sm text-brand-ink/70 leading-relaxed">{v.desc}</p>
               </div>
             ))}
           </div>
@@ -199,9 +200,9 @@ const Careers = () => {
       {/* application form */}
       <section className="section-pad bg-white tex-marble" data-testid="why-work-with-us">
         <div className="max-w-6xl mx-auto px-5 md:px-8">
-          <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Why work with us · Por qué unirte</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-brand-greenLight font-semibold">Why work with us · Por qué unirte</p>
           <h2 className="mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">A cleaning job you'll actually enjoy</h2>
-          <p className="mt-3 text-brand-ink/60 italic">Un trabajo de limpieza que disfrutarás de verdad.</p>
+          <p className="mt-3 text-brand-ink/70 italic">Un trabajo de limpieza que disfrutarás de verdad.</p>
 
           <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
@@ -244,16 +245,16 @@ const Careers = () => {
                   <CheckCircle2 className="w-8 h-8" />
                 </span>
                 <h3 className="font-serif text-3xl font-700 text-brand-ink">Thank you, {form.name.split(" ")[0]}!</h3>
-                <p className="mt-3 text-brand-ink/65 max-w-md mx-auto">
+                <p className="mt-3 text-brand-ink/70 max-w-md mx-auto">
                   We've received your application and will be in touch soon. In the meantime, feel free to call us at {BRAND.phone}.
                 </p>
               </div>
             ) : (
               <>
                 <div className="text-center mb-8">
-                  <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold">Join the team</p>
+                  <p className="text-xs uppercase tracking-[0.22em] text-brand-greenLight font-semibold">Join the team</p>
                   <h2 className="mt-3 font-serif text-4xl font-700 text-brand-ink">Apply today</h2>
-                  <p className="mt-3 text-brand-ink/65">Tell us a little about yourself. We read every application.</p>
+                  <p className="mt-3 text-brand-ink/70">Tell us a little about yourself. We read every application.</p>
                 </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-4">
@@ -287,7 +288,7 @@ const Careers = () => {
                   <button type="submit" className="w-full inline-flex items-center justify-center gap-2 bg-brand-green hover:bg-brand-greenDark text-brand-cream font-600 px-6 py-4 rounded-full transition-all hover:shadow-lift hover:-translate-y-0.5">
                     Submit application <Send className="w-4 h-4" />
                   </button>
-                  <p className="text-center text-xs text-brand-ink/55">
+                  <p className="text-center text-xs text-brand-ink/70">
                     Prefer email? Send your resume to{" "}
                     <a href={`mailto:${BRAND.email}?subject=Job Application`} className="font-600 text-brand-green hover:underline">{BRAND.email}</a>
                   </p>

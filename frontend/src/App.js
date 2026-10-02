@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, lazy, Suspense } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "./components/ui/sonner";
@@ -19,13 +19,15 @@ import FAQ from "./components/FAQ";
 import QuoteForm from "./components/QuoteForm";
 import Footer from "./components/Footer";
 import MobileStickyCTA from "./components/MobileStickyCTA";
-import Careers from "./components/Careers";
-import Admin from "./components/Admin";
-import BrandPreview from "./components/BrandPreview";
 import ServicePage from "./pages/ServicePage";
-import BrightBlessing from "./pages/BrightBlessing";
 import BlessingTeaser from "./components/BlessingTeaser";
 import { usePageHead } from "./hooks/usePageHead";
+
+// Off the homepage's critical path: these only download when their route is visited.
+const Careers = lazy(() => import("./components/Careers"));
+const Admin = lazy(() => import("./components/Admin"));
+const BrandPreview = lazy(() => import("./components/BrandPreview"));
+const BrightBlessing = lazy(() => import("./pages/BrightBlessing"));
 
 const HOME_TITLE = "Bright at Home Cleaning | A Brighter Home. A Better Day.";
 const HOME_DESCRIPTION =
@@ -130,14 +132,16 @@ function App() {
   }, []);
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/careers" element={<Careers />} />
-        <Route path="/bright-blessing" element={<BrightBlessing />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/brand" element={<BrandPreview />} />
-        <Route path="/services/:slug" element={<ServicePage />} />
-      </Routes>
+      <Suspense fallback={<div className="min-h-screen bg-brand-cream" aria-busy="true" />}>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/bright-blessing" element={<BrightBlessing />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/brand" element={<BrandPreview />} />
+          <Route path="/services/:slug" element={<ServicePage />} />
+        </Routes>
+      </Suspense>
       <Toaster position="top-center" richColors />
     </BrowserRouter>
   );

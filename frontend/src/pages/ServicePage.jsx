@@ -1,3 +1,4 @@
+import logo from "../assets/logo.webp";
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Phone, Check, ArrowRight } from "lucide-react";
@@ -64,7 +65,7 @@ const ServicePage = () => {
       <header className="bg-brand-cream border-b border-border">
         <div className="max-w-7xl mx-auto px-5 md:px-8 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center group" data-testid="service-logo">
-            <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-16 md:h-20 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80" />
+            <img src={logo} width="340" height="233" alt={BRAND.full} className="h-16 md:h-20 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80" />
           </Link>
           <div className="flex items-center gap-4">
             <Link to="/" className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-brand-ink/75 hover:text-brand-green transition-colors">

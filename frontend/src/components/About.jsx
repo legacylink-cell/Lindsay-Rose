@@ -24,7 +24,7 @@ const About = () => {
         </div>
 
         <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-brand-green/70 font-semibold reveal">Our story</p>
+          <p className="text-xs uppercase tracking-[0.22em] text-brand-greenLight font-semibold reveal">Our story</p>
           <h2 className="reveal mt-3 font-serif text-4xl md:text-5xl font-700 text-brand-ink">
             A family-run team, now brightening all of DFW
           </h2>
@@ -42,8 +42,8 @@ const About = () => {
                 <span className="grid place-items-center w-11 h-11 rounded-xl bg-brand-sage text-brand-green">
                   <v.icon className="w-5 h-5" />
                 </span>
-                <h4 className="mt-3 font-600 text-brand-ink">{v.title}</h4>
-                <p className="mt-1 text-sm text-brand-ink/60">{v.desc}</p>
+                <h3 className="mt-3 font-600 text-brand-ink">{v.title}</h3>
+                <p className="mt-1 text-sm text-brand-ink/70">{v.desc}</p>
               </div>
             ))}
           </div>

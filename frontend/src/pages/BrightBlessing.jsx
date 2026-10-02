@@ -84,7 +84,7 @@ const BrightBlessing = () => {
   };
 
   const inputCls =
-    "w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-ink/55 focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green transition";
+    "w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-ink/70 focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green transition";
   const labelCls = "block text-sm font-medium text-brand-ink mb-1.5";
   const open = !cycle || cycle.is_open;
 
@@ -181,7 +181,7 @@ const BrightBlessing = () => {
                 through {cycle?.closes_label} and select one DFW home. We may not be able to clean every
                 home nominated, but every story is read.
               </p>
-              <p className="mt-3 text-sm text-brand-ink/60 max-w-md mx-auto">
+              <p className="mt-3 text-sm text-brand-ink/70 max-w-md mx-auto">
                 Our team will follow up with you about your $25-off thank-you.
               </p>
               <button
@@ -196,7 +196,7 @@ const BrightBlessing = () => {
             <form onSubmit={handleSubmit} className="space-y-6" data-testid="blessing-form">
               <div>
                 <h2 className="font-serif text-3xl font-700 text-brand-ink">Nominate a home</h2>
-                <p className="mt-2 text-sm text-brand-ink/65">
+                <p className="mt-2 text-sm text-brand-ink/70">
                   Private form. Their story stays with our team and is never posted publicly.
                 </p>
               </div>
@@ -248,13 +248,13 @@ const BrightBlessing = () => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="bb-nominee-phone" className={labelCls}>Their phone <span className="text-brand-ink/50">(if you know it)</span></label>
+                  <label htmlFor="bb-nominee-phone" className={labelCls}>Their phone <span className="text-brand-ink/70">(if you know it)</span></label>
                   <input id="bb-nominee-phone" data-testid="bb-nominee-phone" type="tel" className={inputCls} value={form.nominee_phone} onChange={update("nominee_phone")} placeholder="Optional" />
                 </div>
                 <div>
                   <label htmlFor="bb-why" className={labelCls}>Why this home? *</label>
                   <textarea id="bb-why" data-testid="bb-why" rows={5} className={inputCls} value={form.why} onChange={update("why")} placeholder="Two to four sentences is plenty. Share the season they're walking through." />
-                  <p className="mt-1.5 text-xs text-brand-ink/55">This stays private with our team.</p>
+                  <p className="mt-1.5 text-xs text-brand-ink/70">This stays private with our team.</p>
                 </div>
               </fieldset>
 
@@ -284,7 +284,7 @@ const BrightBlessing = () => {
               >
                 {loading ? "Sending..." : "Send nomination"} <Send className="w-4 h-4" />
               </button>
-              <p className="flex items-center justify-center gap-2 text-center text-xs text-brand-ink/60">
+              <p className="flex items-center justify-center gap-2 text-center text-xs text-brand-ink/70">
                 <ShieldCheck className="w-3.5 h-3.5" /> One blessing awarded each month · One free clean per household per year · DFW service area only
               </p>
             </form>

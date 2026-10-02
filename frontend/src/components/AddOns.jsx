@@ -47,7 +47,7 @@ const AddOns = () => {
                 <span className="font-medium text-brand-ink">{a.label}</span>
               </div>
             ))}
-            <div className="sm:col-span-2 flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-brand-green/30 p-4 text-sm text-brand-ink/60">
+            <div className="sm:col-span-2 flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-brand-green/30 p-4 text-sm text-brand-ink/70">
               Something else in mind? Just ask, we're flexible.
             </div>
           </div>

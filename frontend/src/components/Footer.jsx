@@ -1,3 +1,4 @@
+import logo from "../assets/logo.webp";
 import React from "react";
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram } from "lucide-react";
 import { BRAND, NAV_LINKS } from "../mock";
@@ -56,13 +57,13 @@ const TermsDialog = ({ children }) => (
         <DialogTitle className="font-serif text-2xl text-brand-ink">Terms &amp; Conditions</DialogTitle>
       </DialogHeader>
       <ScrollArea className="max-h-[65vh] pr-4">
-        <p className="text-sm text-brand-ink/65 mb-4">
+        <p className="text-sm text-brand-ink/70 mb-4">
           Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}. These terms are a general placeholder and should be reviewed by legal counsel before publishing.
         </p>
         <div className="space-y-5">
           {TERMS.map((t) => (
             <div key={t.h}>
-              <h4 className="font-600 text-brand-ink">{t.h}</h4>
+              <h3 className="font-600 text-brand-ink">{t.h}</h3>
               <p className="mt-1 text-sm text-brand-ink/70 leading-relaxed">{t.p}</p>
             </div>
           ))}
@@ -80,7 +81,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-10">
           <div className="md:col-span-2">
             <div className="inline-flex bg-brand-cream rounded-2xl p-3" data-testid="footer-logo">
-              <img src="/logos/logo-b-rooftop-emblem-t.png" alt={BRAND.full} className="h-20 w-auto object-contain" />
+              <img src={logo} width="340" height="233" alt={BRAND.full} className="h-20 w-auto object-contain" />
             </div>
             <p className="mt-3 font-serif text-lg italic text-brand-amberLight">{BRAND.tagline}</p>
             <p className="mt-3 text-brand-cream/70 max-w-sm leading-relaxed">
@@ -95,7 +96,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Explore</h4>
+            <h3 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Explore</h3>
             <ul className="mt-4 space-y-2.5">
               {NAV_LINKS.map((l) => (
                 <li key={l.href}>
@@ -120,7 +121,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Services</h4>
+            <h3 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Services</h3>
             <ul className="mt-4 space-y-2.5">
               {[
                 ["Recurring House Cleaning", "recurring-house-cleaning"],
@@ -137,14 +138,14 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Get in touch</h4>
+            <h3 className="text-sm font-600 uppercase tracking-wider text-brand-cream/80">Get in touch</h3>
             <ul className="mt-4 space-y-3 text-sm text-brand-cream/70">
               <li><a href={BRAND.phoneHref} className="flex items-center gap-2.5 hover:text-brand-amberLight transition-colors"><Phone className="w-4 h-4 shrink-0" /> {BRAND.phone}</a></li>
               <li><a href={`mailto:${BRAND.email}`} className="flex items-center gap-2.5 hover:text-brand-amberLight transition-colors break-all"><Mail className="w-4 h-4 shrink-0" /> {BRAND.email}</a></li>
               <li className="flex items-center gap-2.5"><Clock className="w-4 h-4 shrink-0" /> {BRAND.hours}</li>
             </ul>
 
-            <h4 className="mt-6 text-sm font-600 uppercase tracking-wider text-brand-cream/80">Follow us</h4>
+            <h3 className="mt-6 text-sm font-600 uppercase tracking-wider text-brand-cream/80">Follow us</h3>
             <div className="mt-3 flex items-center gap-3">
               {BRAND.social.facebook && (
                 <a href={BRAND.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook" className="grid place-items-center w-10 h-10 rounded-xl bg-white/10 hover:bg-brand-amber hover:text-brand-ink text-brand-cream transition-colors">

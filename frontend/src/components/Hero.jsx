@@ -8,7 +8,7 @@ const go = (href) => {
 };
 
 const heroBase = IMAGES.heroLiving.replace(/q=\d+/, "q=75");
-const heroSrcSet = [640, 900, 1200]
+const heroSrcSet = [480, 640, 800, 1000, 1200]
   .map((w) => `${heroBase.replace(/w=\d+/, "w=" + w)} ${w}w`)
   .join(", ");
 
@@ -48,7 +48,7 @@ const Hero = () => {
                 </span>
                 <span className="text-xs font-bold text-brand-ink ml-0.5">5.0</span>
               </span>
-              <span className="text-[11px] font-medium text-brand-ink/65 mt-1">65+ five-star Google reviews</span>
+              <span className="text-[11px] font-medium text-brand-ink/70 mt-1">65+ five-star Google reviews</span>
             </div>
           </div>
 
@@ -92,12 +92,12 @@ const Hero = () => {
           </div>
 
           <div className="absolute -bottom-6 -left-4 md:-left-8 w-40 md:w-52 rounded-2xl overflow-hidden shadow-lift ring-4 ring-brand-cream floaty">
-            <img src={IMAGES.kitchen} alt="Sunlit clean kitchen" loading="lazy" decoding="async" width="208" height="160" className="w-full h-32 md:h-40 object-cover" />
+            <img src={IMAGES.kitchen.replace(/w=\d+/, "w=420")} alt="Sunlit clean kitchen" loading="lazy" decoding="async" width="208" height="160" className="w-full h-32 md:h-40 object-cover" />
           </div>
 
           <div className="absolute -top-5 -right-3 md:-right-6 bg-white rounded-2xl shadow-lift px-4 py-3 ring-1 ring-black/5">
             <p className="font-serif text-2xl font-700 text-brand-green leading-none">100%</p>
-            <p className="text-[11px] text-brand-ink/60 mt-1 max-w-[110px]">Satisfaction guaranteed, every visit</p>
+            <p className="text-[11px] text-brand-ink/70 mt-1 max-w-[110px]">Satisfaction guaranteed, every visit</p>
           </div>
         </div>
       </div>
