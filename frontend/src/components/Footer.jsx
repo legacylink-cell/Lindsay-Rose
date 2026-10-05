@@ -57,9 +57,6 @@ const TermsDialog = ({ children }) => (
         <DialogTitle className="font-serif text-2xl text-brand-ink">Terms &amp; Conditions</DialogTitle>
       </DialogHeader>
       <ScrollArea className="max-h-[65vh] pr-4">
-        <p className="text-sm text-brand-ink/70 mb-4">
-          Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}. These terms are a general placeholder and should be reviewed by legal counsel before publishing.
-        </p>
         <div className="space-y-5">
           {TERMS.map((t) => (
             <div key={t.h}>
