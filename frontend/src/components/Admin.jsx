@@ -441,7 +441,7 @@ const Admin = () => {
             <div className="bg-white rounded-2xl p-5 shadow-soft ring-1 ring-black/5">
               <p className="font-600 text-brand-ink flex items-center gap-2"><Download className="w-4 h-4 text-brand-green" /> Nominator list</p>
               <p className="mt-1 text-sm text-brand-ink/65">
-                Every nominator with their phone, email and whether they asked for the $25 code, ready for Mayra.
+                Every nominator with their phone, email and whether they asked for the $25 code, ready for the back office Ops team.
               </p>
               <button onClick={exportNominators} data-testid="export-nominators" className="mt-4 inline-flex items-center gap-2 text-sm font-600 px-5 py-2.5 rounded-full bg-brand-green text-brand-cream hover:bg-brand-greenDark transition-colors">
                 <Download className="w-4 h-4" /> Download CSV
