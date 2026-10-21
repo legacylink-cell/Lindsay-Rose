@@ -51,9 +51,9 @@ def test_site_settings_public_shape(s):
     assert isinstance(data["nominations_live"], bool)
     assert "nominations" in data
     nom = data["nominations"]
-    for k in ("is_open", "cycle", "month_label", "closes_label", "next_open_label"):
+    for k in ("is_open", "cycle", "month_label"):
         assert k in nom, f"missing key {k}"
-    assert isinstance(nom["is_open"], bool)
+    assert nom["is_open"] is True
 
 
 def test_patch_site_settings_requires_auth(s):

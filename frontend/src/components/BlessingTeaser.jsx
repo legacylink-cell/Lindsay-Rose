@@ -32,9 +32,7 @@ export const BlessingTeaser = () => {
               >
                 Nominate a home <ArrowRight className="w-4 h-4" />
               </a>
-              {cycle.is_open && cycle.closes_label && (
-                <p className="text-sm text-brand-cream/70">Nominations close {cycle.closes_label}</p>
-              )}
+              <p className="text-sm text-brand-cream/70">Nominations are open year round</p>
             </div>
           </div>
         </div>

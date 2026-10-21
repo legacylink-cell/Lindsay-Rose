@@ -55,8 +55,6 @@ BUSINESS_PHONE_RAW = '4694436903'
 QUOTE_STATUSES = ('new', 'contacted', 'booked')
 APP_STATUSES = ('new', 'contacted')
 NOMINATION_STATUSES = ('new', 'reviewing', 'selected', 'not_selected')
-NOMINATIONS_OPEN_DAY = 1
-NOMINATIONS_CLOSE_DAY = 15
 DFW_TZ = ZoneInfo('America/Chicago')
 JWT_ALGO = 'HS256'
 
@@ -764,17 +762,12 @@ async def summary(_: bool = Depends(require_admin)):
 
 
 def nomination_cycle(now: datetime = None):
-    """Nominations run the 1st through the 15th, DFW time (playbook §4)."""
+    """Nominations stay open year round; the cycle label only groups submissions by month."""
     local = (now or _now()).astimezone(DFW_TZ)
-    closes = local.replace(day=NOMINATIONS_CLOSE_DAY, hour=23, minute=59, second=59, microsecond=0)
-    is_open = local.day <= NOMINATIONS_CLOSE_DAY
-    next_open = (closes.replace(day=1) + timedelta(days=32)).replace(day=1)
     return {
-        "is_open": is_open,
+        "is_open": True,
         "cycle": local.strftime("%Y-%m"),
         "month_label": local.strftime("%B"),
-        "closes_label": closes.strftime("%B %-d"),
-        "next_open_label": next_open.strftime("%B %-d"),
     }
 
 

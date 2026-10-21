@@ -419,9 +419,7 @@ const Admin = () => {
               </p>
               {settings.nominations && (
                 <p className="mt-1 text-xs text-brand-ink/55">
-                  {settings.nominations.is_open
-                    ? `This month's nominations are open and close ${settings.nominations.closes_label}.`
-                    : `Nominations are closed for ${settings.nominations.month_label}; the next round opens ${settings.nominations.next_open_label}.`}
+                  Nominations stay open year round. Every nomination stays in the pool until you select it.
                 </p>
               )}
             </div>

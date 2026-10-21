@@ -86,7 +86,6 @@ const BrightBlessing = () => {
   const inputCls =
     "w-full rounded-xl border border-input bg-white px-4 py-3 text-sm text-brand-ink placeholder:text-brand-ink/70 focus:outline-none focus:ring-2 focus:ring-brand-green/40 focus:border-brand-green transition";
   const labelCls = "block text-sm font-medium text-brand-ink mb-1.5";
-  const open = !cycle || cycle.is_open;
 
   return (
     <div className="bg-brand-cream min-h-screen" data-testid="bright-blessing-page">
@@ -122,11 +121,9 @@ const BrightBlessing = () => {
             after surgery. Know someone who could use a clean home and a deep breath? Nominate them.
             You can even nominate yourself.
           </p>
-          {cycle?.closes_label && open && (
-            <p className="mt-6 inline-block rounded-full bg-white/10 px-5 py-2.5 text-sm font-600" data-testid="blessing-deadline">
-              Nominations close {cycle.closes_label} · DFW homes only
-            </p>
-          )}
+          <p className="mt-6 inline-block rounded-full bg-white/10 px-5 py-2.5 text-sm font-600" data-testid="blessing-deadline">
+            One home blessed every month · DFW homes only
+          </p>
         </div>
       </section>
 
@@ -156,30 +153,16 @@ const BrightBlessing = () => {
 
       <section className="max-w-3xl mx-auto px-5 md:px-8 pb-20" id="nominate">
         <div className="bg-white rounded-[2rem] p-7 md:p-10 shadow-lift ring-1 ring-black/5">
-          {!open ? (
-            <div className="text-center py-8" data-testid="blessing-closed">
-              <span className="grid place-items-center w-16 h-16 rounded-full bg-brand-sage text-brand-green mx-auto mb-5">
-                <HeartHandshake className="w-8 h-8" />
-              </span>
-              <h2 className="font-serif text-3xl font-700 text-brand-ink">Nominations are closed for {cycle?.month_label}</h2>
-              <p className="mt-3 text-brand-ink/70 max-w-md mx-auto">
-                We're prayerfully reviewing this month's nominations and selecting one home.
-                The next round opens {cycle?.next_open_label}.
-              </p>
-              <a href={BRAND.phoneHref} className="mt-6 inline-flex items-center gap-2 text-sm font-600 text-brand-green hover:text-brand-greenDark">
-                <Phone className="w-4 h-4" /> {BRAND.phone}
-              </a>
-            </div>
-          ) : submitted ? (
+          {submitted ? (
             <div className="text-center py-8" data-testid="blessing-submitted">
               <span className="grid place-items-center w-16 h-16 rounded-full bg-brand-sage text-brand-green mx-auto mb-5">
                 <CheckCircle2 className="w-8 h-8" />
               </span>
               <h2 className="font-serif text-3xl font-700 text-brand-ink">Nomination received</h2>
               <p className="mt-3 text-brand-ink/70 max-w-md mx-auto">
-                Thank you for caring about them, {form.nominator_name.split(" ")[0]}. We review nominations
-                through {cycle?.closes_label} and select one DFW home. We may not be able to clean every
-                home nominated, but every story is read.
+                Thank you for caring about them, {form.nominator_name.split(" ")[0]}. We read every
+                nomination and select one DFW home each month. We may not be able to clean every home
+                nominated, but every story is read.
               </p>
               <p className="mt-3 text-sm text-brand-ink/70 max-w-md mx-auto">
                 Our team will follow up with you about your $25-off thank-you.
