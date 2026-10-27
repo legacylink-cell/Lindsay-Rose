@@ -48,8 +48,8 @@ export const ROUTES = [
   { path: "/careers", title: "Cleaning Jobs in DFW | Now Hiring House Cleaners | Bright at Home Cleaning",
     description: CAREERS_DESCRIPTION, priority: "0.7", changefreq: "monthly", render: renderCareers },
   { path: "/bright-blessing", title: "Bright Blessing of the Month | Nominate a DFW Home | Bright at Home Cleaning",
-    description: BLESSING_DESCRIPTION, priority: "0.5", changefreq: "monthly",
-    render: renderBlessing, noindex: true, sitemap: false },
+    description: BLESSING_DESCRIPTION, priority: "0.6", changefreq: "monthly",
+    render: renderBlessing },
 ];
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
